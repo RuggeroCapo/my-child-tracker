@@ -11,9 +11,11 @@ export function EventList({
   events,
   pageSize = 60,
   dayExtra,
+  showDayHeaders = true,
 }: {
   events: BabyEvent[]
   pageSize?: number
+  showDayHeaders?: boolean
   /** Riepilogo opzionale a destra dell'intestazione del giorno. */
   dayExtra?: (dayEvents: BabyEvent[]) => string | null
 }) {
@@ -35,10 +37,12 @@ export function EventList({
     <div className="space-y-4">
       {groups.map(({ day, items }) => (
         <section key={day.getTime()} className="space-y-2">
-          <div className="flex items-baseline justify-between px-1">
-            <h3 className="text-sm font-semibold text-ink">{formatDayLabel(day)}</h3>
-            {dayExtra && <span className="text-xs text-ink-3">{dayExtra(items)}</span>}
-          </div>
+          {showDayHeaders && (
+            <div className="flex items-baseline justify-between px-1">
+              <h3 className="text-sm font-semibold text-ink">{formatDayLabel(day)}</h3>
+              {dayExtra && <span className="text-xs text-ink-3">{dayExtra(items)}</span>}
+            </div>
+          )}
           <Card className="divide-y divide-line overflow-hidden">
             {items.map((e) => (
               <EventRow key={e.id} event={e} onClick={() => setSelected(e.id)} />

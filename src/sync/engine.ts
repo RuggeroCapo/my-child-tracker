@@ -144,6 +144,17 @@ export async function startSync(userId: string): Promise<void> {
     document.removeEventListener('visibilitychange', onVisible)
   })
 
+  // Nuovi bambini (creati o accettati via invito) → nuovo canale + primo download.
+  let babyKey = ''
+  cleanup.push(
+    useBabies.subscribe((state) => {
+      const key = state.babies.map((b) => b.id).sort().join(',')
+      if (key === babyKey) return
+      babyKey = key
+      if (state.loaded && currentUser) ensureSubscriptions()
+    }),
+  )
+
   void resync()
 }
 

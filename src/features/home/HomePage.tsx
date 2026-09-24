@@ -103,12 +103,12 @@ export function HomePage() {
                 type="button"
                 onClick={() => onQuick(kind)}
                 className={clsx(
-                  'relative flex aspect-[4/5] flex-col items-center justify-center gap-2 rounded-3xl text-xs font-semibold text-ink transition-transform active:scale-95',
+                  'relative flex aspect-[4/5] flex-col items-center justify-center gap-2 rounded-3xl font-semibold text-ink transition-transform active:scale-95',
                   meta.soft,
                 )}
               >
                 <Icon className={clsx('size-8', meta.text)} aria-hidden />
-                {meta.label}
+                <span className="max-w-full hyphens-auto px-1 text-center text-[11px] leading-tight min-[380px]:text-xs">{meta.label}</span>
                 {running && <span className={clsx('absolute right-2.5 top-2.5 size-2 rounded-full animate-pulse-dot', meta.solid)} aria-label="in corso" />}
               </button>
             )
@@ -145,7 +145,7 @@ export function HomePage() {
             Usa i pulsanti qui sopra per registrare il primo.
           </EmptyState>
         ) : (
-          <EventList events={today} />
+          <EventList events={today} showDayHeaders={false} />
         )}
       </section>
 

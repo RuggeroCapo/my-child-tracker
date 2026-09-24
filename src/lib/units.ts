@@ -36,3 +36,8 @@ export function parseDecimal(input: string): number | null {
   const n = Number(normalized)
   return Number.isFinite(n) ? n : null
 }
+
+/** "1 sessione", "3 sessioni". */
+export function plural(n: number, one: string, many: string): string {
+  return `${n} ${n === 1 ? one : many}`
+}

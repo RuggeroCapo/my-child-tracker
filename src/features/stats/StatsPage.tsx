@@ -9,7 +9,7 @@ import { referenceCurves, WHO_MAX_MONTHS } from '@/domain/growth/percentile'
 import { computeStats, latestWithDelta, measurementSeries, rangeBounds, type DayBucket, type StatsRange } from '@/domain/stats'
 import type { EventKind } from '@/domain/types'
 import { ageInMonths, formatDuration, formatShortDate } from '@/lib/time'
-import { formatNumber } from '@/lib/units'
+import { formatNumber, plural } from '@/lib/units'
 import { useActiveBaby } from '@/stores/babies'
 import { useBabyEvents } from '@/stores/selectors'
 import { GrowthChart } from '../growth/GrowthChart'
@@ -52,7 +52,7 @@ export default function StatsPage() {
         ]}
       />
 
-      <StatCard kind="breastfeeding" title="Allattamento" summary={`${feeding.sessions} sessioni · ${formatDuration(feeding.totalSeconds)}`}>
+      <StatCard kind="breastfeeding" title="Allattamento" summary={`${plural(feeding.sessions, 'sessione', 'sessioni')} · ${formatDuration(feeding.totalSeconds)}`}>
         <StatGrid>
           <Stat label="Sessioni" value={feeding.sessions} />
           <Stat label="Totale" value={formatDuration(feeding.totalSeconds)} />
@@ -73,7 +73,7 @@ export default function StatsPage() {
         {range !== 'today' && <DayBars days={stats.days} value={(d) => d.feedings} label="Pasti al giorno (seno + biberon)" color="bg-feed" />}
       </StatCard>
 
-      <StatCard kind="diaper" title="Pannolini" summary={`${diaper.total} totali`}>
+      <StatCard kind="diaper" title="Pannolini" summary={plural(diaper.total, 'pannolino', 'pannolini')}>
         <StatGrid>
           <Stat label="Totale" value={diaper.total} />
           <Stat label="Bagnati" value={diaper.wet + diaper.mixed} />
@@ -95,7 +95,7 @@ export default function StatsPage() {
         )}
       </StatCard>
 
-      <StatCard kind="pumping" title="Tiralatte" summary={`${pumping.sessions} sessioni · ${formatNumber(pumping.totalMl, 0)} ml`}>
+      <StatCard kind="pumping" title="Tiralatte" summary={`${plural(pumping.sessions, 'sessione', 'sessioni')} · ${formatNumber(pumping.totalMl, 0)} ml`}>
         <StatGrid>
           <Stat label="Sessioni" value={pumping.sessions} />
           <Stat label="Durata" value={formatDuration(pumping.totalSeconds)} />
