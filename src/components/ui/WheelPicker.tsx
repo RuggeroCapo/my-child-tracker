@@ -23,7 +23,7 @@ function WheelColumn({
   const ref = useRef<HTMLDivElement>(null)
   const settleTimer = useRef<number>(undefined)
 
-  // Il valore può cambiare da fuori (scorciatoie "Adesso", −15′...): riallinea lo scroll.
+  // Il valore può cambiare da fuori (cambio giorno, passaggio a ieri...): riallinea lo scroll.
   useLayoutEffect(() => {
     const el = ref.current
     const target = value * ITEM_H

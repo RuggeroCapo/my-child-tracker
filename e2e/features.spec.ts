@@ -41,7 +41,12 @@ test('tutte le funzionalità MVP', async ({ page }) => {
   await page.getByRole('link', { name: 'Dettagli allattamento' }).click()
   await expect(page).toHaveURL(/\/breastfeeding\/[0-9a-f-]+$/)
   await page.getByRole('radio', { name: 'Destro' }).click()
-  await page.getByRole('button', { name: '30 minuti fa' }).first().click()
+  // Inizio 30 minuti fa: tocco sull'ora e scelta diretta sulle rotelle, senza conferma
+  const start = new Date(Date.now() - 30 * 60_000)
+  const two = (n: number) => String(n).padStart(2, '0')
+  await page.getByLabel('Inizio').click()
+  await page.getByRole('listbox', { name: 'Ore' }).getByRole('option', { name: two(start.getHours()), exact: true }).click()
+  await page.getByRole('listbox', { name: 'Minuti' }).getByRole('option', { name: two(start.getMinutes()), exact: true }).click()
   await page.getByRole('button', { name: 'Salva' }).click()
   await expect(page.getByText(/^Destro · \d\d:\d\d → \d\d:\d\d$/)).toBeVisible()
   await expect(page.getByRole('timer')).toHaveText(/(29|30):\d\d$/)
