@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { haptic } from '@/lib/haptics'
 
 export interface SegmentOption<T extends string> {
   value: T
@@ -29,7 +30,7 @@ export function Segmented<T extends string>({
       {index >= 0 && (
         <span
           aria-hidden
-          className="absolute inset-y-1 left-1 -z-10 rounded-xl rose-lit transition-transform duration-200 ease-out-expo"
+          className="absolute inset-y-1 left-1 -z-10 rounded-xl rose-lit transition-transform duration-(--spring-ms) ease-(--ease-spring)"
           style={{
             width: `calc((100% - 0.5rem - ${options.length - 1} * 0.25rem) / ${options.length})`,
             transform: `translateX(calc(${index} * (100% + 0.25rem)))`,
@@ -42,9 +43,13 @@ export function Segmented<T extends string>({
           type="button"
           role="radio"
           aria-checked={o.value === value}
-          onClick={() => onChange(o.value)}
+          onClick={() => {
+            if (o.value === value) return
+            haptic('tick')
+            onChange(o.value)
+          }}
           className={clsx(
-            'h-10 flex-1 rounded-xl px-2 text-sm transition-colors duration-200',
+            'press h-10 flex-1 rounded-xl px-2 text-sm [--press:0.95]',
             o.value === value ? 'font-semibold text-night' : 'font-medium text-ink-2 hover:text-ink',
           )}
         >

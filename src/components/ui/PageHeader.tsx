@@ -8,7 +8,8 @@ export function PageHeader({ title, back = true, action }: { title: string; back
   return (
     <header className="sticky top-0 z-20 -mx-4 mb-2 flex items-center gap-1 glass-header px-2 pb-2 pt-safe">
       {back ? (
-        <IconButton label="Indietro" onClick={() => (window.history.length > 1 ? navigate(-1) : navigate('/'))}>
+        // data-swipe-back: il gesto dal bordo sinistro (SwipeBack) preme questo pulsante.
+        <IconButton label="Indietro" data-swipe-back onClick={() => (window.history.length > 1 ? navigate(-1) : navigate('/'))}>
           <ArrowLeft className="size-6" />
         </IconButton>
       ) : (

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/Button'
 import { FormDock } from '@/components/ui/FormDock'
 import { Input, Select } from '@/components/ui/Field'
 import type { EventOf, Medication } from '@/domain/types'
+import { haptic } from '@/lib/haptics'
 import { formatNumber, parseDecimal } from '@/lib/units'
 import { useBabies } from '@/stores/babies'
 import { DateTimeInput, NotesInput } from '../events/formParts'
@@ -26,6 +27,7 @@ export function MedicationForm({ babyId, initial, onSaved }: { babyId: string; i
   const [unit, setUnit] = useState(initial?.details.unit ?? 'ml')
 
   function pick(m: Medication) {
+    haptic('tick')
     setMedicationId(m.id)
     setName(m.name)
     if (m.default_dose != null) setDose(formatNumber(m.default_dose))
@@ -66,8 +68,8 @@ export function MedicationForm({ babyId, initial, onSaved }: { babyId: string; i
                 type="button"
                 onClick={() => pick(m)}
                 className={clsx(
-                  'h-11 rounded-full border border-line px-4 text-sm font-medium transition-colors',
-                  medicationId === m.id && name === m.name ? 'bg-med/12 text-ink ring-2 ring-med' : 'text-ink-2 hover:bg-surface-2',
+                  'press h-11 rounded-full border border-line px-4 text-sm font-medium [--press:0.95]',
+                  medicationId === m.id && name === m.name ? 'bg-med/12 text-ink ring-2 ring-med' : 'text-ink-2 hover:bg-surface-2 active:bg-surface-2',
                 )}
               >
                 {m.name}

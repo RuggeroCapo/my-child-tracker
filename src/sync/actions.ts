@@ -7,6 +7,7 @@ import {
   type TimedKind,
 } from '@/domain/types'
 import { serverNowIso } from '@/lib/clock'
+import { haptic } from '@/lib/haptics'
 import { newId } from '@/lib/id'
 import { useEvents } from '@/stores/events'
 import { useOutbox, type OutboxOp } from '@/stores/outbox'
@@ -49,12 +50,16 @@ function localEvent(input: EventInput, existing?: BabyEvent): BabyEvent {
   } as BabyEvent
 }
 
-/** Crea o modifica un evento. `useServerTime`: orario "adesso" deciso dal server. */
-export function saveEvent(input: EventInput, opts: { useServerTime?: boolean } = {}): BabyEvent {
+/**
+ * Crea o modifica un evento. `useServerTime`: orario "adesso" deciso dal server.
+ * `silent`: nessuna conferma tattile (dettagli aggiunti a un evento appena confermato).
+ */
+export function saveEvent(input: EventInput, opts: { useServerTime?: boolean; silent?: boolean } = {}): BabyEvent {
   const existing = useEvents.getState().byId[input.id]
   const event = localEvent(input, existing)
   useEvents.getState().setLocal(event)
   enqueue({ type: 'upsert', eventId: input.id, input, useServerTime: opts.useServerTime })
+  if (!opts.silent) haptic('success')
   return event
 }
 
@@ -85,6 +90,7 @@ export function startSession<K extends TimedKind>(babyId: string, kind: K, detai
   const event = localEvent({ id, baby_id: babyId, kind, started_at: startedAt, ended_at: null, notes: null, details } as EventInput)
   useEvents.getState().setLocal(event)
   enqueue({ type: 'start', eventId: id, babyId, kind, details, startedAt })
+  haptic('success')
   return event
 }
 
@@ -100,6 +106,7 @@ export function endSession(event: BabyEvent, details?: Partial<DetailsByKind[Tim
     updated_at: endedAt,
   } as BabyEvent)
   enqueue({ type: 'end', eventId: event.id, endedAt, details })
+  haptic('success')
 }
 
 export function switchBreastSide(event: EventOf<'breastfeeding'>): BabyEvent | null {
@@ -119,6 +126,7 @@ export function switchBreastSide(event: EventOf<'breastfeeding'>): BabyEvent | n
   })
   store.setLocal(next)
   enqueue({ type: 'switch', eventId: event.id, newEventId, at })
+  haptic('tap')
   return next
 }
 
@@ -126,6 +134,7 @@ export function deleteEvent(event: BabyEvent, opts: { undo?: boolean } = { undo:
   const at = serverNowIso()
   useEvents.getState().setLocal({ ...event, deleted_at: at, updated_at: at })
   enqueue({ type: 'delete', eventId: event.id })
+  haptic(opts.undo ? 'warning' : 'tap')
   if (opts.undo) {
     toast({
       tone: 'success',
@@ -138,4 +147,5 @@ export function deleteEvent(event: BabyEvent, opts: { undo?: boolean } = { undo:
 export function restoreEvent(event: BabyEvent) {
   useEvents.getState().setLocal({ ...event, deleted_at: null, updated_at: serverNowIso() })
   enqueue({ type: 'restore', eventId: event.id })
+  haptic('tap')
 }

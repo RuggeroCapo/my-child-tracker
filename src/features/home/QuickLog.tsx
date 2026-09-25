@@ -34,7 +34,7 @@ export function QuickLog({ running, feedHint, hints, onQuick }: QuickLogProps) {
         <button
           type="button"
           onClick={() => onQuick('breastfeeding')}
-          className="feed-key flex h-[88px] w-full items-center gap-4 rounded-[22px] pl-4 pr-5 text-left text-night transition-[transform,filter] duration-150 ease-out-quart hover:brightness-[1.03] active:scale-[0.98]"
+          className="feed-key press flex h-[88px] w-full items-center gap-4 rounded-[22px] pl-4 pr-5 text-left text-night [--press:0.975] hover:brightness-[1.03] active:brightness-[0.97]"
         >
           <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[oklch(0.98_0.02_30/0.3)] shadow-[inset_0_1px_0_oklch(0.99_0.02_30/0.4)]">
             <FeedIcon className="size-7" aria-hidden />
@@ -67,9 +67,9 @@ export function QuickLog({ running, feedHint, hints, onQuick }: QuickLogProps) {
                 type="button"
                 onClick={() => onQuick(kind)}
                 style={{ '--k': `var(--color-${KEY_COLOR[kind]})` } as CSSProperties}
-                className="group flex flex-col items-center rounded-[22px] pb-3 pt-4 transition-colors duration-150 ease-out-quart active:bg-night-ink/6"
+                className="press-group flex flex-col items-center rounded-[22px] pb-3 pt-4 transition-colors duration-150 ease-out-quart active:bg-night-ink/6"
               >
-                <span className="console-key relative flex size-16 items-center justify-center rounded-full text-night transition-transform duration-150 ease-out-quart group-active:scale-[0.94]">
+                <span className="console-key press-target relative flex size-16 items-center justify-center rounded-full text-night [--press:0.9]">
                   <Icon className="size-[30px]" aria-hidden />
                   {running.has(kind) && <span className="console-live absolute -right-0.5 -top-0.5 size-3.5 rounded-full animate-pulse-dot" aria-hidden />}
                 </span>
@@ -89,7 +89,7 @@ export function QuickLog({ running, feedHint, hints, onQuick }: QuickLogProps) {
                 key={kind}
                 type="button"
                 onClick={() => onQuick(kind)}
-                className="flex h-14 flex-col items-center justify-center gap-1 rounded-xl text-[13px] font-medium text-night-ink-2 transition-colors duration-150 ease-out-quart hover:text-night-ink active:bg-night-ink/6"
+                className="press flex h-14 flex-col items-center justify-center gap-1 rounded-xl text-[13px] font-medium text-night-ink-2 [--press:0.94] hover:text-night-ink active:bg-night-ink/6"
               >
                 <Icon className={clsx('size-4', meta.text)} aria-hidden />
                 {meta.label}

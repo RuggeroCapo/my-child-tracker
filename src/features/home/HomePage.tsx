@@ -99,7 +99,7 @@ export function HomePage() {
             <h2 className="font-display-tight text-2xl font-bold">Oggi</h2>
             {today.length > 0 && <p className="mt-0.5 text-sm text-ink-2 tabular">{summary.join(' · ')}</p>}
           </div>
-          <Link to="/diary" className="-mr-2 flex h-11 items-center gap-1 rounded-xl px-2 text-sm font-semibold text-ink transition-colors hover:bg-surface-2">
+          <Link to="/diary" className="press -mr-2 flex h-11 items-center gap-1 rounded-xl px-2 text-sm font-semibold text-ink [--press:0.95] hover:bg-surface-2 active:bg-surface-2">
             Diario <ArrowRight className="size-4" aria-hidden />
           </Link>
         </div>

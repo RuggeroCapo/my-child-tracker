@@ -1,4 +1,5 @@
-import { Baby, Bath, ChartSpline, ChevronRight, LogOut, Monitor, Moon, Pill, Stethoscope, Sun, Syringe, UserRound, Users } from 'lucide-react'
+import clsx from 'clsx'
+import { Baby, Bath, ChartSpline, ChevronRight, LogOut, Monitor, Moon, Pill, Stethoscope, Sun, Syringe, UserRound, Users, Vibrate } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { signOut } from '@/app/auth'
@@ -9,6 +10,7 @@ import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Field'
 import { Segmented } from '@/components/ui/Segmented'
 import { Sheet } from '@/components/ui/Sheet'
+import { haptic, hapticsEnabled, hapticsSupported, setHapticsEnabled } from '@/lib/haptics'
 import { formatAge } from '@/lib/time'
 import { useActiveBaby, useBabies } from '@/stores/babies'
 import { useOutbox } from '@/stores/outbox'
@@ -43,7 +45,7 @@ export default function MorePage() {
       </header>
 
       <Card className="divide-y divide-line overflow-hidden">
-        <Link to={`/babies/${baby.id}/edit`} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-2">
+        <Link to={`/babies/${baby.id}/edit`} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-2 active:bg-surface-2">
           <BabyAvatar baby={baby} />
           <span className="min-w-0 flex-1">
             <span className="block font-semibold">{baby.name}</span>
@@ -78,8 +80,10 @@ export default function MorePage() {
         </p>
       </Card>
 
+      {hapticsSupported && <HapticsRow />}
+
       <Card className="divide-y divide-line overflow-hidden">
-        <button type="button" onClick={() => setNameOpen(true)} className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-2">
+        <button type="button" onClick={() => setNameOpen(true)} className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-2 active:bg-surface-2">
           <span className="flex size-11 shrink-0 items-center justify-center"><UserRound className="size-5 text-ink-2" /></span>
           <span className="min-w-0 flex-1">
             <span className="block font-medium">{myName || 'Il tuo nome'}</span>
@@ -87,7 +91,7 @@ export default function MorePage() {
           </span>
           <ChevronRight className="size-4 shrink-0 text-ink-3" aria-hidden />
         </button>
-        <button type="button" onClick={logout} className="flex w-full items-center gap-3 px-4 py-3.5 text-left text-ink-2 transition-colors hover:bg-surface-2 hover:text-ink">
+        <button type="button" onClick={logout} className="flex w-full items-center gap-3 px-4 py-3.5 text-left text-ink-2 transition-colors hover:bg-surface-2 hover:text-ink active:bg-surface-2">
           <span className="flex size-11 shrink-0 items-center justify-center"><LogOut className="size-5" /></span>
           <span className="font-medium">Esci</span>
         </button>
@@ -104,9 +108,50 @@ export default function MorePage() {
   )
 }
 
+/** Vibrazione al tocco: attiva di serie, si spegne qui (resta su questo dispositivo). */
+function HapticsRow() {
+  const [on, setOn] = useState(hapticsEnabled)
+  return (
+    <Card className="overflow-hidden">
+      <button
+        type="button"
+        role="switch"
+        aria-checked={on}
+        onClick={() => {
+          setHapticsEnabled(!on)
+          setOn(!on)
+          // Accendendola si sente subito com'è.
+          if (!on) haptic('tap')
+        }}
+        className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-2 active:bg-surface-2"
+      >
+        <span className="flex size-11 shrink-0 items-center justify-center"><Vibrate className="size-5 text-ink-2" /></span>
+        <span className="min-w-0 flex-1">
+          <span className="block font-medium">Vibrazione al tocco</span>
+          <span className="block text-sm text-ink-2">Un tocco leggero a ogni registrazione</span>
+        </span>
+        <span
+          aria-hidden
+          className={clsx(
+            'relative h-8 w-[52px] shrink-0 rounded-full transition-colors duration-200',
+            on ? 'rose-lit' : 'bg-line',
+          )}
+        >
+          <span
+            className={clsx(
+              'absolute left-1 top-1 size-6 rounded-full bg-surface shadow-[0_2px_6px_oklch(0.3_0.05_350/0.25)] transition-transform duration-(--spring-ms) ease-(--ease-spring)',
+              on && 'translate-x-5',
+            )}
+          />
+        </span>
+      </button>
+    </Card>
+  )
+}
+
 function Row({ to, icon, label, detail }: { to: string; icon: ReactNode; label: string; detail?: string }) {
   return (
-    <Link to={to} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-2">
+    <Link to={to} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-2 active:bg-surface-2">
       <span className="flex size-11 shrink-0 items-center justify-center">{icon}</span>
       <span className="flex-1 font-medium">{label}</span>
       {detail && <span className="text-sm text-ink-3">{detail}</span>}

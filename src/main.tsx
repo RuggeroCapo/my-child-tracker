@@ -9,6 +9,8 @@ import './styles/index.css'
 applyTheme(useUi.getState().theme)
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => applyTheme(useUi.getState().theme))
 initAuth()
+// Senza un ascoltatore touchstart Safari su iOS non applica :active: niente feedback alla pressione.
+document.addEventListener('touchstart', () => {}, { passive: true })
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

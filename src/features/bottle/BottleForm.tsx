@@ -5,6 +5,7 @@ import { FormDock } from '@/components/ui/FormDock'
 import { Input } from '@/components/ui/Field'
 import type { EventOf, MilkType } from '@/domain/types'
 import { MILK_LABEL } from '@/i18n/it'
+import { haptic } from '@/lib/haptics'
 import { parseDecimal } from '@/lib/units'
 import { ChoiceGrid, DateTimeInput, NotesInput } from '../events/formParts'
 import { useEventDraft } from '../events/useEventDraft'
@@ -51,10 +52,13 @@ export function BottleForm({
           <button
             key={p}
             type="button"
-            onClick={() => setAmount(String(p))}
+            onClick={() => {
+              haptic('tick')
+              setAmount(String(p))
+            }}
             className={clsx(
-              'h-11 rounded-full border border-line px-4 text-sm font-medium tabular transition-colors',
-              parseDecimal(amount) === p ? 'bg-bottle/15 text-ink ring-2 ring-bottle' : 'text-ink-2 hover:bg-surface-2',
+              'press h-11 rounded-full border border-line px-4 text-sm font-medium tabular [--press:0.95]',
+              parseDecimal(amount) === p ? 'bg-bottle/15 text-ink ring-2 ring-bottle' : 'text-ink-2 hover:bg-surface-2 active:bg-surface-2',
             )}
           >
             {p} ml

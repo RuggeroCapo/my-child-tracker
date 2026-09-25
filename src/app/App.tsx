@@ -9,6 +9,7 @@ import { useSession } from '@/stores/session'
 import { AppLayout } from './AppLayout'
 import { lazyPage, preloadWhenIdle } from './navTransition'
 import { FullScreenLoader, SetupMissing } from './Screens'
+import { SwipeBack } from './SwipeBack'
 import { UpdatePrompt } from './UpdatePrompt'
 import { LoginPage } from '@/features/auth/LoginPage'
 import { SignupPage } from '@/features/auth/SignupPage'
@@ -102,6 +103,7 @@ export function App() {
       <Ambient />
       <Toaster />
       <UpdatePrompt />
+      <SwipeBack />
       <Suspense fallback={<FullScreenLoader />}>
         <Routes>
           <Route element={<PublicOnly />}>

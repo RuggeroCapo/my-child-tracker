@@ -3,6 +3,7 @@ import { Droplet } from 'lucide-react'
 import { StoolIcon } from '@/components/icons'
 import type { DiaperType, StoolAmount, StoolColor } from '@/domain/types'
 import { STOOL_AMOUNT_LABEL, STOOL_COLOR_HEX, STOOL_COLOR_LABEL } from '@/i18n/it'
+import { haptic } from '@/lib/haptics'
 
 const AMOUNT_DOT: Record<StoolAmount, string> = { small: 'size-2.5', medium: 'size-4', large: 'size-6' }
 
@@ -29,10 +30,13 @@ export function StoolPicker({
               type="button"
               role="radio"
               aria-checked={amount === a}
-              onClick={() => onAmount(amount === a ? null : a)}
+              onClick={() => {
+                haptic('tick')
+                onAmount(amount === a ? null : a)
+              }}
               className={clsx(
-                'flex h-16 flex-col items-center justify-center gap-1.5 rounded-2xl border border-line text-sm font-medium transition-colors duration-150',
-                amount === a ? 'bg-bottle/15 text-ink ring-2 ring-bottle' : 'text-ink-2 hover:bg-surface-2',
+                'press flex h-16 flex-col items-center justify-center gap-1.5 rounded-2xl border border-line text-sm font-medium',
+                amount === a ? 'bg-bottle/15 text-ink ring-2 ring-bottle' : 'text-ink-2 hover:bg-surface-2 active:bg-surface-2',
               )}
             >
               <span className={clsx('rounded-full bg-[#9a6a3a]', AMOUNT_DOT[a])} aria-hidden />
@@ -54,9 +58,12 @@ export function StoolPicker({
               aria-checked={color === c}
               aria-label={STOOL_COLOR_LABEL[c]}
               title={STOOL_COLOR_LABEL[c]}
-              onClick={() => onColor(color === c ? null : c)}
+              onClick={() => {
+                haptic('tick')
+                onColor(color === c ? null : c)
+              }}
               className={clsx(
-                'size-11 rounded-full border border-ink/15 transition-transform duration-150',
+                'press size-11 rounded-full border border-ink/15 [--press:0.9]',
                 color === c ? 'scale-110 ring-2 ring-ink ring-offset-2 ring-offset-surface' : 'hover:scale-105',
               )}
               style={{ backgroundColor: STOOL_COLOR_HEX[c] }}

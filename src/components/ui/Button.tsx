@@ -7,12 +7,12 @@ type Size = 'sm' | 'md' | 'lg'
 
 const variants: Record<Variant, string> = {
   /** L'unica azione piena in rosa: testo scuro, il bianco sul rosa non regge il contrasto. */
-  primary: 'rose-lit text-night hover:brightness-[1.04]',
-  secondary: 'bg-surface-2 text-ink hover:bg-line/70',
-  outline: 'border border-line bg-surface text-ink hover:bg-surface-2',
-  ghost: 'text-ink-2 hover:bg-surface-2 hover:text-ink',
+  primary: 'rose-lit text-night hover:brightness-[1.04] active:brightness-[0.96]',
+  secondary: 'bg-surface-2 text-ink hover:bg-line/70 active:bg-line/70',
+  outline: 'border border-line bg-surface text-ink hover:bg-surface-2 active:bg-surface-2',
+  ghost: 'text-ink-2 hover:bg-surface-2 hover:text-ink active:bg-surface-2 active:text-ink',
   /** Per i pulsanti secondari sopra il pannello bg-night. */
-  night: 'border border-night-line text-night-ink hover:bg-night-line/60',
+  night: 'border border-night-line text-night-ink hover:bg-night-line/60 active:bg-night-line/60',
 }
 
 const sizes: Record<Size, string> = {
@@ -46,7 +46,7 @@ export function Button({
       type={type}
       disabled={disabled || loading}
       className={clsx(
-        'inline-flex select-none items-center justify-center font-semibold transition-[color,background-color,transform] duration-150 ease-out-quart active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50',
+        'press inline-flex select-none items-center justify-center font-semibold disabled:pointer-events-none disabled:opacity-50',
         variants[variant],
         sizes[size],
         block && 'w-full',
@@ -72,7 +72,7 @@ export function IconButton({
       aria-label={label}
       title={label}
       className={clsx(
-        'inline-flex size-11 shrink-0 items-center justify-center rounded-full text-ink-2 transition-[color,background-color,transform] duration-150 ease-out-quart hover:bg-surface-2 hover:text-ink active:scale-95 active:bg-surface-2',
+        'press inline-flex size-11 shrink-0 items-center justify-center rounded-full text-ink-2 [--press:0.9] hover:bg-surface-2 hover:text-ink active:bg-surface-2',
         className,
       )}
       {...rest}

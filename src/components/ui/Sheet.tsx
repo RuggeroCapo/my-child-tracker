@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { X } from 'lucide-react'
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
+import { haptic } from '@/lib/haptics'
 
 /** Oltre questa distanza (px) o velocità (px/ms) il trascinamento chiude il foglio. */
 const DISMISS_DISTANCE = 96
@@ -23,7 +24,7 @@ export function Sheet({
 }) {
   const panel = useRef<HTMLDivElement>(null)
   const scrim = useRef<HTMLDivElement>(null)
-  const drag = useRef<{ id: number; y0: number; t0: number; dy: number } | null>(null)
+  const drag = useRef<{ id: number; y0: number; t0: number; dy: number; armed: boolean } | null>(null)
   // Resta montato durante l'animazione di uscita.
   const [mounted, setMounted] = useState(open)
   if (open && !mounted) setMounted(true)
@@ -53,7 +54,7 @@ export function Sheet({
   // Trascinamento verso il basso dalla maniglia/intestazione, solo con tocco o penna.
   function onPointerDown(e: PointerEvent<HTMLDivElement>) {
     if (e.pointerType === 'mouse' || closing || (e.target as HTMLElement).closest('button')) return
-    drag.current = { id: e.pointerId, y0: e.clientY, t0: e.timeStamp, dy: 0 }
+    drag.current = { id: e.pointerId, y0: e.clientY, t0: e.timeStamp, dy: 0, armed: false }
     e.currentTarget.setPointerCapture(e.pointerId)
   }
 
@@ -66,6 +67,12 @@ export function Sheet({
     panel.current.style.transition = 'none'
     panel.current.style.transform = `translateY(${d.dy}px)`
     if (scrim.current) scrim.current.style.opacity = String(1 - Math.max(0, d.dy) / panel.current.offsetHeight)
+    // Un tic quando lasciare il dito chiuderebbe il foglio: si sente senza guardare.
+    const armed = d.dy > DISMISS_DISTANCE
+    if (armed !== d.armed) {
+      d.armed = armed
+      if (armed) haptic('tick')
+    }
   }
 
   function onPointerUp(e: PointerEvent<HTMLDivElement>) {
@@ -80,7 +87,8 @@ export function Sheet({
       onClose()
       return
     }
-    el.style.transition = 'transform 220ms var(--ease-out-expo)'
+    // Torna su con la molla, come se il dito l'avesse lasciato andare.
+    el.style.transition = 'transform var(--spring-ms) var(--ease-spring)'
     el.style.transform = ''
     if (scrim.current) {
       scrim.current.style.transition = 'opacity 220ms var(--ease-out-quart)'
@@ -126,7 +134,7 @@ export function Sheet({
                 type="button"
                 onClick={onClose}
                 aria-label="Chiudi"
-                className="-mr-2 inline-flex size-11 items-center justify-center rounded-full text-ink-2 transition-[color,background-color,transform] duration-150 ease-out-quart hover:bg-surface-2 hover:text-ink active:scale-95"
+                className="press -mr-2 inline-flex size-11 items-center justify-center rounded-full text-ink-2 [--press:0.9] hover:bg-surface-2 hover:text-ink active:bg-surface-2"
               >
                 <X className="size-5" />
               </button>
