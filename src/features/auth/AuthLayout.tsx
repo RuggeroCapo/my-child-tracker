@@ -3,7 +3,7 @@ import { Logo } from '@/components/Logo'
 
 export function AuthLayout({ title, subtitle, children, footer }: { title: string; subtitle?: string; children: ReactNode; footer?: ReactNode }) {
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-sm flex-col justify-center px-6 py-10 pt-safe">
+    <div className="vt-page mx-auto flex min-h-dvh w-full max-w-sm flex-col justify-center px-6 py-10 pt-safe">
       <div className="mb-8 flex flex-col items-center text-center">
         <Logo size={72} />
         <h1 className="mt-5 font-display-tight text-[34px] font-extrabold leading-tight">{title}</h1>

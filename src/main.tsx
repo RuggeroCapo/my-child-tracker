@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter } from 'react-router'
 import { App } from './app/App'
+import { TransitionRouter } from './app/navTransition'
 import { initAuth } from './app/auth'
 import { applyTheme, useUi } from './stores/ui'
 import './styles/index.css'
@@ -12,8 +12,8 @@ initAuth()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <TransitionRouter>
       <App />
-    </BrowserRouter>
+    </TransitionRouter>
   </StrictMode>,
 )

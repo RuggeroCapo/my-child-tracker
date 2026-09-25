@@ -11,7 +11,10 @@ import { describeEvent } from '../kinds'
 import { EventForm } from './EventForm'
 
 export function EventDetailSheet({ eventId, onClose }: { eventId: string | null; onClose: () => void }) {
-  const event = useEvent(eventId)
+  // Tiene l'ultimo evento mostrato, così il foglio ha ancora un contenuto mentre si chiude.
+  const [shownId, setShownId] = useState(eventId)
+  if (eventId && eventId !== shownId) setShownId(eventId)
+  const event = useEvent(shownId)
   const [editing, setEditing] = useState(false)
   const createdBy = useMemberName(event?.created_by)
   const endedBy = useMemberName(event?.ended_by)

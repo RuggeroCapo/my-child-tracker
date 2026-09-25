@@ -41,23 +41,17 @@ test('tutte le funzionalità MVP', async ({ page }) => {
   await page.getByRole('link', { name: 'Dettagli allattamento' }).click()
   await expect(page).toHaveURL(/\/breastfeeding\/[0-9a-f-]+$/)
   await page.getByRole('radio', { name: 'Destro' }).click()
-  // Orario locale calcolato nel browser (timezone del contesto Playwright)
-  const tenMinAgo = await page.evaluate(() => {
-    const d = new Date(Date.now() - 10 * 60_000)
-    const pad = (n: number) => String(n).padStart(2, '0')
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
-  })
-  await page.getByLabel('Inizio').fill(tenMinAgo)
+  await page.getByRole('button', { name: '30 minuti fa' }).first().click()
   await page.getByRole('button', { name: 'Salva' }).click()
   await expect(page.getByText(/^Destro · \d\d:\d\d → \d\d:\d\d$/)).toBeVisible()
-  await expect(page.getByRole('timer')).toHaveText(/(09|10):\d\d$/)
+  await expect(page.getByRole('timer')).toHaveText(/(29|30):\d\d$/)
   await shot(page, 'breastfeeding-detail')
   await page.getByRole('button', { name: 'Termina' }).click()
   await expect(page.getByLabel('Fine')).toBeVisible()
 
   // Dal diario, un allattamento apre la stessa pagina
   await page.goto('/diary')
-  await page.getByRole('button', { name: /Allattamento\s*Destro · (9|10|11) min/ }).click()
+  await page.getByRole('button', { name: /Allattamento\s*Destro · (29|30|31) min/ }).click()
   await expect(page).toHaveURL(/\/breastfeeding\/[0-9a-f-]+$/)
   await expect(page.getByLabel('Inizio')).toBeVisible()
 
@@ -106,7 +100,8 @@ test('tutte le funzionalità MVP', async ({ page }) => {
     await page.getByLabel(/Altezza/).fill(cm)
     const d = new Date(Date.now() - daysAgo * 86_400_000 - 3_600_000)
     const local = new Date(d.getTime() - d.getTimezoneOffset() * 60_000).toISOString().slice(0, 16)
-    await page.getByLabel('Data e ora').fill(local)
+    await page.getByLabel('Giorno', { exact: true }).fill(local.slice(0, 10))
+    await page.getByLabel('Data e ora').fill(local.slice(11))
     await page.getByRole('button', { name: 'Salva' }).click()
   }
   await expect(page.getByText('Percentile OMS')).toBeVisible()
@@ -132,14 +127,14 @@ test('tutte le funzionalità MVP', async ({ page }) => {
   // Statistiche
   await page.goto('/stats')
   await page.getByRole('radio', { name: 'Oggi' }).click()
-  await expect(page.getByText(/^2 sessioni · 2\d min$/)).toBeVisible()
+  await expect(page.getByText(/^2 sessioni · 4\d min$/)).toBeVisible()
   await page.waitForTimeout(300)
   await shot(page, 'stats')
 
   // I dati sopravvivono al reload (cache IndexedDB + server)
   await page.reload()
   await page.getByRole('radio', { name: 'Oggi' }).click()
-  await expect(page.getByText(/^2 sessioni · 2\d min$/)).toBeVisible()
+  await expect(page.getByText(/^2 sessioni · 4\d min$/)).toBeVisible()
 
   // Tema scuro
   await page.goto('/more')

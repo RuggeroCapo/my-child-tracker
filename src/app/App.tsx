@@ -1,10 +1,11 @@
-import { lazy, Suspense, type ReactNode } from 'react'
+import { Suspense, useEffect, type ReactNode } from 'react'
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router'
 import { Toaster } from '@/components/ui/Toaster'
 import { isSupabaseConfigured } from '@/lib/supabase'
 import { useBabies } from '@/stores/babies'
 import { useSession } from '@/stores/session'
 import { AppLayout } from './AppLayout'
+import { lazyPage, preloadWhenIdle } from './navTransition'
 import { FullScreenLoader, SetupMissing } from './Screens'
 import { UpdatePrompt } from './UpdatePrompt'
 import { LoginPage } from '@/features/auth/LoginPage'
@@ -13,21 +14,39 @@ import { ForgotPasswordPage } from '@/features/auth/ForgotPasswordPage'
 import { ResetPasswordPage } from '@/features/auth/ResetPasswordPage'
 import { HomePage } from '@/features/home/HomePage'
 
-const WelcomePage = lazy(() => import('@/features/babies/WelcomePage'))
-const BabyFormPage = lazy(() => import('@/features/babies/BabyFormPage'))
-const InvitePage = lazy(() => import('@/features/babies/InvitePage'))
-const DiaryPage = lazy(() => import('@/features/diary/DiaryPage'))
-const StatsPage = lazy(() => import('@/features/stats/StatsPage'))
-const MorePage = lazy(() => import('@/features/more/MorePage'))
-const MembersPage = lazy(() => import('@/features/more/MembersPage'))
-const BreastfeedingPage = lazy(() => import('@/features/breastfeeding/BreastfeedingPage'))
-const FeedingDetailPage = lazy(() => import('@/features/breastfeeding/FeedingDetailPage'))
-const DiaperPage = lazy(() => import('@/features/diaper/DiaperPage'))
-const BottlePage = lazy(() => import('@/features/bottle/BottlePage'))
-const PumpingPage = lazy(() => import('@/features/pumping/PumpingPage'))
-const MedicationsPage = lazy(() => import('@/features/medication/MedicationsPage'))
-const VaccinationsPage = lazy(() => import('@/features/vaccination/VaccinationsPage'))
-const GrowthPage = lazy(() => import('@/features/growth/GrowthPage'))
+const WelcomePage = lazyPage(() => import('@/features/babies/WelcomePage'))
+const BabyFormPage = lazyPage(() => import('@/features/babies/BabyFormPage'))
+const InvitePage = lazyPage(() => import('@/features/babies/InvitePage'))
+const DiaryPage = lazyPage(() => import('@/features/diary/DiaryPage'))
+const StatsPage = lazyPage(() => import('@/features/stats/StatsPage'))
+const MorePage = lazyPage(() => import('@/features/more/MorePage'))
+const MembersPage = lazyPage(() => import('@/features/more/MembersPage'))
+const BreastfeedingPage = lazyPage(() => import('@/features/breastfeeding/BreastfeedingPage'))
+const FeedingDetailPage = lazyPage(() => import('@/features/breastfeeding/FeedingDetailPage'))
+const DiaperPage = lazyPage(() => import('@/features/diaper/DiaperPage'))
+const BottlePage = lazyPage(() => import('@/features/bottle/BottlePage'))
+const PumpingPage = lazyPage(() => import('@/features/pumping/PumpingPage'))
+const MedicationsPage = lazyPage(() => import('@/features/medication/MedicationsPage'))
+const VaccinationsPage = lazyPage(() => import('@/features/vaccination/VaccinationsPage'))
+const GrowthPage = lazyPage(() => import('@/features/growth/GrowthPage'))
+
+const LAZY_PAGES = [
+  WelcomePage,
+  BabyFormPage,
+  InvitePage,
+  DiaryPage,
+  StatsPage,
+  MorePage,
+  MembersPage,
+  BreastfeedingPage,
+  FeedingDetailPage,
+  DiaperPage,
+  BottlePage,
+  PumpingPage,
+  MedicationsPage,
+  VaccinationsPage,
+  GrowthPage,
+]
 
 function RequireAuth() {
   const { session, ready, recovering } = useSession()
@@ -57,10 +76,13 @@ function RequireBaby() {
 }
 
 function Page({ children }: { children: ReactNode }) {
-  return <div className="mx-auto min-h-dvh w-full max-w-lg px-4 pb-safe">{children}</div>
+  return (
+    <div className="vt-page mx-auto min-h-dvh w-full max-w-lg px-4 pb-safe">{children}</div>
+  )
 }
 
 export function App() {
+  useEffect(() => preloadWhenIdle(LAZY_PAGES), [])
   if (!isSupabaseConfigured) return <SetupMissing />
   return (
     <>

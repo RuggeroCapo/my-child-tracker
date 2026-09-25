@@ -18,8 +18,24 @@ export function Segmented<T extends string>({
   className?: string
   ariaLabel?: string
 }) {
+  const index = options.findIndex((o) => o.value === value)
   return (
-    <div role="radiogroup" aria-label={ariaLabel} className={clsx('flex gap-1 rounded-2xl bg-surface-2 p-1', className)}>
+    <div
+      role="radiogroup"
+      aria-label={ariaLabel}
+      className={clsx('relative isolate flex gap-1 rounded-2xl bg-surface-2 p-1', className)}
+    >
+      {/* Un solo indicatore che scivola sotto l'opzione scelta (opzioni di pari larghezza, gap-1 = 0.25rem). */}
+      {index >= 0 && (
+        <span
+          aria-hidden
+          className="absolute inset-y-1 left-1 -z-10 rounded-xl bg-rose transition-transform duration-200 ease-out-expo"
+          style={{
+            width: `calc((100% - 0.5rem - ${options.length - 1} * 0.25rem) / ${options.length})`,
+            transform: `translateX(calc(${index} * (100% + 0.25rem)))`,
+          }}
+        />
+      )}
       {options.map((o) => (
         <button
           key={o.value}
@@ -28,8 +44,8 @@ export function Segmented<T extends string>({
           aria-checked={o.value === value}
           onClick={() => onChange(o.value)}
           className={clsx(
-            'h-10 flex-1 rounded-xl px-2 text-sm font-medium transition-colors duration-150',
-            o.value === value ? 'bg-rose font-semibold text-night' : 'text-ink-2 hover:text-ink',
+            'h-10 flex-1 rounded-xl px-2 text-sm transition-colors duration-200',
+            o.value === value ? 'font-semibold text-night' : 'font-medium text-ink-2 hover:text-ink',
           )}
         >
           {o.label}

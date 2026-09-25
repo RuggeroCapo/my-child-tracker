@@ -10,6 +10,8 @@ export interface Toast {
   description?: string
   action?: { label: string; onClick: () => void }
   duration: number
+  /** In uscita: resta a schermo il tempo dell'animazione. */
+  leaving?: boolean
 }
 
 export type SyncStatus = 'offline' | 'syncing' | 'synced' | 'error'
@@ -25,6 +27,7 @@ interface UiState {
 }
 
 let nextToastId = 1
+const TOAST_EXIT_MS = 160
 const THEME_KEY = 'bebe-theme'
 
 function readTheme(): ThemePref {
@@ -56,7 +59,12 @@ export const useUi = create<UiState>()((set, get) => ({
     setTimeout(() => get().dismiss(id), toast.duration)
     return id
   },
-  dismiss: (id) => set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })),
+  dismiss: (id) => {
+    const t = get().toasts.find((x) => x.id === id)
+    if (!t || t.leaving) return
+    set((s) => ({ toasts: s.toasts.map((x) => (x.id === id ? { ...x, leaving: true } : x)) }))
+    setTimeout(() => set((s) => ({ toasts: s.toasts.filter((x) => x.id !== id) })), TOAST_EXIT_MS)
+  },
   setTheme: (theme) => {
     try {
       localStorage.setItem(THEME_KEY, theme)

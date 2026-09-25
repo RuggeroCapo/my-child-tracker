@@ -41,7 +41,7 @@ export function PumpingForm({ babyId, initial, onSaved }: { babyId: string; init
         options={(['left', 'right', 'both'] as const).map((s) => ({ value: s, label: PUMP_SIDE_LABEL[s] }))}
       />
       <DateTimeInput label="Inizio" value={draft.startedAt} onChange={draft.setStartedAt} />
-      {!active && <DateTimeInput label="Fine" value={endedAt} onChange={setEndedAt} min={draft.startedAt} />}
+      {!active && <DateTimeInput label="Fine" value={endedAt} onChange={setEndedAt} />}
       <Input label="Quantità estratta" optional inputMode="decimal" suffix="ml" value={amount} onChange={(e) => setAmount(e.target.value)} />
       <NotesInput value={draft.notes} onChange={draft.setNotes} />
       {draft.error && <p className="text-sm text-danger" role="alert">{draft.error}</p>}

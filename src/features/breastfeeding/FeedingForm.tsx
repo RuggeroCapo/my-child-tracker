@@ -34,7 +34,7 @@ export function FeedingForm({ babyId, initial, onSaved }: { babyId: string; init
         options={(['left', 'right'] as const).map((s) => ({ value: s, label: BREAST_SIDE_LABEL[s] }))}
       />
       <DateTimeInput label="Inizio" value={draft.startedAt} onChange={draft.setStartedAt} />
-      {!active && <DateTimeInput label="Fine" value={endedAt} onChange={setEndedAt} min={draft.startedAt} />}
+      {!active && <DateTimeInput label="Fine" value={endedAt} onChange={setEndedAt} />}
       <NotesInput value={draft.notes} onChange={draft.setNotes} />
       {draft.error && <p className="text-sm text-danger" role="alert">{draft.error}</p>}
       <Button type="submit" block size="lg">

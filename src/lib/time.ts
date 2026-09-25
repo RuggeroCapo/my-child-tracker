@@ -112,3 +112,24 @@ export function fromLocalInput(value: string): string {
 export function toDateInput(d: Date): string {
   return toLocalInput(d).slice(0, 10)
 }
+
+/** Tolleranza sul futuro accettata dai form (orologi non perfettamente allineati). */
+export const FUTURE_TOLERANCE_MS = 5 * 60_000
+
+/**
+ * Cambia l'ora di un valore datetime-local mantenendo il giorno.
+ * Se l'orario risultante cade nel futuro, passa al giorno prima:
+ * alle 3 di notte "23:30" significa ieri sera.
+ */
+export function withLocalTime(value: string, time: string, now: Date = new Date()): string {
+  const next = `${value.slice(0, 10)}T${time}`
+  if (new Date(next).getTime() > now.getTime() + FUTURE_TOLERANCE_MS) {
+    return `${toDateInput(addDays(new Date(next), -1))}T${time}`
+  }
+  return next
+}
+
+/** Sposta un valore datetime-local di N giorni mantenendo l'ora. */
+export function shiftLocalDay(value: string, days: number): string {
+  return toLocalInput(addDays(new Date(value), days))
+}

@@ -194,7 +194,7 @@ This system explicitly rejects the **SaaS dashboard** (KPI tiles, hero metrics, 
 - Category color = soft pastel tile + saturated icon + text label, always all three.
 - Rounded, soft geometry (12px elements, 16px cards, 24px feature panels, 28px sheets).
 - Bottom sheets for quick logging, undo toasts instead of confirmation dialogs.
-- Responsive motion: press feedback, sheet slide-up, live-session pulse. Nothing else moves.
+- Responsive motion: press feedback, sheet slide-up and slide-down (drag the grabber to dismiss), live-session pulse, toast in/out, the segmented control's sliding indicator, and screen transitions on navigation (shared-axis slide going deeper or back, fade-through between tabs, tab bar slides away on detail screens). Nothing else moves.
 - Layout rhythm on a 4px base: 4 · 8 · 12 · 16 · 24 · 48. Container padding 16px, space between sections 24px (Home uses 36 to 40px between major blocks), space between cards 16px.
 
 ## 2. Colors
@@ -354,7 +354,7 @@ Slides up in 220ms (ease-out-quart), 28px top radius, grab handle, title + close
 - **Do** use undo toasts (Paper, 16px radius, Toast shadow) instead of confirmation dialogs for deletes and edits.
 - **Do** keep transitions between 150 and 250ms with exponential ease-out; press feedback is `scale(0.98)`.
 - **Do** design the dark theme on its own: plum Night Canvas base, no Paper or Snow fills larger than a button, at most one filled Nursery Rose element per screen.
-- **Do** respect `prefers-reduced-motion`: the live pulse and sheet slide become instant.
+- **Do** respect `prefers-reduced-motion`: the live pulse, sheet slide and screen transitions become instant.
 
 ### Don't:
 - **Don't** build a **SaaS dashboard**: no KPI tiles, no hero-metric blocks (big number, small label, trend arrow), no grids of identical stat cards, no gradients.

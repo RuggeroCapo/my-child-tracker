@@ -24,7 +24,10 @@ export function Toaster() {
           <div
             key={t.id}
             role={t.tone === 'error' ? 'alert' : 'status'}
-            className="animate-toast-in pointer-events-auto flex w-full max-w-md items-center gap-3 rounded-2xl bg-surface py-2 pl-4 pr-1 text-ink shadow-[0_8px_24px_oklch(0.3_0.05_350/0.14)] ring-1 ring-line dark:bg-surface-2 dark:shadow-none"
+            className={clsx(
+              t.leaving ? 'animate-toast-out pointer-events-none' : 'animate-toast-in pointer-events-auto',
+              'flex w-full max-w-md items-center gap-3 rounded-2xl bg-surface py-2 pl-4 pr-1 text-ink shadow-[0_8px_24px_oklch(0.3_0.05_350/0.14)] ring-1 ring-line dark:bg-surface-2 dark:shadow-none',
+            )}
           >
             <Icon className={clsx('size-5 shrink-0', color)} aria-hidden />
             <div className="min-w-0 flex-1 py-1">

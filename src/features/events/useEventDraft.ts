@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { BabyEvent, EventInput } from '@/domain/types'
 import { newId } from '@/lib/id'
-import { fromLocalInput, toLocalInput } from '@/lib/time'
+import { FUTURE_TOLERANCE_MS, fromLocalInput, toLocalInput } from '@/lib/time'
 import { toast } from '@/stores/ui'
 import { saveEvent } from '@/sync/actions'
 
@@ -19,7 +19,7 @@ export function useEventDraft(initial?: BabyEvent | null, minutesAgo = 0) {
     opts: { successTitle?: string } = {},
   ): boolean {
     const started = input.started_at ?? fromLocalInput(startedAt)
-    const limit = Date.now() + 5 * 60_000
+    const limit = Date.now() + FUTURE_TOLERANCE_MS
     if (Date.parse(started) > limit || (input.ended_at && Date.parse(input.ended_at) > limit)) {
       setError("L'orario non può essere nel futuro.")
       return false
