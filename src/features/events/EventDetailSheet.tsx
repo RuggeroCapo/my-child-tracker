@@ -26,7 +26,6 @@ export function EventDetailSheet({ eventId, onClose }: { eventId: string | null;
 
   if (!event) return null
   const { title, subtitle } = describeEvent(event)
-  const editable = event.kind !== 'bath' && event.kind !== 'doctor_visit'
 
   return (
     <Sheet open={Boolean(eventId)} onClose={close} title={editing ? `Modifica ${KIND_LABEL[event.kind].toLowerCase()}` : undefined}>
@@ -71,12 +70,10 @@ export function EventDetailSheet({ eventId, onClose }: { eventId: string | null;
               </>
             )}
           </dl>
-          <div className={editable ? 'grid grid-cols-2 gap-2' : 'grid grid-cols-1 gap-2'}>
-            {editable && (
-              <Button variant="outline" icon={<Pencil className="size-4" />} onClick={() => setEditing(true)}>
-                Modifica
-              </Button>
-            )}
+          <div className={'grid grid-cols-2 gap-2'}>
+            <Button variant="outline" icon={<Pencil className="size-4" />} onClick={() => setEditing(true)}>
+              Modifica
+            </Button>
             <Button
               variant="ghost"
               icon={<Trash className="size-4" />}

@@ -90,7 +90,7 @@ export function describeEvent(e: BabyEvent): { title: string; subtitle: string }
     case 'bath':
       return {
         title: KIND_LABEL.bath,
-        subtitle: e.ended_at ? formatDuration(e.duration_seconds ?? 0) : 'in corso',
+        subtitle: e.ended_at ? formatDuration(e.duration_seconds ?? 0) : (e.notes?.split('\n')[0] ?? 'Fatto'),
       }
     case 'doctor_visit':
       return { title: e.details.visit_type, subtitle: KIND_LABEL.doctor_visit }

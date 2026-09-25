@@ -1,7 +1,9 @@
 import type { BabyEvent, EventKind, EventOf } from '@/domain/types'
+import { BathForm } from '../bath/BathForm'
 import { BottleForm } from '../bottle/BottleForm'
 import { FeedingForm } from '../breastfeeding/FeedingForm'
 import { DiaperForm } from '../diaper/DiaperForm'
+import { DoctorVisitForm } from '../doctorVisit/DoctorVisitForm'
 import { MeasurementForm } from '../growth/MeasurementForm'
 import { MedicationForm } from '../medication/MedicationForm'
 import { PumpingForm } from '../pumping/PumpingForm'
@@ -35,5 +37,9 @@ export function EventForm({
       return <VaccinationForm {...props} initial={initial as EventOf<'vaccination'>} />
     case 'measurement':
       return <MeasurementForm {...props} initial={initial as EventOf<'measurement'>} />
+    case 'bath':
+      return <BathForm {...props} initial={initial as EventOf<'bath'>} />
+    case 'doctor_visit':
+      return <DoctorVisitForm {...props} initial={initial as EventOf<'doctor_visit'>} />
   }
 }

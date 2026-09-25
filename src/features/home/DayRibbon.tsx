@@ -9,7 +9,7 @@ const LANES: { label: string; kinds: EventKind[]; always?: boolean }[] = [
   { label: 'Pasti', kinds: ['breastfeeding', 'bottle'], always: true },
   { label: 'Cambi', kinds: ['diaper'], always: true },
   { label: 'Tiralatte', kinds: ['pumping'] },
-  { label: 'Altro', kinds: ['medication', 'vaccination', 'measurement'] },
+  { label: 'Altro', kinds: ['medication', 'vaccination', 'measurement', 'bath', 'doctor_visit'] },
 ]
 
 /** Il ritmo della giornata su una riga di 24 ore: i buchi tra i pasti si vedono a colpo d'occhio. */
