@@ -13,7 +13,7 @@ export interface QuickLogProps {
 }
 
 const MINOR = ['diaper', 'bottle', 'pumping'] as const
-const SECONDARY: EventKind[] = ['medication', 'measurement', 'vaccination']
+const SECONDARY: EventKind[] = ['medication', 'measurement', 'vaccination', 'bath']
 const KEY_COLOR: Record<(typeof MINOR)[number], string> = { diaper: 'diaper', bottle: 'bottle', pumping: 'pump' }
 
 /**
@@ -80,7 +80,7 @@ export function QuickLog({ running, feedHint, hints, onQuick }: QuickLogProps) {
           })}
         </div>
 
-        <div className="mx-2 grid grid-cols-3 border-t border-night-line">
+        <div className="mx-2 grid grid-cols-4 border-t border-night-line">
           {SECONDARY.map((kind) => {
             const meta = KIND_META[kind]
             const Icon = meta.icon
@@ -89,7 +89,7 @@ export function QuickLog({ running, feedHint, hints, onQuick }: QuickLogProps) {
                 key={kind}
                 type="button"
                 onClick={() => onQuick(kind)}
-                className="flex h-12 items-center justify-center gap-1.5 rounded-xl text-[13px] font-medium text-night-ink-2 transition-colors duration-150 ease-out-quart hover:text-night-ink active:bg-night-ink/6"
+                className="flex h-14 flex-col items-center justify-center gap-1 rounded-xl text-[13px] font-medium text-night-ink-2 transition-colors duration-150 ease-out-quart hover:text-night-ink active:bg-night-ink/6"
               >
                 <Icon className={clsx('size-4', meta.text)} aria-hidden />
                 {meta.label}

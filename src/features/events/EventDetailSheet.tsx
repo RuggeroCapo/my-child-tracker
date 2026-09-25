@@ -26,7 +26,7 @@ export function EventDetailSheet({ eventId, onClose }: { eventId: string | null;
 
   if (!event) return null
   const { title, subtitle } = describeEvent(event)
-  const editable = event.kind !== 'bath' && event.kind !== 'doctor_visit'
+  const editable = event.kind !== 'doctor_visit'
 
   return (
     <Sheet open={Boolean(eventId)} onClose={close} title={editing ? `Modifica ${KIND_LABEL[event.kind].toLowerCase()}` : undefined}>

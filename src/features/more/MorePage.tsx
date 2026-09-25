@@ -1,4 +1,4 @@
-import { Baby, ChartSpline, ChevronRight, LogOut, Monitor, Moon, Pill, Sun, Syringe, UserRound, Users } from 'lucide-react'
+import { Baby, Bath, ChartSpline, ChevronRight, LogOut, Monitor, Moon, Pill, Sun, Syringe, UserRound, Users } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { signOut } from '@/app/auth'
@@ -55,6 +55,7 @@ export default function MorePage() {
         <Row to="/growth" icon={<ChartSpline className="size-5 text-growth" />} label="Crescita e curve OMS" />
         <Row to="/medications" icon={<Pill className="size-5 text-med" />} label="Registro medicine" />
         <Row to="/vaccinations" icon={<Syringe className="size-5 text-vax" />} label="Vaccinazioni" />
+        <Row to="/bath" icon={<Bath className="size-5 text-bath" />} label="Bagnetto" />
         <Row to="/babies/new" icon={<Baby className="size-5 text-rose-ink" />} label="Aggiungi un altro bambino" />
       </Card>
 

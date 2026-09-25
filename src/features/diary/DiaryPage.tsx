@@ -24,7 +24,7 @@ const FILTERS: { id: string; label: string; kinds: EventKind[] | null }[] = [
   { id: 'visit', label: 'Visite mediche', kinds: ['doctor_visit'] },
 ]
 
-const ADDABLE: EventKind[] = ['breastfeeding', 'diaper', 'bottle', 'pumping', 'medication', 'vaccination', 'measurement']
+const ADDABLE: EventKind[] = ['breastfeeding', 'diaper', 'bottle', 'pumping', 'medication', 'vaccination', 'measurement', 'bath']
 
 export default function DiaryPage() {
   const baby = useActiveBaby()!
