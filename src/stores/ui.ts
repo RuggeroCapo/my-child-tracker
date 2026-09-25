@@ -42,7 +42,7 @@ export function applyTheme(pref: ThemePref) {
   document.documentElement.classList.toggle('dark', dark)
   document
     .querySelectorAll('meta[name="theme-color"]')
-    .forEach((m) => m.setAttribute('content', dark ? '#0B1220' : '#FFF8F5'))
+    .forEach((m) => m.setAttribute('content', dark ? '#1a1016' : '#fbf4f0'))
 }
 
 export const useUi = create<UiState>()((set, get) => ({

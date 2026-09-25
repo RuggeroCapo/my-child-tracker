@@ -22,12 +22,12 @@ export default function WelcomePage() {
     <div className="flex min-h-dvh flex-col justify-center gap-6 py-10 pt-safe">
       <div className="flex flex-col items-center text-center">
         <Logo size={64} />
-        <h1 className="mt-4 text-2xl font-semibold">Benvenuto!</h1>
+        <h1 className="mt-4 font-display-tight text-[34px] font-extrabold leading-tight">Iniziamo</h1>
         <p className="mt-1 text-ink-2">Inizia creando il profilo del tuo bambino.</p>
       </div>
       <Card className="p-5">
         <div className="mb-4 flex items-center gap-3">
-          <span className="flex size-11 items-center justify-center rounded-full bg-rose/12 text-rose">
+          <span className="flex size-11 items-center justify-center rounded-full bg-rose/12 text-rose-ink">
             <Baby className="size-6" />
           </span>
           <div>
@@ -41,7 +41,7 @@ export default function WelcomePage() {
       </Card>
       <Card className="p-5">
         <div className="mb-4 flex items-center gap-3">
-          <span className="flex size-11 items-center justify-center rounded-full bg-sky/12 text-sky">
+          <span className="flex size-11 items-center justify-center rounded-full bg-surface-2 text-ink-2">
             <KeyRound className="size-5" />
           </span>
           <div>
@@ -57,7 +57,7 @@ export default function WelcomePage() {
         </form>
       </Card>
       <p className="text-center text-sm text-ink-3">
-        <Link to="/login" onClick={() => void signOut()} className="underline-offset-2 hover:underline">
+        <Link to="/login" onClick={() => void signOut()} className="inline-flex h-11 items-center px-3 underline-offset-2 hover:underline">
           Esci
         </Link>
       </p>

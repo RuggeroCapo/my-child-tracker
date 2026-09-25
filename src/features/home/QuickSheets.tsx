@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { CircleCheck } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { Button } from '@/components/ui/Button'
@@ -42,11 +43,11 @@ export function FeedingQuickSheet({
             className={clsx(bigChoice, suggested === side ? 'border-feed bg-feed/12 text-ink' : 'border-line bg-surface text-ink-2')}
           >
             <span>{side === 'left' ? 'Sinistro' : 'Destro'}</span>
-            {suggested === side && <span className="text-xs font-medium text-feed">Suggerito</span>}
+            {suggested === side && <span className="text-xs font-semibold text-rose-ink">Suggerito</span>}
           </button>
         ))}
       </div>
-      <Link to="/breastfeeding?manual=1" onClick={onClose} className="mt-4 block py-2 text-center text-sm font-medium text-ink-2 hover:underline">
+      <Link to="/breastfeeding?manual=1" onClick={onClose} className="mt-3 flex h-11 items-center justify-center text-center text-sm font-medium text-ink-2 underline-offset-2 hover:text-ink hover:underline">
         Inserisci un allattamento passato
       </Link>
     </Sheet>
@@ -111,14 +112,15 @@ export function DiaperQuickSheet({ open, onClose, babyId }: { open: boolean; onC
               </button>
             ))}
           </div>
-          <Link to="/diaper" onClick={close} className="mt-4 block py-2 text-center text-sm font-medium text-ink-2 hover:underline">
+          <Link to="/diaper" onClick={close} className="mt-3 flex h-11 items-center justify-center text-center text-sm font-medium text-ink-2 underline-offset-2 hover:text-ink hover:underline">
             Storico pannolini
           </Link>
         </>
       ) : (
         <div className="space-y-4 pb-2">
-          <p className="rounded-2xl bg-success/10 px-4 py-3 text-sm text-ink">
-            ✓ {DIAPER_LABEL[saved.details.type]} registrato. Puoi aggiungere qualche dettaglio.
+          <p className="flex items-start gap-2.5 rounded-2xl bg-success/10 px-4 py-3 text-sm text-ink">
+            <CircleCheck className="mt-px size-[18px] shrink-0 text-success" aria-hidden />
+            <span>{DIAPER_LABEL[saved.details.type]} registrato. Puoi aggiungere qualche dettaglio.</span>
           </p>
           <StoolPicker amount={amount} color={color} onAmount={setAmount} onColor={setColor} />
           <NotesInput value={notes} onChange={setNotes} />
@@ -161,7 +163,7 @@ export function BottleQuickSheet({
             type="button"
             aria-label="Diminuisci di 10 ml"
             onClick={() => setAmount(String(Math.max(10, (value ?? 0) - 10)))}
-            className="size-14 rounded-full bg-surface-2 text-2xl font-semibold text-ink-2"
+            className="size-14 rounded-full bg-surface-2 text-2xl font-semibold text-ink-2 transition-[background-color,transform] duration-150 hover:bg-line/70 active:scale-95"
           >
             −
           </button>
@@ -179,20 +181,20 @@ export function BottleQuickSheet({
             type="button"
             aria-label="Aumenta di 10 ml"
             onClick={() => setAmount(String((value ?? 0) + 10))}
-            className="size-14 rounded-full bg-surface-2 text-2xl font-semibold text-ink-2"
+            className="size-14 rounded-full bg-surface-2 text-2xl font-semibold text-ink-2 transition-[background-color,transform] duration-150 hover:bg-line/70 active:scale-95"
           >
             +
           </button>
         </div>
-        <div className="flex flex-wrap justify-center gap-2">
+        <div className="grid grid-cols-3 gap-2">
           {BOTTLE_PRESETS.map((p) => (
             <button
               key={p}
               type="button"
               onClick={() => setAmount(String(p))}
-              className={clsx('h-10 rounded-full border border-line px-4 text-sm font-medium tabular', value === p ? 'bg-bottle/15 ring-2 ring-bottle' : 'text-ink-2')}
+              className={clsx('h-11 rounded-full border border-line px-4 text-sm font-medium tabular transition-colors', value === p ? 'bg-bottle/15 text-ink ring-2 ring-bottle' : 'text-ink-2 hover:bg-surface-2')}
             >
-              {p}
+              {p} ml
             </button>
           ))}
         </div>
@@ -202,16 +204,16 @@ export function BottleQuickSheet({
               key={m}
               type="button"
               onClick={() => setMilk(m)}
-              className={clsx('h-12 rounded-2xl border border-line text-sm font-medium', milk === m ? 'bg-bottle/15 text-ink ring-2 ring-bottle' : 'text-ink-2')}
+              className={clsx('h-12 rounded-2xl border border-line text-sm font-medium transition-colors', milk === m ? 'bg-bottle/15 text-ink ring-2 ring-bottle' : 'text-ink-2 hover:bg-surface-2')}
             >
               {MILK_LABEL[m]}
             </button>
           ))}
         </div>
-        <Button block size="lg" variant="amber" onClick={save} disabled={!value || value <= 0}>
+        <Button block size="lg" onClick={save} disabled={!value || value <= 0}>
           Salva
         </Button>
-        <Link to="/bottle" onClick={onClose} className="block py-1 text-center text-sm font-medium text-ink-2 hover:underline">
+        <Link to="/bottle" onClick={onClose} className="flex h-11 items-center justify-center text-center text-sm font-medium text-ink-2 underline-offset-2 hover:text-ink hover:underline">
           Altre opzioni e storico
         </Link>
       </div>
@@ -233,7 +235,7 @@ export function PumpingQuickSheet({ open, onClose, babyId }: { open: boolean; on
           </button>
         ))}
       </div>
-      <Link to="/pumping?manual=1" onClick={onClose} className="mt-4 block py-2 text-center text-sm font-medium text-ink-2 hover:underline">
+      <Link to="/pumping?manual=1" onClick={onClose} className="mt-3 flex h-11 items-center justify-center text-center text-sm font-medium text-ink-2 underline-offset-2 hover:text-ink hover:underline">
         Registra senza timer
       </Link>
     </Sheet>

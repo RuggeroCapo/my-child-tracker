@@ -1,8 +1,7 @@
-import clsx from 'clsx'
 import { Plus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router'
-import { IconButton } from '@/components/ui/Button'
+import { Button, IconButton } from '@/components/ui/Button'
 import { Card, SectionTitle } from '@/components/ui/Card'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { PageHeader } from '@/components/ui/PageHeader'
@@ -54,28 +53,22 @@ export default function PumpingPage() {
       ) : (
         <Card className="space-y-4 p-4">
           <Segmented<PumpSide>
-            tone="violet"
             ariaLabel="Lato"
             value={side}
             onChange={setSide}
             options={(['left', 'right', 'both'] as const).map((s) => ({ value: s, label: PUMP_SIDE_LABEL[s] }))}
           />
-          <button
-            type="button"
-            onClick={() => startSession(baby.id, 'pumping', { side, amount: null, unit: 'ml' })}
-            className={clsx('flex h-16 w-full items-center justify-center rounded-2xl bg-violet text-lg font-semibold text-white shadow-sm shadow-violet/25 active:scale-[0.98]')}
-          >
+          <Button block size="lg" onClick={() => startSession(baby.id, 'pumping', { side, amount: null, unit: 'ml' })}>
             Avvia timer
-          </button>
+          </Button>
         </Card>
       )}
 
       <Card className="space-y-3 p-4">
         <div className="flex items-center justify-between gap-2">
-          <SectionTitle className="px-0">Totali</SectionTitle>
+          <SectionTitle flush>Totali</SectionTitle>
           <Segmented<StatsRange>
             className="w-56"
-            tone="violet"
             ariaLabel="Periodo"
             value={range}
             onChange={setRange}
@@ -95,7 +88,7 @@ export default function PumpingPage() {
 
       <section className="space-y-3">
         <SectionTitle>Storico</SectionTitle>
-        {sessions.length === 0 ? <EmptyState title="Nessuna sessione registrata" /> : <EventList events={sessions} />}
+        {sessions.length === 0 ? <EmptyState title="Nessuna sessione registrata">Scegli il lato e avvia il timer, oppure usa + per una sessione passata.</EmptyState> : <EventList events={sessions} />}
       </section>
 
       <Sheet open={manual} onClose={closeManual} title="Sessione tiralatte">

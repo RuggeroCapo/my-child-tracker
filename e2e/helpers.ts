@@ -24,7 +24,7 @@ export async function signUp(page: Page, name: string, email: string, path = '/'
 }
 
 export async function createBaby(page: Page, name: string) {
-  await expect(page.getByRole('heading', { name: 'Benvenuto!' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Iniziamo' })).toBeVisible()
   await page.getByRole('button', { name: 'Aggiungi bambino' }).click()
   await page.getByLabel('Nome').fill(name)
   const d = new Date(Date.now() - 60 * 86_400_000)

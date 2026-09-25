@@ -59,7 +59,7 @@ export function MeasurementForm({ babyId, initial, onSaved }: { babyId: string; 
       <DateTimeInput label="Data e ora" value={draft.startedAt} onChange={draft.setStartedAt} />
       <NotesInput value={draft.notes} onChange={draft.setNotes} />
       {draft.error && <p className="text-sm text-danger" role="alert">{draft.error}</p>}
-      <Button type="submit" block size="lg" className="bg-growth text-white hover:bg-growth/90">
+      <Button type="submit" block size="lg">
         Salva
       </Button>
     </form>

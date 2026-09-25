@@ -45,14 +45,14 @@ export function BottleForm({
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <Input label="Quantità" big inputMode="decimal" suffix="ml" value={amount} onChange={(e) => setAmount(e.target.value)} />
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-3 gap-2">
         {BOTTLE_PRESETS.map((p) => (
           <button
             key={p}
             type="button"
             onClick={() => setAmount(String(p))}
             className={clsx(
-              'h-10 rounded-full border border-line px-4 text-sm font-medium tabular',
+              'h-11 rounded-full border border-line px-4 text-sm font-medium tabular transition-colors',
               parseDecimal(amount) === p ? 'bg-bottle/15 text-ink ring-2 ring-bottle' : 'text-ink-2 hover:bg-surface-2',
             )}
           >
@@ -70,7 +70,7 @@ export function BottleForm({
       <DateTimeInput label="Data e ora" value={draft.startedAt} onChange={draft.setStartedAt} />
       <NotesInput value={draft.notes} onChange={draft.setNotes} />
       {draft.error && <p className="text-sm text-danger" role="alert">{draft.error}</p>}
-      <Button type="submit" block size="lg" variant="amber">
+      <Button type="submit" block size="lg">
         Salva
       </Button>
     </form>

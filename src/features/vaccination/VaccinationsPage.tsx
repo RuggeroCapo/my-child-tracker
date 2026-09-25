@@ -18,7 +18,7 @@ export default function VaccinationsPage() {
   return (
     <div className="space-y-5">
       <PageHeader title="Vaccinazioni" />
-      <Button block size="lg" variant="violet" icon={<Plus className="size-5" />} onClick={() => setOpen(true)}>
+      <Button block size="lg" icon={<Plus className="size-5" />} onClick={() => setOpen(true)}>
         Registra vaccinazione
       </Button>
       <section className="space-y-3">

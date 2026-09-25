@@ -14,7 +14,7 @@ export function PageHeader({ title, back = true, action }: { title: string; back
       ) : (
         <span className="w-2" />
       )}
-      <h1 className="min-w-0 flex-1 truncate text-center text-lg font-semibold">{title}</h1>
+      <h1 className="min-w-0 flex-1 truncate text-center font-display-snug text-xl font-bold">{title}</h1>
       <div className="flex min-w-11 justify-end">{action}</div>
     </header>
   )

@@ -43,7 +43,7 @@ export default function InvitePage() {
   return (
     <div className="flex min-h-dvh flex-col justify-center py-10">
       <Card className="flex flex-col items-center gap-4 p-6 text-center">
-        <span className="flex size-14 items-center justify-center rounded-full bg-rose/12 text-rose">
+        <span className="flex size-14 items-center justify-center rounded-full bg-rose/12 text-rose-ink">
           <HeartHandshake className="size-7" />
         </span>
         {!info && !error && <LoaderCircle className="size-6 animate-spin text-ink-3" aria-label="Caricamento" />}
@@ -51,7 +51,7 @@ export default function InvitePage() {
         {info?.status === 'valid' && (
           <>
             <div>
-              <h1 className="text-xl font-semibold">Invito per {info.baby_name}</h1>
+              <h1 className="font-display-snug text-2xl font-bold">Invito per {info.baby_name}</h1>
               <p className="mt-1 text-ink-2">
                 {info.invited_by} ti invita a condividere il diario di {info.baby_name}: vedrete gli stessi eventi in tempo reale.
               </p>
@@ -69,7 +69,7 @@ export default function InvitePage() {
             </Button>
           </>
         )}
-        <Link to="/" className="text-sm text-ink-3 hover:underline">
+        <Link to="/" className="inline-flex h-11 items-center px-3 text-sm text-ink-2 underline-offset-2 hover:underline">
           Annulla
         </Link>
       </Card>

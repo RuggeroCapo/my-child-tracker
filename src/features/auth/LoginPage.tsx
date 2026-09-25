@@ -44,7 +44,7 @@ export function LoginPage() {
       footer={
         <>
           Non hai un account?{' '}
-          <Link to={`/signup${params.size ? `?${params}` : ''}`} className="font-semibold text-rose">
+          <Link to={`/signup${params.size ? `?${params}` : ''}`} className="font-semibold text-rose-ink underline-offset-2 hover:underline">
             Registrati
           </Link>
         </>

@@ -10,17 +10,14 @@ export function Segmented<T extends string>({
   options,
   onChange,
   className,
-  tone = 'rose',
   ariaLabel,
 }: {
   value: T
   options: SegmentOption<T>[]
   onChange: (value: T) => void
   className?: string
-  tone?: 'rose' | 'sky' | 'violet'
   ariaLabel?: string
 }) {
-  const active = { rose: 'bg-rose text-white', sky: 'bg-sky text-white', violet: 'bg-violet text-white' }[tone]
   return (
     <div role="radiogroup" aria-label={ariaLabel} className={clsx('flex gap-1 rounded-2xl bg-surface-2 p-1', className)}>
       {options.map((o) => (
@@ -31,8 +28,8 @@ export function Segmented<T extends string>({
           aria-checked={o.value === value}
           onClick={() => onChange(o.value)}
           className={clsx(
-            'h-10 flex-1 rounded-xl px-2 text-sm font-medium transition-colors',
-            o.value === value ? active : 'text-ink-2 hover:text-ink',
+            'h-10 flex-1 rounded-xl px-2 text-sm font-medium transition-colors duration-150',
+            o.value === value ? 'bg-rose font-semibold text-night' : 'text-ink-2 hover:text-ink',
           )}
         >
           {o.label}

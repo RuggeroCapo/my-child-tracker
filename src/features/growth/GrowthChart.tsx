@@ -29,7 +29,7 @@ export function GrowthChart({
   xMax,
   xLabel,
   unit,
-  color = '#4F8EF7',
+  color = 'var(--color-diaper)',
 }: {
   points: ChartPoint[]
   curves?: ReferenceCurve[]

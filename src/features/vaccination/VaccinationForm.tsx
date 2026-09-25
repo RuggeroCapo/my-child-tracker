@@ -65,7 +65,7 @@ export function VaccinationForm({ babyId, initial, onSaved }: { babyId: string; 
       <Input label="Data" type="date" required max={toDateInput(new Date())} value={date} onChange={(e) => setDate(e.target.value)} />
       <NotesInput value={draft.notes} onChange={draft.setNotes} />
       {draft.error && <p className="text-sm text-danger" role="alert">{draft.error}</p>}
-      <Button type="submit" block size="lg" variant="violet">
+      <Button type="submit" block size="lg">
         Salva
       </Button>
     </form>

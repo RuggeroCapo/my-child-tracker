@@ -37,26 +37,26 @@ export default function MorePage() {
   return (
     <div className="space-y-5">
       <header className="flex items-center justify-between pt-safe">
-        <h1 className="text-2xl font-semibold">Altro</h1>
+        <h1 className="font-display-tight text-[34px] font-extrabold leading-none">Altro</h1>
         <SyncBadge />
       </header>
 
       <Card className="divide-y divide-line overflow-hidden">
-        <Link to={`/babies/${baby.id}/edit`} className="flex items-center gap-3 px-4 py-3 hover:bg-surface-2">
+        <Link to={`/babies/${baby.id}/edit`} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-2">
           <BabyAvatar baby={baby} />
           <span className="min-w-0 flex-1">
             <span className="block font-semibold">{baby.name}</span>
             <span className="block text-sm text-ink-2">{formatAge(baby.birth_date)} · profilo bambino</span>
           </span>
-          <ChevronRight className="size-4 text-ink-3" />
+          <ChevronRight className="size-4 shrink-0 text-ink-3" aria-hidden />
         </Link>
         <Row to="/members" icon={<Users className="size-5 text-sky" />} label="Genitori e caregiver" detail={`${members.length} ${members.length === 1 ? 'persona' : 'persone'}`} />
         <Row to="/medications" icon={<Pill className="size-5 text-med" />} label="Registro medicine" />
-        <Row to="/babies/new" icon={<Baby className="size-5 text-rose" />} label="Aggiungi un altro bambino" />
+        <Row to="/babies/new" icon={<Baby className="size-5 text-rose-ink" />} label="Aggiungi un altro bambino" />
       </Card>
 
       <Card className="space-y-3 p-4">
-        <p className="text-sm font-medium text-ink-2">Tema</p>
+        <p className="font-display-snug text-lg font-bold">Tema</p>
         <Segmented<ThemePref>
           ariaLabel="Tema"
           value={theme}
@@ -74,16 +74,16 @@ export default function MorePage() {
       </Card>
 
       <Card className="divide-y divide-line overflow-hidden">
-        <button type="button" onClick={() => setNameOpen(true)} className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-surface-2">
-          <UserRound className="size-5 text-ink-2" />
+        <button type="button" onClick={() => setNameOpen(true)} className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-2">
+          <span className="flex size-11 shrink-0 items-center justify-center"><UserRound className="size-5 text-ink-2" /></span>
           <span className="min-w-0 flex-1">
             <span className="block font-medium">{myName || 'Il tuo nome'}</span>
             <span className="block truncate text-sm text-ink-2">{session?.user.email}</span>
           </span>
-          <ChevronRight className="size-4 text-ink-3" />
+          <ChevronRight className="size-4 shrink-0 text-ink-3" aria-hidden />
         </button>
-        <button type="button" onClick={logout} className="flex w-full items-center gap-3 px-4 py-3 text-left text-danger hover:bg-surface-2">
-          <LogOut className="size-5" />
+        <button type="button" onClick={logout} className="flex w-full items-center gap-3 px-4 py-3.5 text-left text-ink-2 transition-colors hover:bg-surface-2 hover:text-ink">
+          <span className="flex size-11 shrink-0 items-center justify-center"><LogOut className="size-5" /></span>
           <span className="font-medium">Esci</span>
         </button>
       </Card>
@@ -101,11 +101,11 @@ export default function MorePage() {
 
 function Row({ to, icon, label, detail }: { to: string; icon: ReactNode; label: string; detail?: string }) {
   return (
-    <Link to={to} className="flex items-center gap-3 px-4 py-3.5 hover:bg-surface-2">
-      <span className="flex size-11 items-center justify-center">{icon}</span>
+    <Link to={to} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-2">
+      <span className="flex size-11 shrink-0 items-center justify-center">{icon}</span>
       <span className="flex-1 font-medium">{label}</span>
       {detail && <span className="text-sm text-ink-3">{detail}</span>}
-      <ChevronRight className="size-4 text-ink-3" />
+      <ChevronRight className="size-4 shrink-0 text-ink-3" aria-hidden />
     </Link>
   )
 }

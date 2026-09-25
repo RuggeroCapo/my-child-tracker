@@ -19,7 +19,7 @@ import { EventList } from '../events/EventList'
 import { GrowthChart } from './GrowthChart'
 import { MeasurementForm } from './MeasurementForm'
 
-const COLORS: Record<MeasurementMetric, string> = { weight: '#4F8EF7', length: '#14B8A6', head: '#8B7CF6' }
+const COLORS: Record<MeasurementMetric, string> = { weight: 'var(--color-diaper)', length: 'var(--color-growth)', head: 'var(--color-pump)' }
 
 export default function GrowthPage() {
   const baby = useActiveBaby()!
@@ -50,7 +50,6 @@ export default function GrowthPage() {
     <div className="space-y-5">
       <PageHeader title="Crescita" />
       <Segmented<MeasurementMetric>
-        tone="sky"
         ariaLabel="Misura"
         value={metric}
         onChange={setMetric}
@@ -96,7 +95,7 @@ export default function GrowthPage() {
         {!baby.sex && withinWho && (
           <p className="rounded-2xl bg-surface-2 px-3 py-2 text-xs text-ink-2">
             Per vedere le curve OMS indica il sesso nel{' '}
-            <Link to={`/babies/${baby.id}/edit`} className="font-semibold text-sky underline-offset-2 hover:underline">
+            <Link to={`/babies/${baby.id}/edit`} className="font-semibold text-rose-ink underline underline-offset-2">
               profilo del bambino
             </Link>
             .
@@ -117,7 +116,7 @@ export default function GrowthPage() {
 
       <section className="space-y-3">
         <SectionTitle>Ultime misurazioni</SectionTitle>
-        {measurements.length === 0 ? <EmptyState title="Nessuna misurazione" /> : <EventList events={measurements} />}
+        {measurements.length === 0 ? <EmptyState title="Nessuna misurazione">Aggiungi peso, altezza o circonferenza dopo ogni visita dal pediatra.</EmptyState> : <EventList events={measurements} />}
       </section>
 
       <Sheet open={open} onClose={() => setOpen(false)} title="Nuova misurazione">

@@ -33,7 +33,7 @@ export default function BabyFormPage() {
       const input = { name: name.trim(), birth_date: birthDate, sex: sex === 'unset' ? null : sex }
       if (isEdit && id) await updateBaby(id, input)
       else await createBaby(input)
-      toast({ tone: 'success', title: isEdit ? 'Profilo aggiornato' : `Benvenuto/a ${input.name}!` })
+      toast({ tone: 'success', title: isEdit ? 'Profilo aggiornato' : `Profilo di ${input.name} creato` })
       if (isEdit) navigate(-1)
       else navigate('/', { replace: true })
     } catch (err) {
@@ -81,7 +81,7 @@ export default function BabyFormPage() {
           Salva
         </Button>
         {isEdit && role === 'owner' && (
-          <Button variant="ghost" block className="text-danger" loading={deleting} onClick={onDelete}>
+          <Button variant="ghost" block loading={deleting} onClick={onDelete}>
             Elimina profilo
           </Button>
         )}

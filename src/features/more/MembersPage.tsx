@@ -79,7 +79,7 @@ export default function MembersPage() {
       <Card className="divide-y divide-line overflow-hidden">
         {members.map((m) => (
           <div key={m.user_id} className="flex items-center gap-3 px-4 py-3">
-            <span className="flex size-10 items-center justify-center rounded-full bg-sky/12 font-semibold text-sky">
+            <span className="flex size-10 items-center justify-center rounded-full bg-surface-2 font-semibold text-ink-2">
               {m.display_name.charAt(0).toUpperCase()}
             </span>
             <span className="min-w-0 flex-1">

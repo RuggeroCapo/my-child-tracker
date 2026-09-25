@@ -10,6 +10,7 @@ export function Card({ className, ...rest }: HTMLAttributes<HTMLDivElement>) {
   )
 }
 
-export function SectionTitle({ className, ...rest }: HTMLAttributes<HTMLHeadingElement>) {
-  return <h2 className={clsx('px-1 text-[15px] font-semibold text-ink', className)} {...rest} />
+/** `flush` dentro una Card: allinea il titolo al contenuto invece che al margine della pagina. */
+export function SectionTitle({ className, flush, ...rest }: HTMLAttributes<HTMLHeadingElement> & { flush?: boolean }) {
+  return <h2 className={clsx(!flush && 'px-1', 'font-display-snug text-lg font-bold text-ink', className)} {...rest} />
 }

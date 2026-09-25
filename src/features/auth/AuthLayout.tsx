@@ -6,8 +6,8 @@ export function AuthLayout({ title, subtitle, children, footer }: { title: strin
     <div className="mx-auto flex min-h-dvh w-full max-w-sm flex-col justify-center px-6 py-10 pt-safe">
       <div className="mb-8 flex flex-col items-center text-center">
         <Logo size={72} />
-        <h1 className="mt-5 text-[28px] font-semibold tracking-tight">{title}</h1>
-        {subtitle && <p className="mt-1 text-ink-2">{subtitle}</p>}
+        <h1 className="mt-5 font-display-tight text-[34px] font-extrabold leading-tight">{title}</h1>
+        {subtitle && <p className="mt-2 text-pretty text-ink-2">{subtitle}</p>}
       </div>
       {children}
       {footer && <div className="mt-8 text-center text-sm text-ink-2">{footer}</div>}

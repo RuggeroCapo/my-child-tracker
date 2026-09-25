@@ -36,7 +36,7 @@ export default function DiaryPage() {
     <div className="space-y-4">
       <header className="sticky top-0 z-20 -mx-4 space-y-3 bg-bg/90 px-4 pb-3 pt-safe backdrop-blur">
         <div className="flex items-center justify-between gap-2">
-          <h1 className="text-2xl font-semibold">Diario</h1>
+          <h1 className="font-display-tight text-[34px] font-extrabold leading-none">Diario</h1>
           <div className="flex items-center gap-1">
             <SyncBadge />
             <IconButton label="Aggiungi evento" onClick={() => setAdding('pick')}>
@@ -53,8 +53,8 @@ export default function DiaryPage() {
               aria-selected={filter === f.id}
               onClick={() => setFilter(f.id)}
               className={clsx(
-                'h-9 shrink-0 rounded-full px-4 text-sm font-medium transition-colors',
-                filter === f.id ? 'bg-rose text-white' : 'bg-surface text-ink-2 ring-1 ring-line',
+                'h-11 shrink-0 rounded-full px-4 text-sm font-medium transition-colors duration-150',
+                filter === f.id ? 'bg-rose font-semibold text-night' : 'bg-surface text-ink-2 ring-1 ring-inset ring-line hover:text-ink',
               )}
             >
               {f.label}
@@ -63,7 +63,13 @@ export default function DiaryPage() {
         </div>
       </header>
 
-      {filtered.length === 0 ? <EmptyState title="Nessun evento" /> : <EventList events={filtered} />}
+      {filtered.length === 0 ? (
+        <EmptyState title={kinds ? 'Nessun evento in questa categoria' : 'Il diario è ancora vuoto'}>
+          {kinds ? 'Scegli "Tutti" per vedere l\'intero diario.' : 'Registra dalla home o con il + qui sopra.'}
+        </EmptyState>
+      ) : (
+        <EventList events={filtered} />
+      )}
 
       <Sheet
         open={adding !== null}
@@ -77,7 +83,7 @@ export default function DiaryPage() {
                 key={k}
                 type="button"
                 onClick={() => setAdding(k)}
-                className="flex h-24 flex-col items-center justify-center gap-2 rounded-2xl bg-surface-2 text-xs font-medium"
+                className="flex h-24 flex-col items-center justify-center gap-2 rounded-2xl bg-surface-2 text-sm font-medium transition-[background-color,transform] duration-150 hover:bg-line/60 active:scale-[0.97]"
               >
                 <CategoryIcon kind={k} />
                 {KIND_LABEL[k]}

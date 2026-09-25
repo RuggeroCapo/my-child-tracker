@@ -21,6 +21,7 @@ const StatsPage = lazy(() => import('@/features/stats/StatsPage'))
 const MorePage = lazy(() => import('@/features/more/MorePage'))
 const MembersPage = lazy(() => import('@/features/more/MembersPage'))
 const BreastfeedingPage = lazy(() => import('@/features/breastfeeding/BreastfeedingPage'))
+const FeedingDetailPage = lazy(() => import('@/features/breastfeeding/FeedingDetailPage'))
 const DiaperPage = lazy(() => import('@/features/diaper/DiaperPage'))
 const BottlePage = lazy(() => import('@/features/bottle/BottlePage'))
 const PumpingPage = lazy(() => import('@/features/pumping/PumpingPage'))
@@ -87,6 +88,7 @@ export function App() {
               <Route path="/babies/:id/edit" element={<Page><BabyFormPage /></Page>} />
               <Route path="/members" element={<Page><MembersPage /></Page>} />
               <Route path="/breastfeeding" element={<Page><BreastfeedingPage /></Page>} />
+              <Route path="/breastfeeding/:id" element={<Page><FeedingDetailPage /></Page>} />
               <Route path="/diaper" element={<Page><DiaperPage /></Page>} />
               <Route path="/bottle" element={<Page><BottlePage /></Page>} />
               <Route path="/pumping" element={<Page><PumpingPage /></Page>} />

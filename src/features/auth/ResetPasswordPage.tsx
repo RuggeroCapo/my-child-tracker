@@ -18,7 +18,7 @@ export function ResetPasswordPage() {
   if (!ready) return <FullScreenLoader />
   if (!session) {
     return (
-      <AuthLayout title="Link non valido" subtitle="Il link è scaduto o è già stato usato." footer={<Link to="/forgot-password" className="font-semibold text-rose">Richiedi un nuovo link</Link>}>
+      <AuthLayout title="Link non valido" subtitle="Il link è scaduto o è già stato usato." footer={<Link to="/forgot-password" className="font-semibold text-rose-ink underline-offset-2 hover:underline">Richiedi un nuovo link</Link>}>
         <span />
       </AuthLayout>
     )

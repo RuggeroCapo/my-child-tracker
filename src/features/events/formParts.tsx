@@ -62,7 +62,7 @@ export function ChoiceGrid<T extends string>({
             aria-checked={value === o.value}
             onClick={() => onChange(o.value)}
             className={clsx(
-              'flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl border border-line bg-surface px-2 py-2 text-sm font-medium transition-all',
+              'flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl border border-line bg-surface px-2 py-2 text-sm font-medium transition-colors duration-150',
               value === o.value ? activeClass : 'text-ink-2 hover:bg-surface-2',
             )}
           >

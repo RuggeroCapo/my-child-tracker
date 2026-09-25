@@ -14,9 +14,9 @@ import { formatDuration } from '@/lib/time'
 import { useActiveBaby } from '@/stores/babies'
 import { useActiveSession, useEventsOfKind } from '@/stores/selectors'
 import { startSession } from '@/sync/actions'
+import { FeedingIcon } from '@/components/icons'
 import { EventList } from '../events/EventList'
 import { ActiveSessionCard } from '../home/ActiveSessionCard'
-import { FeedingIcon } from '@/components/icons'
 import { FeedingForm } from './FeedingForm'
 
 export default function BreastfeedingPage() {
@@ -58,20 +58,20 @@ export default function BreastfeedingPage() {
               type="button"
               onClick={() => startSession(baby.id, 'breastfeeding', { side })}
               className={clsx(
-                'flex h-36 flex-col items-center justify-center gap-2 rounded-3xl border-2 font-semibold transition-transform active:scale-[0.97]',
+                'flex h-36 flex-col items-center justify-center gap-2 rounded-3xl border-2 font-semibold transition-transform duration-150 ease-out-quart active:scale-[0.97]',
                 suggested === side ? 'border-feed bg-feed/12 text-ink' : 'border-transparent bg-surface text-ink-2 shadow-[var(--shadow-card)]',
               )}
             >
               <FeedingIcon className="size-8 text-feed" />
               Seno {side === 'left' ? 'sinistro' : 'destro'}
-              <span className={clsx('text-xs font-medium', suggested === side ? 'text-feed' : 'invisible')}>Suggerito</span>
+              <span className={clsx('text-xs font-semibold', suggested === side ? 'text-rose-ink' : 'invisible')}>Suggerito</span>
             </button>
           ))}
         </div>
       )}
 
       <Card className="space-y-3 p-4">
-        <SectionTitle className="px-0">Oggi</SectionTitle>
+        <SectionTitle flush>Oggi</SectionTitle>
         <StatGrid>
           <Stat label="Sessioni" value={today.sessions} />
           <Stat label="Totale" value={formatDuration(today.totalSeconds)} />

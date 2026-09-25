@@ -52,17 +52,17 @@ export default function DiaperPage() {
             key={t}
             type="button"
             onClick={() => record(t)}
-            className="flex h-28 flex-col items-center justify-center gap-2 rounded-3xl bg-diaper/10 text-sm font-semibold text-ink transition-transform active:scale-[0.97]"
+            className="flex h-28 flex-col items-center justify-center gap-2 rounded-3xl bg-diaper/10 text-sm font-semibold text-ink transition-[background-color,transform] duration-150 ease-out-quart hover:bg-diaper/15 active:scale-[0.97]"
           >
             <DiaperTypeIcon type={t} />
             {DIAPER_LABEL[t]}
           </button>
         ))}
       </div>
-      <p className="-mt-2 px-1 text-xs text-ink-3">Un tocco registra il cambio adesso. Usa + per orario, quantità e colore.</p>
+      <p className="-mt-2 px-1 text-sm text-ink-2">Un tocco registra il cambio adesso. Usa + per orario, quantità e colore.</p>
 
       <Card className="space-y-3 p-4">
-        <SectionTitle className="px-0">Oggi</SectionTitle>
+        <SectionTitle flush>Oggi</SectionTitle>
         <StatGrid>
           <Stat label="Totale" value={today.total} />
           <Stat label="Bagnati" value={today.wet + today.mixed} />
@@ -72,7 +72,7 @@ export default function DiaperPage() {
 
       <section className="space-y-3">
         <SectionTitle>Ultimi pannolini</SectionTitle>
-        {diapers.length === 0 ? <EmptyState title="Nessun pannolino registrato" /> : <EventList events={diapers} />}
+        {diapers.length === 0 ? <EmptyState title="Nessun pannolino registrato">Tocca un tipo qui sopra per registrare il primo cambio.</EmptyState> : <EventList events={diapers} />}
       </section>
 
       <Sheet open={form} onClose={() => setForm(false)} title="Pannolino">

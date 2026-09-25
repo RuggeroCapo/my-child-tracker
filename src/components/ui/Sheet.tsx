@@ -38,7 +38,7 @@ export function Sheet({
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
-      <div className="animate-fade-in absolute inset-0 bg-slate-950/40 backdrop-blur-[2px]" onClick={onClose} aria-hidden />
+      <div className="animate-fade-in absolute inset-0 bg-scrim backdrop-blur-[2px]" onClick={onClose} aria-hidden />
       <div
         ref={panel}
         role="dialog"
@@ -53,12 +53,12 @@ export function Sheet({
         <div className="mx-auto mb-2 h-1.5 w-10 rounded-full bg-line sm:hidden" aria-hidden />
         {title && (
           <div className="mb-3 flex items-center justify-between gap-2">
-            <h2 className="text-lg font-semibold">{title}</h2>
+            <h2 className="font-display-snug text-xl font-bold">{title}</h2>
             <button
               type="button"
               onClick={onClose}
               aria-label="Chiudi"
-              className="-mr-2 inline-flex size-10 items-center justify-center rounded-full text-ink-3 hover:bg-surface-2"
+              className="-mr-2 inline-flex size-11 items-center justify-center rounded-full text-ink-2 transition-colors hover:bg-surface-2 hover:text-ink"
             >
               <X className="size-5" />
             </button>

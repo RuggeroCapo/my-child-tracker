@@ -38,7 +38,7 @@ export default function StatsPage() {
   return (
     <div className="space-y-4">
       <header className="flex items-center justify-between pt-safe">
-        <h1 className="text-2xl font-semibold">Statistiche</h1>
+        <h1 className="font-display-tight text-[34px] font-extrabold leading-none">Statistiche</h1>
         <SyncBadge />
       </header>
       <Segmented<StatsRange>
@@ -134,7 +134,7 @@ function StatCard({ kind, title, summary, children }: { kind: EventKind; title: 
       <div className="flex items-center gap-3">
         <CategoryIcon kind={kind} />
         <div className="min-w-0">
-          <h2 className="font-semibold">{title}</h2>
+          <h2 className="font-display-snug text-lg font-bold">{title}</h2>
           <p className="truncate text-sm text-ink-2">{summary}</p>
         </div>
       </div>
@@ -155,7 +155,7 @@ function DayBars({ days, value, label, color }: { days: DayBucket[]; value: (d: 
           </div>
         ))}
       </div>
-      <div className="flex justify-between text-[10px] text-ink-3">
+      <div className="flex justify-between text-[11px] text-ink-3 tabular">
         <span>{days[0]?.date.toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}</span>
         <span>Oggi</span>
       </div>

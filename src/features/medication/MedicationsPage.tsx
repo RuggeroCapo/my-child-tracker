@@ -35,14 +35,14 @@ export default function MedicationsPage() {
           </IconButton>
         }
       />
-      <Button block size="lg" variant="success" icon={<Plus className="size-5" />} onClick={() => setLogOpen(true)}>
+      <Button block size="lg" icon={<Plus className="size-5" />} onClick={() => setLogOpen(true)}>
         Registra somministrazione
       </Button>
 
       <section className="space-y-3">
         <div className="flex items-center justify-between">
           <SectionTitle>Registro medicine</SectionTitle>
-          <Button size="sm" variant="ghost" icon={<Plus className="size-4" />} onClick={() => setEditing('new')}>
+          <Button size="sm" variant="ghost" className="-mr-2" icon={<Plus className="size-4" />} onClick={() => setEditing('new')}>
             Aggiungi
           </Button>
         </div>
@@ -75,7 +75,7 @@ export default function MedicationsPage() {
 
       <section className="space-y-3">
         <SectionTitle>Storico somministrazioni</SectionTitle>
-        {history.length === 0 ? <EmptyState title="Nessuna somministrazione registrata" /> : <EventList events={history} />}
+        {history.length === 0 ? <EmptyState title="Nessuna somministrazione registrata">Ogni dose registrata compare qui, con orario e chi l'ha data.</EmptyState> : <EventList events={history} />}
       </section>
 
       <Sheet open={logOpen} onClose={() => setLogOpen(false)} title="Somministrazione">
@@ -142,11 +142,11 @@ function RegistryForm({ babyId, medication, onDone }: { babyId: string; medicati
         </Select>
       </div>
       <Textarea label="Note" optional maxLength={500} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Es. al mattino, prescritta dal pediatra" />
-      <Button type="submit" block size="lg" variant="success" loading={saving} disabled={!name.trim()}>
+      <Button type="submit" block size="lg" loading={saving} disabled={!name.trim()}>
         Salva
       </Button>
       {medication && (
-        <Button variant="ghost" block className="text-danger" icon={<Trash className="size-4" />} onClick={onRemove}>
+        <Button variant="ghost" block icon={<Trash className="size-4" />} onClick={onRemove}>
           Rimuovi dal registro
         </Button>
       )}

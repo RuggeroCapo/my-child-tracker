@@ -27,8 +27,8 @@ export function AppLayout() {
               end={end}
               className={({ isActive }) =>
                 clsx(
-                  'flex h-16 flex-1 flex-col items-center justify-center gap-1 text-[11px] font-medium transition-colors',
-                  isActive ? 'text-rose' : 'text-ink-3 hover:text-ink-2',
+                  'flex h-16 flex-1 flex-col items-center justify-center gap-1 text-xs font-medium transition-colors',
+                  isActive ? 'font-semibold text-rose-ink' : 'text-ink-3 hover:text-ink-2',
                 )
               }
             >

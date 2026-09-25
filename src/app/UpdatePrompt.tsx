@@ -16,12 +16,12 @@ export function UpdatePrompt() {
   if (!needRefresh) return null
   return (
     <div className="fixed inset-x-0 bottom-24 z-50 flex justify-center px-4">
-      <div className="flex items-center gap-3 rounded-2xl bg-ink px-4 py-3 text-sm text-bg shadow-lg">
-        <span>Nuova versione disponibile</span>
-        <button type="button" className="inline-flex items-center gap-1 font-semibold" onClick={() => void updateServiceWorker(true)}>
-          <RefreshCw className="size-4" /> Aggiorna
+      <div className="flex items-center gap-1 rounded-2xl bg-night py-1 pl-4 pr-1 text-sm text-night-ink shadow-[0_8px_24px_oklch(0.3_0.05_350/0.2)]" role="status">
+        <span className="mr-2">Nuova versione disponibile</span>
+        <button type="button" className="inline-flex h-11 items-center gap-1.5 rounded-xl px-3 font-semibold hover:bg-night-line/60" onClick={() => void updateServiceWorker(true)}>
+          <RefreshCw className="size-4" aria-hidden /> Aggiorna
         </button>
-        <button type="button" className="opacity-70" onClick={() => setNeedRefresh(false)}>
+        <button type="button" className="h-11 rounded-xl px-3 text-night-ink-2 hover:bg-night-line/60" onClick={() => setNeedRefresh(false)}>
           Più tardi
         </button>
       </div>

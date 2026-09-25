@@ -43,7 +43,7 @@ export default function BottlePage() {
       </Card>
       <section className="space-y-3">
         <SectionTitle>Storico</SectionTitle>
-        {bottles.length === 0 ? <EmptyState title="Nessun biberon registrato" /> : <EventList events={bottles} dayExtra={dayTotal} />}
+        {bottles.length === 0 ? <EmptyState title="Nessun biberon registrato">Salva il primo qui sopra: la quantità resta pronta per la volta dopo.</EmptyState> : <EventList events={bottles} dayExtra={dayTotal} />}
       </section>
     </div>
   )

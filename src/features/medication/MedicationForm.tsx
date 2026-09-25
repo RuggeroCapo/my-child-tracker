@@ -65,7 +65,7 @@ export function MedicationForm({ babyId, initial, onSaved }: { babyId: string; i
                 type="button"
                 onClick={() => pick(m)}
                 className={clsx(
-                  'h-10 rounded-full border border-line px-4 text-sm font-medium',
+                  'h-11 rounded-full border border-line px-4 text-sm font-medium transition-colors',
                   medicationId === m.id && name === m.name ? 'bg-med/12 text-ink ring-2 ring-med' : 'text-ink-2 hover:bg-surface-2',
                 )}
               >
@@ -89,7 +89,7 @@ export function MedicationForm({ babyId, initial, onSaved }: { babyId: string; i
       <DateTimeInput label="Data e ora" value={draft.startedAt} onChange={draft.setStartedAt} />
       <NotesInput value={draft.notes} onChange={draft.setNotes} />
       {draft.error && <p className="text-sm text-danger" role="alert">{draft.error}</p>}
-      <Button type="submit" block size="lg" variant="success">
+      <Button type="submit" block size="lg">
         Salva
       </Button>
     </form>

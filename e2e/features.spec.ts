@@ -22,7 +22,7 @@ test('tutte le funzionalità MVP', async ({ page }) => {
 
   // Biberon rapido
   await page.getByRole('button', { name: 'Biberon' }).first().click()
-  await page.getByRole('button', { name: '120', exact: true }).click()
+  await page.getByRole('button', { name: '120 ml', exact: true }).click()
   await page.getByRole('button', { name: 'Latte artificiale' }).click()
   await page.getByRole('button', { name: 'Salva' }).click()
   await expect(page.getByRole('button', { name: /Biberon\s*120 ml · latte artificiale/ })).toBeVisible()
@@ -34,6 +34,32 @@ test('tutte le funzionalità MVP', async ({ page }) => {
   await page.getByRole('button', { name: 'Salva' }).click()
   await expect(page.getByRole('button', { name: /Allattamento\s*Destro · 15 min/ })).toBeVisible()
   await shot(page, 'breastfeeding')
+
+  // Allattamento in corso → pagina di dettaglio: cambio lato e orario di inizio
+  await page.getByRole('button', { name: 'Seno sinistro' }).click()
+  await expect(page.getByText('Allattamento in corso')).toBeVisible()
+  await page.getByRole('link', { name: 'Dettagli allattamento' }).click()
+  await expect(page).toHaveURL(/\/breastfeeding\/[0-9a-f-]+$/)
+  await page.getByRole('radio', { name: 'Destro' }).click()
+  // Orario locale calcolato nel browser (timezone del contesto Playwright)
+  const tenMinAgo = await page.evaluate(() => {
+    const d = new Date(Date.now() - 10 * 60_000)
+    const pad = (n: number) => String(n).padStart(2, '0')
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+  })
+  await page.getByLabel('Inizio').fill(tenMinAgo)
+  await page.getByRole('button', { name: 'Salva' }).click()
+  await expect(page.getByText(/^Destro · \d\d:\d\d → \d\d:\d\d$/)).toBeVisible()
+  await expect(page.getByRole('timer')).toHaveText(/(09|10):\d\d$/)
+  await shot(page, 'breastfeeding-detail')
+  await page.getByRole('button', { name: 'Termina' }).click()
+  await expect(page.getByLabel('Fine')).toBeVisible()
+
+  // Dal diario, un allattamento apre la stessa pagina
+  await page.goto('/diary')
+  await page.getByRole('button', { name: /Allattamento\s*Destro · (9|10|11) min/ }).click()
+  await expect(page).toHaveURL(/\/breastfeeding\/[0-9a-f-]+$/)
+  await expect(page.getByLabel('Inizio')).toBeVisible()
 
   // Tiralatte con timer + quantità
   await page.goto('/pumping')
@@ -106,14 +132,14 @@ test('tutte le funzionalità MVP', async ({ page }) => {
   // Statistiche
   await page.goto('/stats')
   await page.getByRole('radio', { name: 'Oggi' }).click()
-  await expect(page.getByText('1 sessione · 15 min')).toBeVisible()
+  await expect(page.getByText(/^2 sessioni · 2\d min$/)).toBeVisible()
   await page.waitForTimeout(300)
   await shot(page, 'stats')
 
   // I dati sopravvivono al reload (cache IndexedDB + server)
   await page.reload()
   await page.getByRole('radio', { name: 'Oggi' }).click()
-  await expect(page.getByText('1 sessione · 15 min')).toBeVisible()
+  await expect(page.getByText(/^2 sessioni · 2\d min$/)).toBeVisible()
 
   // Tema scuro
   await page.goto('/more')

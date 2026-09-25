@@ -28,11 +28,11 @@ export function ForgotPasswordPage() {
     <AuthLayout
       title="Recupera l'accesso"
       subtitle={sent ? undefined : 'Ti invieremo un link per scegliere una nuova password'}
-      footer={<Link to="/login" className="font-semibold text-rose">Torna all'accesso</Link>}
+      footer={<Link to="/login" className="font-semibold text-rose-ink underline-offset-2 hover:underline">Torna all'accesso</Link>}
     >
       {sent ? (
         <div className="flex flex-col items-center gap-3 text-center text-ink-2">
-          <MailCheck className="size-10 text-rose" aria-hidden />
+          <MailCheck className="size-10 text-rose-ink" aria-hidden />
           <p>
             Se esiste un account per <strong className="text-ink">{email}</strong>, riceverai a breve un'email con il link.
           </p>

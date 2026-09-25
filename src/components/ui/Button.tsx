@@ -2,22 +2,21 @@ import clsx from 'clsx'
 import { LoaderCircle } from 'lucide-react'
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 
-type Variant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'success' | 'violet' | 'amber'
+type Variant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'night'
 type Size = 'sm' | 'md' | 'lg'
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-rose text-white hover:bg-rose-strong shadow-sm shadow-rose/25',
-  secondary: 'bg-sky/12 text-sky hover:bg-sky/20 dark:text-sky-300',
+  /** L'unica azione piena in rosa: testo scuro, il bianco sul rosa non regge il contrasto. */
+  primary: 'bg-rose text-night hover:bg-rose/90',
+  secondary: 'bg-surface-2 text-ink hover:bg-line/70',
   outline: 'border border-line bg-surface text-ink hover:bg-surface-2',
-  ghost: 'text-ink-2 hover:bg-surface-2',
-  danger: 'bg-danger text-white hover:bg-danger/90',
-  success: 'bg-med text-white hover:bg-med/90',
-  violet: 'bg-violet text-white hover:bg-violet/90 shadow-sm shadow-violet/25',
-  amber: 'bg-bottle text-white hover:bg-bottle/90 shadow-sm shadow-bottle/25',
+  ghost: 'text-ink-2 hover:bg-surface-2 hover:text-ink',
+  /** Per i pulsanti secondari sopra il pannello bg-night. */
+  night: 'border border-night-line text-night-ink hover:bg-night-line/60',
 }
 
 const sizes: Record<Size, string> = {
-  sm: 'h-9 px-3 text-sm rounded-xl gap-1.5',
+  sm: 'h-11 px-3 text-sm rounded-xl gap-1.5',
   md: 'h-11 px-4 text-[15px] rounded-2xl gap-2',
   lg: 'h-14 px-5 text-base rounded-2xl gap-2',
 }
@@ -47,7 +46,7 @@ export function Button({
       type={type}
       disabled={disabled || loading}
       className={clsx(
-        'inline-flex select-none items-center justify-center font-semibold transition-colors active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50',
+        'inline-flex select-none items-center justify-center font-semibold transition-[color,background-color,transform] duration-150 ease-out-quart active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50',
         variants[variant],
         sizes[size],
         block && 'w-full',
@@ -73,7 +72,7 @@ export function IconButton({
       aria-label={label}
       title={label}
       className={clsx(
-        'inline-flex size-11 shrink-0 items-center justify-center rounded-full text-ink-2 transition-colors hover:bg-surface-2 active:scale-95',
+        'inline-flex size-11 shrink-0 items-center justify-center rounded-full text-ink-2 transition-[color,background-color,transform] duration-150 ease-out-quart hover:bg-surface-2 hover:text-ink active:scale-95 active:bg-surface-2',
         className,
       )}
       {...rest}

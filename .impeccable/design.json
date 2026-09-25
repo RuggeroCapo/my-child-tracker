@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-25T00:00:00Z",
+  "title": "Design System: Bebè",
+  "extensions": {
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "Nursery Rose", "canonical": "oklch(0.66 0.17 8)", "tonalRamp": ["oklch(0.22 0.06 8)", "oklch(0.32 0.1 8)", "oklch(0.44 0.14 8)", "oklch(0.56 0.17 8)", "oklch(0.66 0.17 8)", "oklch(0.76 0.12 8)", "oklch(0.86 0.07 8)", "oklch(0.95 0.025 8)"] },
+      "primary-pressed": { "role": "primary", "displayName": "Pressed Rose", "canonical": "oklch(0.78 0.07 5)" },
+      "secondary": { "role": "secondary", "displayName": "Quiet Indigo", "canonical": "oklch(0.585 0.204 277)", "tonalRamp": ["oklch(0.22 0.07 277)", "oklch(0.32 0.12 277)", "oklch(0.44 0.17 277)", "oklch(0.585 0.204 277)", "oklch(0.68 0.16 277)", "oklch(0.78 0.11 277)", "oklch(0.87 0.06 277)", "oklch(0.95 0.02 277)"] },
+      "accent": { "role": "tertiary", "displayName": "Mint Accent", "canonical": "oklch(0.8 0.13 181)", "tonalRamp": ["oklch(0.22 0.04 181)", "oklch(0.34 0.07 181)", "oklch(0.46 0.09 181)", "oklch(0.6 0.11 181)", "oklch(0.72 0.13 181)", "oklch(0.8 0.13 181)", "oklch(0.88 0.08 181)", "oklch(0.96 0.03 181)"] },
+      "success": { "role": "tertiary", "displayName": "Soft Success" },
+      "danger": { "role": "tertiary", "displayName": "Alert Red" },
+      "feed": { "role": "category", "displayName": "Nursery Rose (Allattamento)" },
+      "feed-soft": { "role": "category", "displayName": "Blush" },
+      "diaper": { "role": "category", "displayName": "Cornflower (Pannolino)" },
+      "diaper-soft": { "role": "category", "displayName": "Morning Sky" },
+      "bottle": { "role": "category", "displayName": "Honey (Biberon)" },
+      "bottle-soft": { "role": "category", "displayName": "Warm Milk" },
+      "pump": { "role": "category", "displayName": "Lavender (Tiralatte)" },
+      "pump-soft": { "role": "category", "displayName": "Lilac Mist" },
+      "med": { "role": "category", "displayName": "Sage Green (Medicine)" },
+      "med-soft": { "role": "category", "displayName": "Mint Cream" },
+      "vax": { "role": "category", "displayName": "Violet (Vaccinazioni)" },
+      "vax-soft": { "role": "category", "displayName": "Periwinkle Wash" },
+      "growth": { "role": "category", "displayName": "Teal (Crescita)" },
+      "growth-soft": { "role": "category", "displayName": "Seafoam" },
+      "neutral-soft": { "role": "category", "displayName": "Slate Wash" },
+      "grey-900": { "role": "neutral", "displayName": "Ink Navy", "tonalRamp": ["#0F172A", "#1E293B", "#334155", "#475569", "#64748B", "#CBD5E1", "#F1F5F9", "#FAFAFC"] },
+      "grey-700": { "role": "neutral", "displayName": "Slate" },
+      "grey-500": { "role": "neutral", "displayName": "Muted Slate" },
+      "grey-300": { "role": "neutral", "displayName": "Hairline" },
+      "grey-100": { "role": "neutral", "displayName": "Mist" },
+      "grey-50": { "role": "neutral", "displayName": "Snow" },
+      "canvas": { "role": "neutral", "displayName": "Cream Page" },
+      "surface": { "role": "neutral", "displayName": "Paper" },
+      "dark-canvas": { "role": "neutral", "displayName": "Night Canvas" },
+      "dark-surface": { "role": "neutral", "displayName": "Night Surface" },
+      "dark-surface-2": { "role": "neutral", "displayName": "Night Raised" },
+      "dark-line": { "role": "neutral", "displayName": "Night Line" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Home status sentence and baby name. One per screen." },
+      "headline": { "displayName": "H1", "purpose": "Home section titles, page titles." },
+      "title": { "displayName": "H2", "purpose": "Sheet titles, card headings, stat values." },
+      "subtitle": { "displayName": "H3", "purpose": "Large list labels, tile labels." },
+      "body": { "displayName": "Body", "purpose": "Default text, inputs, buttons (at 600)." },
+      "body-small": { "displayName": "Body Small", "purpose": "Event subtitles, hints, summaries." },
+      "caption": { "displayName": "Caption", "purpose": "Tab labels, dense timestamps, chart axes." },
+      "timer": { "displayName": "Timer", "purpose": "Running session timers, tabular figures." }
+    },
+    "shadows": [
+      { "name": "card-rest", "value": "0 1px 2px rgb(15 23 42 / 0.04), 0 6px 20px rgb(15 23 42 / 0.05)", "purpose": "Cards on the Cream Page, light mode only." },
+      { "name": "sheet", "value": "0 -8px 32px rgb(15 23 42 / 0.12)", "purpose": "Bottom sheets over a 40% Ink Navy scrim." },
+      { "name": "toast", "value": "0 8px 24px rgb(15 23 42 / 0.12)", "purpose": "Toasts only." }
+    ],
+    "motion": [
+      { "name": "ease-out-quart", "value": "cubic-bezier(0.25, 1, 0.5, 1)", "purpose": "Default easing for sheets and state transitions." },
+      { "name": "duration-press", "value": "150ms", "purpose": "Press feedback (scale 0.98)." },
+      { "name": "duration-sheet", "value": "220ms", "purpose": "Bottom sheet slide-up." },
+      { "name": "pulse-live", "value": "1.6s ease-in-out infinite", "purpose": "Dot on a running session. Disabled under reduced motion." }
+    ],
+    "breakpoints": [
+      { "name": "column", "value": "512px" },
+      { "name": "sm", "value": "640px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Most frequent action on a screen. At most one per screen.",
+      "html": "<button class=\"ds-btn ds-btn-primary\">Termina</button>",
+      "css": ".ds-btn { height: 48px; padding: 0 16px; border-radius: 12px; border: none; font: 600 16px/24px 'Inter Variable', system-ui, sans-serif; cursor: pointer; transition: background-color 150ms cubic-bezier(0.25,1,0.5,1), transform 150ms cubic-bezier(0.25,1,0.5,1); } .ds-btn:active { transform: scale(0.98); } .ds-btn:focus-visible { outline: 2px solid #6366F1; outline-offset: 2px; } .ds-btn-primary { background: #E75B7A; color: #FFFDFC; } .ds-btn-primary:active { background: #D9A3B0; } .ds-btn-primary:disabled { background: #F1F5F9; color: #CBD5E1; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Alternative action next to a primary.",
+      "html": "<button class=\"ds-btn-secondary\">Secondario</button>",
+      "css": ".ds-btn-secondary { height: 48px; padding: 0 16px; border-radius: 12px; border: 1px solid #CBD5E1; background: #FFFDFC; color: #0F172A; font: 600 16px/24px 'Inter Variable', system-ui, sans-serif; cursor: pointer; transition: background-color 150ms, transform 150ms; } .ds-btn-secondary:hover { background: #F1F5F9; } .ds-btn-secondary:active { transform: scale(0.98); } .ds-btn-secondary:focus-visible { outline: 2px solid #6366F1; outline-offset: 2px; }"
+    },
+    {
+      "name": "Destructive Button",
+      "kind": "button",
+      "refersTo": "button-destructive",
+      "description": "Delete. Calm Ink Navy, always followed by an undo toast.",
+      "html": "<button class=\"ds-btn-destructive\">Elimina</button>",
+      "css": ".ds-btn-destructive { height: 48px; padding: 0 16px; border-radius: 12px; border: none; background: #0F172A; color: #FFFDFC; font: 600 16px/24px 'Inter Variable', system-ui, sans-serif; cursor: pointer; transition: background-color 150ms, transform 150ms; } .ds-btn-destructive:hover { background: #334155; } .ds-btn-destructive:active { transform: scale(0.98); } .ds-btn-destructive:focus-visible { outline: 2px solid #6366F1; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Labelled field; rose focus, red error.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Nome del bambino</span><input class=\"ds-input\" placeholder=\"Arianna\" /></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 6px; font-family: 'Inter Variable', system-ui, sans-serif; } .ds-field-label { font: 500 14px/20px inherit; color: #334155; padding: 0 4px; } .ds-input { height: 48px; padding: 0 16px; border-radius: 12px; border: 1px solid #CBD5E1; background: #FFFDFC; color: #0F172A; font: 400 16px/24px 'Inter Variable', system-ui, sans-serif; outline: none; transition: border-color 150ms, box-shadow 150ms; } .ds-input::placeholder { color: #64748B; } .ds-input:focus { border-color: #E75B7A; box-shadow: 0 0 0 3px rgb(231 91 122 / 0.2); } .ds-input[aria-invalid=true] { border-color: #E5484D; }"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "custom",
+      "refersTo": "segmented",
+      "description": "Time range and binary choices.",
+      "html": "<div class=\"ds-seg\" role=\"radiogroup\"><button role=\"radio\" aria-checked=\"false\">Oggi</button><button role=\"radio\" aria-checked=\"true\">7 giorni</button><button role=\"radio\" aria-checked=\"false\">30 giorni</button></div>",
+      "css": ".ds-seg { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #F1F5F9; width: 320px; } .ds-seg button { flex: 1; height: 40px; border: none; border-radius: 10px; background: transparent; color: #334155; font: 500 14px/20px 'Inter Variable', system-ui, sans-serif; cursor: pointer; transition: background-color 150ms, color 150ms; } .ds-seg button:hover { color: #0F172A; } .ds-seg button[aria-checked=true] { background: #E75B7A; color: #FFFDFC; } .ds-seg button:focus-visible { outline: 2px solid #6366F1; outline-offset: 2px; }"
+    },
+    {
+      "name": "Status Panel",
+      "kind": "card",
+      "refersTo": "status-panel",
+      "description": "Home answer: last meal as a sentence, next side and last change.",
+      "html": "<section class=\"ds-status\"><p class=\"ds-status-lead\">Ha mangiato <span>40 min fa</span></p><p class=\"ds-status-sub\">Seno sinistro, 14 min · alle 10:15</p><dl class=\"ds-status-dl\"><div><dt>Prossimo lato</dt><dd>Destro</dd></div><div><dt>Cambio</dt><dd>1 h fa</dd></div></dl></section>",
+      "css": ".ds-status { width: 320px; background: #0F172A; color: #FAFAFC; border-radius: 24px; padding: 24px 20px 20px; font-family: 'Inter Variable', system-ui, sans-serif; } .ds-status-lead { margin: 0; font: 600 32px/40px inherit; letter-spacing: -0.02em; } .ds-status-lead span { color: #F4A3B5; } .ds-status-sub { margin: 8px 0 0; font: 400 14px/20px inherit; color: #CBD5E1; } .ds-status-dl { display: grid; grid-template-columns: 1fr 1fr; margin: 24px 0 0; padding-top: 16px; border-top: 1px solid #26304A; } .ds-status-dl div + div { border-left: 1px solid #26304A; padding-left: 16px; } .ds-status-dl dt { font: 400 14px/20px inherit; color: #CBD5E1; } .ds-status-dl dd { margin: 2px 0 0; font: 600 20px/28px inherit; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Category Tile",
+      "kind": "custom",
+      "refersTo": "category-tile-diaper",
+      "description": "Quick-log key: pastel tint, ink icon, label and live hint.",
+      "html": "<button class=\"ds-tile\"><svg width=\"32\" height=\"32\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 7h18v4a9 9 0 0 1-18 0z\"/><path d=\"M8 11a4 4 0 0 0 8 0\"/></svg><span><b>Pannolino</b><small>3 oggi</small></span></button>",
+      "css": ".ds-tile { width: 110px; height: 118px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; padding: 14px; border: none; border-radius: 22px; background: #E8F2FF; color: #4F8EF7; text-align: left; cursor: pointer; font-family: 'Inter Variable', system-ui, sans-serif; transition: transform 150ms cubic-bezier(0.25,1,0.5,1); } .ds-tile:active { transform: scale(0.97); } .ds-tile:focus-visible { outline: 2px solid #6366F1; outline-offset: 2px; } .ds-tile b { display: block; font: 600 15px/1.2 inherit; color: #0F172A; } .ds-tile small { display: block; font: 400 12px/16px inherit; color: #334155; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Tab Bar",
+      "kind": "nav",
+      "refersTo": "tab-bar",
+      "description": "Fixed bottom navigation, four destinations.",
+      "html": "<nav class=\"ds-tabs\"><a aria-current=\"page\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 10.5 12 3l9 7.5V21H3z\"/></svg>Home</a><a><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2 4h7a3 3 0 0 1 3 3v14a2 2 0 0 0-2-2H2zM22 4h-7a3 3 0 0 0-3 3v14a2 2 0 0 1 2-2h8z\"/></svg>Diario</a><a><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M4 20V10M10 20V4M16 20v-8M22 20H2\"/></svg>Statistiche</a><a><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M4 6h16M4 12h16M4 18h16\"/></svg>Altro</a></nav>",
+      "css": ".ds-tabs { display: flex; width: 360px; background: rgb(255 253 252 / 0.95); border-top: 1px solid #CBD5E1; } .ds-tabs a { flex: 1; height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #64748B; font: 500 12px/16px 'Inter Variable', system-ui, sans-serif; text-decoration: none; cursor: pointer; transition: color 150ms; } .ds-tabs a:hover { color: #334155; } .ds-tabs a[aria-current=page] { color: #E75B7A; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Shared Notebook",
+    "overview": "Bebè is the paper diary two parents keep on the changing table, rebuilt so it lives on both of their phones at once. A notebook has no dashboard: it has the last entry, written plainly, and a column of times down the margin. The system borrows that honesty. The palette is soft and domestic: a warm cream page, one confident rose for the thing you do most, and a set of pastel category tints that behave like colored tabs in a notebook. Type is a single, well-tuned Inter at a modest scale. This system explicitly rejects the SaaS dashboard and the ad-heavy baby tracker, and treats the dark theme as a first-class, night-safe surface.",
+    "keyCharacteristics": [
+      "Single mobile column, max 512px wide, 16px side gutter, bottom tab bar.",
+      "Answer-first home: a dark status panel phrased as a sentence, then primary logging keys, then today.",
+      "Category color = soft pastel tile + saturated icon + text label, always all three.",
+      "Rounded, soft geometry (12px elements, 16px cards, 24px feature panels, 28px sheets).",
+      "Bottom sheets for quick logging, undo toasts instead of confirmation dialogs.",
+      "Responsive motion: press feedback, sheet slide-up, live-session pulse. Nothing else moves.",
+      "Layout rhythm on a 4px base: 4, 8, 12, 16, 24, 48."
+    ],
+    "rules": [
+      { "name": "The Notebook Tab Rule", "body": "Category color is a tab, not a theme. A category tint may fill its own tile, icon chip or chart series; it never tints a whole screen, a header, or text paragraphs.", "section": "colors" },
+      { "name": "The One Rose Rule", "body": "Nursery Rose fills at most one large element per screen (the primary action or the running timer). Everything else rose is small.", "section": "colors" },
+      { "name": "The Calm Red Rule", "body": "Alert Red means something went wrong with your data. Normal events, including medicines and vaccines, are never red.", "section": "colors" },
+      { "name": "The Tabular Time Rule", "body": "Every time, duration, quantity and timer uses tabular figures. Numbers that shift width while ticking are forbidden.", "section": "typography" },
+      { "name": "The Sentence-Case Rule", "body": "Labels, buttons and headings are sentence case in Italian. No all-caps, no letter-spaced eyebrow labels.", "section": "typography" },
+      { "name": "The Paper-On-Table Rule", "body": "If a shadow is noticeable at a glance, it is too strong. Elevation should read like a sheet of paper lying on a table.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do lead every screen with the answer: the Home status panel's Display sentence comes before any button.",
+      "Do keep frequent actions in the lower half of the screen and at least 44×44px; Home logging keys are 84px and 118px tall.",
+      "Do show every category as tint + ink icon + text label, all three, every time.",
+      "Do use tabular figures for all times, durations, quantities and timers.",
+      "Do use undo toasts (Paper, 16px radius, Toast shadow) instead of confirmation dialogs for deletes and edits.",
+      "Do keep transitions between 150 and 250ms with exponential ease-out; press feedback is scale(0.98).",
+      "Do design the dark theme on its own: Night Canvas (#0B1120) base, no Paper or Snow fills larger than a button, at most one filled Nursery Rose element per screen.",
+      "Do respect prefers-reduced-motion: the live pulse and sheet slide become instant."
+    ],
+    "donts": [
+      "Don't build a SaaS dashboard: no KPI tiles, no hero-metric blocks (big number, small label, trend arrow), no grids of identical stat cards, no gradients.",
+      "Don't make it an ad-heavy baby tracker: no banners, premium upsell badges, streaks, gamification, or engagement nags; no crowded home screen with every feature competing.",
+      "Don't use gender-coded pink-for-girls / blue-for-boys theming; the palette is the same for every baby.",
+      "Don't use Alert Red (#E5484D) for normal events; red means a data problem.",
+      "Don't fill whole screens or headers with a category tint (The Notebook Tab Rule).",
+      "Don't use border-left or border-right wider than 1px as a colored stripe on rows, cards or toasts.",
+      "Don't use gradient text, glassmorphism, or decorative blur (the sheet scrim is the only blur, at 2px).",
+      "Don't add a second typeface, all-caps labels, or letter-spaced eyebrows.",
+      "Don't open a modal dialog when a sheet, inline edit, or undo toast would do.",
+      "Don't animate anything that isn't feedback or a state change; no page-load choreography.",
+      "Don't use pure black (#000) or pure white (#FFF) anywhere; use Ink Navy and Paper."
+    ]
+  }
+}

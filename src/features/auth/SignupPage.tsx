@@ -43,9 +43,9 @@ export function SignupPage() {
 
   if (sent) {
     return (
-      <AuthLayout title="Controlla la posta" footer={<Link to="/login" className="font-semibold text-rose">Torna all'accesso</Link>}>
+      <AuthLayout title="Controlla la posta" footer={<Link to="/login" className="font-semibold text-rose-ink underline-offset-2 hover:underline">Torna all'accesso</Link>}>
         <div className="flex flex-col items-center gap-3 text-center text-ink-2">
-          <MailCheck className="size-10 text-rose" aria-hidden />
+          <MailCheck className="size-10 text-rose-ink" aria-hidden />
           <p>
             Ti abbiamo inviato un link a <strong className="text-ink">{email}</strong> per confermare l'account.
           </p>
@@ -61,7 +61,7 @@ export function SignupPage() {
       footer={
         <>
           Hai già un account?{' '}
-          <Link to={`/login${params.size ? `?${params}` : ''}`} className="font-semibold text-rose">
+          <Link to={`/login${params.size ? `?${params}` : ''}`} className="font-semibold text-rose-ink underline-offset-2 hover:underline">
             Accedi
           </Link>
         </>

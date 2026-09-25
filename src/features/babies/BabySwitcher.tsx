@@ -30,7 +30,7 @@ export function BabySwitcher({ open, onClose }: { open: boolean; onClose: () => 
                 <span className="block font-semibold">{b.name}</span>
                 <span className="block text-sm text-ink-2">{formatAge(b.birth_date)}</span>
               </span>
-              {b.id === activeBabyId && <Check className="size-5 text-rose" />}
+              {b.id === activeBabyId && <Check className="size-5 text-rose-ink" aria-label="Selezionato" />}
             </button>
           </li>
         ))}

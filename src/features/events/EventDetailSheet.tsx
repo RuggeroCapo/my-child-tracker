@@ -33,36 +33,36 @@ export function EventDetailSheet({ eventId, onClose }: { eventId: string | null;
           <div className="flex items-center gap-3 pt-2">
             <CategoryIcon kind={event.kind} size="lg" />
             <div className="min-w-0">
-              <h2 className="truncate text-lg font-semibold">{title}</h2>
+              <h2 className="truncate font-display-snug text-xl font-bold">{title}</h2>
               <p className="text-ink-2">{subtitle}</p>
             </div>
           </div>
           <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
-            <dt className="text-ink-3">{event.ended_at ? 'Inizio' : 'Data e ora'}</dt>
+            <dt className="text-ink-2">{event.ended_at ? 'Inizio' : 'Data e ora'}</dt>
             <dd className="text-ink">
               {formatShortDate(event.started_at)}, {formatTime(event.started_at)}
             </dd>
             {event.ended_at && (
               <>
-                <dt className="text-ink-3">Fine</dt>
+                <dt className="text-ink-2">Fine</dt>
                 <dd className="text-ink">{formatTime(event.ended_at)}</dd>
               </>
             )}
             {createdBy && (
               <>
-                <dt className="text-ink-3">Registrato da</dt>
+                <dt className="text-ink-2">Registrato da</dt>
                 <dd className="text-ink">{createdBy}</dd>
               </>
             )}
             {endedBy && event.ended_by !== event.created_by && (
               <>
-                <dt className="text-ink-3">Terminato da</dt>
+                <dt className="text-ink-2">Terminato da</dt>
                 <dd className="text-ink">{endedBy}</dd>
               </>
             )}
             {event.notes && (
               <>
-                <dt className="text-ink-3">Note</dt>
+                <dt className="text-ink-2">Note</dt>
                 <dd className="whitespace-pre-wrap text-ink">{event.notes}</dd>
               </>
             )}
@@ -73,7 +73,6 @@ export function EventDetailSheet({ eventId, onClose }: { eventId: string | null;
             </Button>
             <Button
               variant="ghost"
-              className="text-danger"
               icon={<Trash className="size-4" />}
               onClick={() => {
                 deleteEvent(event)

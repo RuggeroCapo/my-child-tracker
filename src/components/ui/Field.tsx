@@ -3,7 +3,7 @@ import { ChevronDown } from 'lucide-react'
 import { useId, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from 'react'
 
 const control =
-  'w-full rounded-2xl border border-line bg-surface px-4 text-ink placeholder:text-ink-3 outline-none transition-colors focus:border-sky focus:ring-2 focus:ring-sky/20 disabled:opacity-60'
+  'w-full rounded-2xl border border-line bg-surface px-4 text-ink placeholder:text-ink-3 outline-none transition-colors focus:border-rose focus:ring-3 focus:ring-rose/20 aria-[invalid=true]:border-danger disabled:opacity-60'
 
 export function Field({
   label,
@@ -28,11 +28,13 @@ export function Field({
       </label>
       {children}
       {error ? (
-        <p className="px-1 text-sm text-danger" role="alert">
+        <p id={htmlFor && `${htmlFor}-msg`} className="px-1 text-sm text-danger" role="alert">
           {error}
         </p>
       ) : hint ? (
-        <p className="px-1 text-xs text-ink-3">{hint}</p>
+        <p id={htmlFor && `${htmlFor}-msg`} className="px-1 text-xs text-ink-3">
+          {hint}
+        </p>
       ) : null}
     </div>
   )
@@ -48,6 +50,8 @@ export function Input({ label, optional, hint, suffix, error, big, className, id
       <input
         id={inputId}
         className={clsx(control, big ? 'h-16 text-3xl font-semibold tabular' : 'h-12', suffix && 'pr-14', className)}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error || hint ? `${inputId}-msg` : undefined}
         {...rest}
       />
       {suffix && (

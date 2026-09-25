@@ -45,7 +45,7 @@ export function PumpingForm({ babyId, initial, onSaved }: { babyId: string; init
       <Input label="Quantità estratta" optional inputMode="decimal" suffix="ml" value={amount} onChange={(e) => setAmount(e.target.value)} />
       <NotesInput value={draft.notes} onChange={draft.setNotes} />
       {draft.error && <p className="text-sm text-danger" role="alert">{draft.error}</p>}
-      <Button type="submit" block size="lg" variant="violet">
+      <Button type="submit" block size="lg">
         Salva
       </Button>
     </form>

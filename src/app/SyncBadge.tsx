@@ -20,9 +20,9 @@ export function SyncBadge() {
       <button
         type="button"
         onClick={() => void resync()}
-        className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-900 dark:bg-amber-950 dark:text-amber-100"
+        className="-my-2 inline-flex h-11 items-center gap-1.5 rounded-full px-3 text-xs font-semibold text-ink ring-1 ring-inset ring-line transition-colors hover:bg-surface-2"
       >
-        <TriangleAlert className="size-3.5" aria-hidden /> Riprova
+        <TriangleAlert className="size-3.5 text-warning" aria-hidden /> Non sincronizzato · Riprova
       </button>
     )
   }

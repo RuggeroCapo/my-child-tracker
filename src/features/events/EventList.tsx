@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router'
 import { EventRow } from '@/components/EventRow'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
@@ -19,6 +20,7 @@ export function EventList({
   /** Riepilogo opzionale a destra dell'intestazione del giorno. */
   dayExtra?: (dayEvents: BabyEvent[]) => string | null
 }) {
+  const navigate = useNavigate()
   const [selected, setSelected] = useState<string | null>(null)
   const [visible, setVisible] = useState(pageSize)
   const groups = useMemo(() => {
@@ -45,7 +47,7 @@ export function EventList({
           )}
           <Card className="divide-y divide-line overflow-hidden">
             {items.map((e) => (
-              <EventRow key={e.id} event={e} onClick={() => setSelected(e.id)} />
+              <EventRow key={e.id} event={e} onClick={() => (e.kind === 'breastfeeding' ? navigate(`/breastfeeding/${e.id}`) : setSelected(e.id))} />
             ))}
           </Card>
         </section>

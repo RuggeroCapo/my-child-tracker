@@ -31,7 +31,7 @@ export function StoolPicker({
               aria-checked={amount === a}
               onClick={() => onAmount(amount === a ? null : a)}
               className={clsx(
-                'flex h-16 flex-col items-center justify-center gap-1.5 rounded-2xl border border-line text-sm font-medium',
+                'flex h-16 flex-col items-center justify-center gap-1.5 rounded-2xl border border-line text-sm font-medium transition-colors duration-150',
                 amount === a ? 'bg-bottle/15 text-ink ring-2 ring-bottle' : 'text-ink-2 hover:bg-surface-2',
               )}
             >
@@ -56,8 +56,8 @@ export function StoolPicker({
               title={STOOL_COLOR_LABEL[c]}
               onClick={() => onColor(color === c ? null : c)}
               className={clsx(
-                'size-11 rounded-full border border-black/10 transition-transform',
-                color === c ? 'scale-110 ring-2 ring-sky ring-offset-2 ring-offset-surface' : 'hover:scale-105',
+                'size-11 rounded-full border border-ink/15 transition-transform duration-150',
+                color === c ? 'scale-110 ring-2 ring-ink ring-offset-2 ring-offset-surface' : 'hover:scale-105',
               )}
               style={{ backgroundColor: STOOL_COLOR_HEX[c] }}
             />
