@@ -1,5 +1,4 @@
 import clsx from 'clsx'
-import { Maximize2 } from 'lucide-react'
 import { useMemo, type ReactNode } from 'react'
 import type { ReferenceCurve } from '@/domain/growth/percentile'
 import { formatNumber } from '@/lib/units'
@@ -231,7 +230,7 @@ export function GrowthChart({
   xLabel: string
   unit: string
   color?: string
-  /** Se presente, il grafico si apre a schermo intero toccandolo o con il pulsante accanto alla legenda. */
+  /** Se presente, toccare il grafico lo apre a schermo intero. */
   onExpand?: () => void
 }) {
   const view = useMemo(() => fitView(points, curves, xMax), [points, curves, xMax])
@@ -261,18 +260,8 @@ export function GrowthChart({
           color={color}
         />
       </svg>
-      <figcaption className="flex items-start justify-between gap-2">
+      <figcaption>
         <GrowthLegend color={color} curves={!!curves} />
-        {onExpand && (
-          <button
-            type="button"
-            onClick={onExpand}
-            aria-label="Ingrandisci il grafico"
-            className="-mt-2 -mr-1 inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-surface-2 px-3 text-xs font-semibold text-ink-2 transition-[color,transform] duration-150 ease-out-quart hover:text-ink active:scale-95"
-          >
-            <Maximize2 className="size-3.5" /> Espandi
-          </button>
-        )}
       </figcaption>
     </figure>
   )

@@ -109,7 +109,7 @@ test('tutte le funzionalità MVP', async ({ page }) => {
   await shot(page, 'growth')
 
   // Grafico a schermo intero: zoom, dettagli al tocco e schede per metrica
-  await page.getByRole('button', { name: 'Ingrandisci il grafico' }).click()
+  await page.getByRole('button', { name: 'Schermo intero' }).click()
   const growthDialog = page.getByRole('dialog', { name: 'Curve di crescita' })
   await growthDialog.getByRole('button', { name: 'Ingrandisci', exact: true }).click()
   await expect(growthDialog.getByRole('button', { name: 'Ripristina vista' })).toBeEnabled()

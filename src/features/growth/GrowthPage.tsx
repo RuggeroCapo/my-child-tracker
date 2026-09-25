@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react'
+import { Maximize2, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { Button } from '@/components/ui/Button'
@@ -69,6 +69,12 @@ export default function GrowthPage() {
           <p className="text-sm text-ink-2">Nessuna misura di {METRIC_LABEL[metric].toLowerCase()} registrata.</p>
         )}
 
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-sm font-semibold text-ink-2">Curva di crescita</p>
+          <Button size="sm" variant="secondary" icon={<Maximize2 className="size-4" />} onClick={() => setExplorerOpen(true)}>
+            Schermo intero
+          </Button>
+        </div>
         <GrowthChart
           points={points}
           curves={curves}
