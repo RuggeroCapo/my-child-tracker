@@ -167,6 +167,12 @@
 @utility tabular {
   font-variant-numeric: tabular-nums;
 }
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 
 /* -----------------------------------------------------------------------------
    Profondità. La pagina è immersa in un velo di colore fisso; sopra, superfici

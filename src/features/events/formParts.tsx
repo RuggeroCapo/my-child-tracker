@@ -1,8 +1,11 @@
 import clsx from 'clsx'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useId, type ReactNode } from 'react'
-import { Input, Textarea } from '@/components/ui/Field'
+import { useId, useState, type ReactNode } from 'react'
+import { Textarea } from '@/components/ui/Field'
+import { WheelTimePicker } from '@/components/ui/WheelPicker'
 import { formatAgo, formatDayLabel, isSameDay, shiftLocalDay, toDateInput, toLocalInput, withLocalTime } from '@/lib/time'
+
+const pad = (n: number) => String(n).padStart(2, '0')
 
 const QUICK_OFFSETS = [
   { minutes: 0, label: 'Adesso', aria: 'Adesso' },
@@ -13,8 +16,10 @@ const QUICK_OFFSETS = [
 ]
 
 /**
- * Data e ora di un evento: scorciatoie relative ad adesso, giorno a frecce e ora nativa.
- * Il caso comune ("appena successo") richiede un tocco, non un selettore a rotelle.
+ * Data e ora di un evento: scorciatoie relative ad adesso, giorno a frecce nativo,
+ * ora con rotelle proprie (a scroll-snap) invece del picker nativo del browser,
+ * che su Android apre un quadrante analogico e su iOS non risponde bene al tocco
+ * dentro un foglio modale.
  */
 export function DateTimeInput({
   label,
@@ -29,6 +34,9 @@ export function DateTimeInput({
   const now = new Date()
   const date = new Date(value)
   const isToday = isSameDay(date, now)
+  const [wheelOpen, setWheelOpen] = useState(false)
+  const hour = Number(value.slice(11, 13))
+  const minute = Number(value.slice(14, 16))
 
   return (
     <div className="space-y-1.5">
@@ -76,16 +84,34 @@ export function DateTimeInput({
             <ChevronRight className="size-5" aria-hidden />
           </button>
         </div>
-        <Input
+        <button
+          type="button"
           id={id}
-          type="time"
-          required
+          aria-haspopup="dialog"
+          aria-expanded={wheelOpen}
+          aria-controls={`${id}-wheel`}
           aria-describedby={`${id}-ago`}
-          className="w-28 text-center tabular"
-          value={value.slice(11, 16)}
-          onChange={(e) => e.target.value && onChange(withLocalTime(value, e.target.value))}
-        />
+          onClick={() => setWheelOpen((o) => !o)}
+          className={clsx(
+            'flex h-12 w-28 shrink-0 items-center justify-center rounded-2xl border bg-surface text-base font-medium text-ink tabular transition-colors',
+            wheelOpen ? 'border-rose ring-3 ring-rose/20' : 'border-line',
+          )}
+        >
+          {value.slice(11, 16)}
+        </button>
       </div>
+      {wheelOpen && (
+        <div id={`${id}-wheel`} role="dialog" aria-label="Seleziona l'ora" className="space-y-2 pt-1">
+          <WheelTimePicker hour={hour} minute={minute} onChange={(h, m) => onChange(withLocalTime(value, `${pad(h)}:${pad(m)}`))} />
+          <button
+            type="button"
+            onClick={() => setWheelOpen(false)}
+            className="h-10 w-full rounded-xl bg-surface-2 text-sm font-semibold text-ink-2 transition-colors duration-150 hover:text-ink"
+          >
+            Fatto
+          </button>
+        </div>
+      )}
       <div className="flex gap-2 overflow-x-auto">
         {QUICK_OFFSETS.map((o) => (
           <button
