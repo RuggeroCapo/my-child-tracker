@@ -1,25 +1,20 @@
 import clsx from 'clsx'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useId, useState, type ReactNode } from 'react'
+import { CalendarDays } from 'lucide-react'
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { Textarea } from '@/components/ui/Field'
 import { WheelTimePicker } from '@/components/ui/WheelPicker'
-import { formatAgo, formatDayLabel, isSameDay, shiftLocalDay, toDateInput, toLocalInput, withLocalTime } from '@/lib/time'
+import { formatAgo, formatDayLabel, toDateInput, withLocalTime } from '@/lib/time'
 
 const pad = (n: number) => String(n).padStart(2, '0')
 
-const QUICK_OFFSETS = [
-  { minutes: 0, label: 'Adesso', aria: 'Adesso' },
-  { minutes: 5, label: '−5′', aria: '5 minuti fa' },
-  { minutes: 15, label: '−15′', aria: '15 minuti fa' },
-  { minutes: 30, label: '−30′', aria: '30 minuti fa' },
-  { minutes: 60, label: '−1h', aria: "Un'ora fa" },
-]
-
 /**
- * Data e ora di un evento: scorciatoie relative ad adesso, giorno a frecce nativo,
- * ora con rotelle proprie (a scroll-snap) invece del picker nativo del browser,
- * che su Android apre un quadrante analogico e su iOS non risponde bene al tocco
- * dentro un foglio modale.
+ * Data e ora di un evento. L'ora è il controllo principale (quasi sempre si
+ * corregge solo quella): tocco sull'ora → rotelle in linea, senza conferma.
+ * Si chiudono ritoccando l'ora, toccando fuori o con Esc. Il giorno è un chip
+ * secondario (date input nativo trasparente) perché è quasi sempre oggi, e
+ * `withLocalTime` porta già a ieri un orario che oggi sarebbe nel futuro.
+ * Rotelle proprie invece del picker nativo: su Android apre un quadrante
+ * analogico e su iOS non risponde bene al tocco dentro un foglio modale.
  */
 export function DateTimeInput({
   label,
@@ -31,15 +26,29 @@ export function DateTimeInput({
   onChange: (v: string) => void
 }) {
   const id = useId()
+  const rootRef = useRef<HTMLDivElement>(null)
   const now = new Date()
   const date = new Date(value)
-  const isToday = isSameDay(date, now)
   const [wheelOpen, setWheelOpen] = useState(false)
   const hour = Number(value.slice(11, 13))
   const minute = Number(value.slice(14, 16))
 
+  useEffect(() => {
+    if (!wheelOpen) return
+    const onPointerDown = (e: PointerEvent) => {
+      if (!rootRef.current?.contains(e.target as Node)) setWheelOpen(false)
+    }
+    const onKeyDown = (e: KeyboardEvent) => e.key === 'Escape' && setWheelOpen(false)
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [wheelOpen])
+
   return (
-    <div className="space-y-1.5">
+    <div ref={rootRef} className="space-y-1.5">
       {/* Il "quanto tempo fa" sta sulla riga dell'etichetta: una riga in meno per campo. */}
       <div className="flex items-baseline justify-between gap-3 px-1">
         <label htmlFor={id} className="text-sm font-medium text-ink-2">
@@ -50,40 +59,6 @@ export function DateTimeInput({
         </span>
       </div>
       <div className="flex gap-2">
-        <div className="flex h-12 min-w-0 flex-1 items-center rounded-2xl border border-line bg-surface">
-          <button
-            type="button"
-            aria-label="Giorno precedente"
-            onClick={() => onChange(shiftLocalDay(value, -1))}
-            className="grid size-12 shrink-0 place-items-center rounded-2xl text-ink-2 hover:text-ink"
-          >
-            <ChevronLeft className="size-5" aria-hidden />
-          </button>
-          {/* Il giorno è un date input nativo trasparente: per saltare a date lontane (es. misurazioni). */}
-          <div className="relative flex h-full min-w-0 flex-1 items-center justify-center">
-            <span className="truncate text-sm font-medium text-ink" aria-hidden>
-              {formatDayLabel(date, now)}
-            </span>
-            <input
-              type="date"
-              required
-              aria-label="Giorno"
-              max={toDateInput(now)}
-              value={value.slice(0, 10)}
-              onChange={(e) => e.target.value && onChange(`${e.target.value}${value.slice(10)}`)}
-              className="absolute inset-0 size-full cursor-pointer opacity-0"
-            />
-          </div>
-          <button
-            type="button"
-            aria-label="Giorno successivo"
-            disabled={isToday}
-            onClick={() => onChange(shiftLocalDay(value, 1))}
-            className="grid size-12 shrink-0 place-items-center rounded-2xl text-ink-2 hover:text-ink disabled:opacity-30"
-          >
-            <ChevronRight className="size-5" aria-hidden />
-          </button>
-        </div>
         <button
           type="button"
           id={id}
@@ -93,38 +68,33 @@ export function DateTimeInput({
           aria-describedby={`${id}-ago`}
           onClick={() => setWheelOpen((o) => !o)}
           className={clsx(
-            'flex h-12 w-28 shrink-0 items-center justify-center rounded-2xl border bg-surface text-base font-medium text-ink tabular transition-colors',
+            'flex h-14 min-w-0 flex-1 items-center justify-center rounded-2xl border bg-surface text-2xl font-semibold text-ink tabular transition-colors',
             wheelOpen ? 'border-rose ring-3 ring-rose/20' : 'border-line',
           )}
         >
           {value.slice(11, 16)}
         </button>
+        <div className="relative flex h-14 shrink-0 items-center gap-1.5 rounded-2xl border border-line bg-surface px-3.5 text-sm font-medium text-ink-2">
+          <CalendarDays className="size-4" aria-hidden />
+          <span className="max-w-28 truncate" aria-hidden>
+            {formatDayLabel(date, now)}
+          </span>
+          <input
+            type="date"
+            required
+            aria-label="Giorno"
+            max={toDateInput(now)}
+            value={value.slice(0, 10)}
+            onChange={(e) => e.target.value && onChange(`${e.target.value}${value.slice(10)}`)}
+            className="absolute inset-0 size-full cursor-pointer opacity-0"
+          />
+        </div>
       </div>
       {wheelOpen && (
-        <div id={`${id}-wheel`} role="dialog" aria-label="Seleziona l'ora" className="space-y-2 pt-1">
+        <div id={`${id}-wheel`} role="dialog" aria-label="Seleziona l'ora" className="pt-1">
           <WheelTimePicker hour={hour} minute={minute} onChange={(h, m) => onChange(withLocalTime(value, `${pad(h)}:${pad(m)}`))} />
-          <button
-            type="button"
-            onClick={() => setWheelOpen(false)}
-            className="h-10 w-full rounded-xl bg-surface-2 text-sm font-semibold text-ink-2 transition-colors duration-150 hover:text-ink"
-          >
-            Fatto
-          </button>
         </div>
       )}
-      <div className="flex gap-2 overflow-x-auto">
-        {QUICK_OFFSETS.map((o) => (
-          <button
-            key={o.minutes}
-            type="button"
-            aria-label={o.aria}
-            onClick={() => onChange(toLocalInput(new Date(Date.now() - o.minutes * 60_000)))}
-            className="h-10 shrink-0 rounded-xl bg-surface-2 px-3.5 text-sm font-medium text-ink-2 transition-colors duration-150 hover:text-ink active:bg-rose/15"
-          >
-            {o.label}
-          </button>
-        ))}
-      </div>
     </div>
   )
 }
