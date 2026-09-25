@@ -45,7 +45,7 @@ export function ActiveSessionCard({
 
   return (
     <section
-      className="relative overflow-hidden rounded-[28px] bg-night p-5 text-night-ink"
+      className="night-panel relative overflow-hidden rounded-[28px] p-5 text-night-ink"
       aria-live="polite"
     >
       <div className="flex items-center gap-2.5">
@@ -55,7 +55,7 @@ export function ActiveSessionCard({
           <Link
             to={`/breastfeeding/${event.id}`}
             aria-label="Dettagli allattamento"
-            className="-mr-2 -mt-2 ml-auto flex size-11 items-center justify-center rounded-xl text-night-ink-2 transition-colors hover:bg-white/10 hover:text-night-ink"
+            className="-mr-2 -mt-2 ml-auto flex size-11 items-center justify-center rounded-xl text-night-ink-2 transition-colors hover:bg-night-line hover:text-night-ink"
           >
             <Maximize2 className="size-5" />
           </Link>

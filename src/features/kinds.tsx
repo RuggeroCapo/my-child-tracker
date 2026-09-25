@@ -1,4 +1,4 @@
-import { ChartSpline, Pill, Syringe } from 'lucide-react'
+import { Bath, ChartSpline, Pill, Stethoscope, Syringe } from 'lucide-react'
 import type { ComponentType, SVGProps } from 'react'
 import { BottleIcon, DiaperIcon, FeedingIcon, PumpIcon } from '@/components/icons'
 import type { BabyEvent, EventKind } from '@/domain/types'
@@ -39,6 +39,8 @@ export const KIND_META: Record<EventKind, KindMeta> = {
   medication: { label: 'Medicine', icon: Pill, text: 'text-med', soft: 'bg-med/12', solid: 'bg-med', path: '/medications' },
   vaccination: { label: 'Vaccini', icon: Syringe, text: 'text-vax', soft: 'bg-vax/12', solid: 'bg-vax', path: '/vaccinations' },
   measurement: { label: 'Crescita', icon: ChartSpline, text: 'text-growth', soft: 'bg-growth/12', solid: 'bg-growth', path: '/growth' },
+  bath: { label: KIND_LABEL.bath, icon: Bath, text: 'text-bath', soft: 'bg-bath/12', solid: 'bg-bath', path: '/bath' },
+  doctor_visit: { label: KIND_LABEL.doctor_visit, icon: Stethoscope, text: 'text-visit', soft: 'bg-visit/12', solid: 'bg-visit', path: '/doctor-visit' },
 }
 
 function volume(amount: number, unit: string) {
@@ -85,5 +87,12 @@ export function describeEvent(e: BabyEvent): { title: string; subtitle: string }
         title: KIND_LABEL.measurement,
         subtitle: e.details.items.map((i) => `${METRIC_SHORT[i.metric]} ${formatNumber(i.value)} ${i.unit}`).join(' · '),
       }
+    case 'bath':
+      return {
+        title: KIND_LABEL.bath,
+        subtitle: e.ended_at ? formatDuration(e.duration_seconds ?? 0) : 'in corso',
+      }
+    case 'doctor_visit':
+      return { title: e.details.visit_type, subtitle: KIND_LABEL.doctor_visit }
   }
 }

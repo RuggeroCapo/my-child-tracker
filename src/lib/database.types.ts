@@ -224,6 +224,29 @@ export type Database = {
           },
         ]
       }
+      doctor_visit_events: {
+        Row: {
+          event_id: string
+          visit_type: string
+        }
+        Insert: {
+          event_id: string
+          visit_type: string
+        }
+        Update: {
+          event_id?: string
+          visit_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctor_visit_events_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: true
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       events: {
         Row: {
           baby_id: string
@@ -629,6 +652,8 @@ export type Database = {
         | "medication"
         | "vaccination"
         | "measurement"
+        | "bath"
+        | "doctor_visit"
       measurement_metric: "weight" | "length" | "head"
       member_role: "owner" | "member"
       milk_type: "breast_milk" | "formula" | "other"
@@ -777,6 +802,8 @@ export const Constants = {
         "medication",
         "vaccination",
         "measurement",
+        "bath",
+        "doctor_visit",
       ],
       measurement_metric: ["weight", "length", "head"],
       member_role: ["owner", "member"],

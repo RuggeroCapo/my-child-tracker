@@ -50,6 +50,10 @@ export interface MeasurementItem {
 export interface MeasurementDetails {
   items: MeasurementItem[]
 }
+export type BathDetails = Record<string, never>
+export interface DoctorVisitDetails {
+  visit_type: string
+}
 
 export interface DetailsByKind {
   breastfeeding: FeedingDetails
@@ -59,6 +63,8 @@ export interface DetailsByKind {
   medication: MedicationDetails
   vaccination: VaccinationDetails
   measurement: MeasurementDetails
+  bath: BathDetails
+  doctor_visit: DoctorVisitDetails
 }
 
 interface EventBase {

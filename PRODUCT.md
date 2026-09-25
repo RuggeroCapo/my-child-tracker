@@ -35,7 +35,7 @@ Success looks like:
 
 ## Anti-references
 
-- **SaaS dashboards.** No KPI tiles, no hero-metric blocks (big number, small label, trend arrow), no grids of identical stat cards, no gradients. The home screen is a sentence and a set of buttons, not a cockpit.
+- **SaaS dashboards.** No KPI tiles, no hero-metric blocks (big number, small label, trend arrow), no grids of identical stat cards, no gradient accents on numbers or charts. The home screen is a sentence and a set of buttons, not a cockpit.
 - **Ad-heavy baby trackers.** The typical free tracker: banners, premium upsell badges, streaks and gamification, push-for-engagement nags, crowded home screens with every feature fighting for attention. Bebè has no reason to ask for attention it does not need.
 
 ## Design Principles

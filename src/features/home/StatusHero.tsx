@@ -32,7 +32,7 @@ export function StatusHero({
   now: number
 }) {
   return (
-    <section aria-label="Situazione" className="rounded-[28px] bg-night px-5 pb-5 pt-6 text-night-ink">
+    <section aria-label="Situazione" className="night-panel rounded-[28px] px-5 pb-5 pt-6 text-night-ink">
       {lastMeal ? (
         <>
           <p className="font-display-tight text-[40px] font-bold leading-[1.02]">

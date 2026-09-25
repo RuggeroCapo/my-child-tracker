@@ -4,7 +4,7 @@ import type { HTMLAttributes } from 'react'
 export function Card({ className, ...rest }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={clsx('rounded-[var(--radius-card)] bg-surface shadow-[var(--shadow-card)] dark:shadow-none', className)}
+      className={clsx('frost rounded-[var(--radius-card)]', className)}
       {...rest}
     />
   )

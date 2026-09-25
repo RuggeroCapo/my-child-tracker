@@ -7,7 +7,7 @@ type Size = 'sm' | 'md' | 'lg'
 
 const variants: Record<Variant, string> = {
   /** L'unica azione piena in rosa: testo scuro, il bianco sul rosa non regge il contrasto. */
-  primary: 'bg-rose text-night hover:bg-rose/90',
+  primary: 'rose-lit text-night hover:brightness-[1.04]',
   secondary: 'bg-surface-2 text-ink hover:bg-line/70',
   outline: 'border border-line bg-surface text-ink hover:bg-surface-2',
   ghost: 'text-ink-2 hover:bg-surface-2 hover:text-ink',

@@ -1,12 +1,11 @@
-import clsx from 'clsx'
-import { ArrowRight, ChevronDown, Plus } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router'
-import { SyncBadge } from '@/app/SyncBadge'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { BREAST_SIDE_LABEL } from '@/i18n/it'
 import { isActiveSession, type BreastSide, type EventKind, type EventOf } from '@/domain/types'
 import { useNow } from '@/lib/clock'
-import { formatAge, isSameDay } from '@/lib/time'
+import { isSameDay } from '@/lib/time'
 import { formatNumber } from '@/lib/units'
 import { useActiveBaby, useBabies } from '@/stores/babies'
 import { useBabyEvents } from '@/stores/selectors'
@@ -15,14 +14,12 @@ import { EventList } from '../events/EventList'
 import { KIND_META } from '../kinds'
 import { ActiveSessionCard } from './ActiveSessionCard'
 import { DayRibbon } from './DayRibbon'
+import { HomeHeader } from './HomeHeader'
 import { BottleQuickSheet, DiaperQuickSheet, FeedingQuickSheet, PumpingQuickSheet } from './QuickSheets'
+import { QuickLog } from './QuickLog'
 import { isMeal, StatusHero } from './StatusHero'
 
 type QuickSheet = 'breastfeeding' | 'diaper' | 'bottle' | 'pumping' | null
-
-const SECONDARY: EventKind[] = ['medication', 'measurement', 'vaccination']
-
-const todayFmt = new Intl.DateTimeFormat('it-IT', { weekday: 'long', day: 'numeric', month: 'long' })
 
 function plural(n: number, one: string, many: string) {
   return `${n} ${n === 1 ? one : many}`
@@ -68,33 +65,15 @@ export function HomePage() {
     }
   }
 
-  const minorKeys: { kind: EventKind; hint: string }[] = [
-    { kind: 'diaper', hint: `${count('diaper')} oggi` },
-    { kind: 'bottle', hint: lastBottle ? `ultimo ${formatNumber(lastBottle.details.amount, 1)} ${lastBottle.details.unit}` : 'nessuno' },
-    { kind: 'pumping', hint: activeKinds.has('pumping') ? 'in corso' : `${count('pumping')} oggi` },
-  ]
-  const feeding = KIND_META.breastfeeding
-  const FeedIcon = feeding.icon
   const feedingRunning = activeKinds.has('breastfeeding')
 
   return (
     <div className="pb-4">
-      <header className="pt-safe">
-        <div className="flex min-h-8 items-center justify-between gap-3">
-          <p className="text-sm font-medium capitalize text-ink-2">{todayFmt.format(new Date(now))}</p>
-          <SyncBadge />
-        </div>
-        <button
-          type="button"
-          className="-mx-1 mt-1 flex max-w-full items-baseline gap-2 rounded-2xl px-1 text-left"
-          onClick={() => (babyCount > 1 ? setSwitcher(true) : navigate(`/babies/${baby.id}/edit`))}
-          aria-label={babyCount > 1 ? 'Cambia bambino' : 'Profilo bambino'}
-        >
-          <span className="truncate font-display-tight text-[44px] font-extrabold leading-none">{baby.name}</span>
-          {babyCount > 1 && <ChevronDown className="size-6 shrink-0 self-center text-ink-3" />}
-        </button>
-        <p className="mt-1 text-[15px] text-ink-2">{formatAge(baby.birth_date)}</p>
-      </header>
+      <HomeHeader
+        baby={baby}
+        canSwitch={babyCount > 1}
+        onPress={() => (babyCount > 1 ? setSwitcher(true) : navigate(`/babies/${baby.id}/edit`))}
+      />
 
       <div className="mt-6 space-y-3">
         {active.map((e) => (
@@ -103,76 +82,16 @@ export function HomePage() {
         {!feedingRunning && <StatusHero lastMeal={lastMeal} lastDiaper={lastDiaper} suggestedSide={suggestedSide} now={now} />}
       </div>
 
-      <section className="mt-9">
-        <h2 className="font-display-tight text-2xl font-bold">Aggiungi</h2>
-        <button
-          type="button"
-          onClick={() => onQuick('breastfeeding')}
-          className="mt-3 flex h-[84px] w-full items-center gap-4 rounded-[24px] bg-feed px-5 text-left text-night transition-transform duration-150 ease-out-quart hover:bg-rose/92 active:scale-[0.98]"
-        >
-          <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-night/10">
-            <FeedIcon className="size-7" aria-hidden />
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block truncate font-display-tight text-[26px] font-extrabold leading-tight">{feeding.label}</span>
-            {feedingRunning && (
-              <span className="mt-0.5 flex items-center gap-1.5 text-sm font-semibold">
-                <span className="size-1.5 rounded-full bg-night animate-pulse-dot" aria-hidden />
-                in corso
-              </span>
-            )}
-          </span>
-          {feedingRunning ? (
-            <ArrowRight className="size-7 shrink-0" strokeWidth={2.5} aria-hidden />
-          ) : (
-            <Plus className="size-7 shrink-0" strokeWidth={2.5} aria-hidden />
-          )}
-        </button>
-
-        <div className="mt-2.5 grid grid-cols-3 gap-2.5">
-          {minorKeys.map(({ kind, hint }) => {
-            const meta = KIND_META[kind]
-            const Icon = meta.icon
-            const running = activeKinds.has(kind)
-            return (
-              <button
-                key={kind}
-                type="button"
-                onClick={() => onQuick(kind)}
-                className={clsx(
-                  'relative flex h-[118px] flex-col items-start justify-between rounded-[22px] p-3.5 text-left transition-transform duration-150 ease-out-quart active:scale-[0.97]',
-                  meta.soft,
-                )}
-              >
-                <Icon className={clsx('size-8', meta.text)} aria-hidden />
-                <span className="min-w-0 max-w-full">
-                  <span className="block truncate text-[15px] font-semibold leading-tight text-ink">{meta.label}</span>
-                  <span className="block truncate text-xs text-ink-2 tabular">{hint}</span>
-                </span>
-                {running && <span className={clsx('absolute right-3.5 top-3.5 size-2 rounded-full animate-pulse-dot', meta.solid)} aria-hidden />}
-              </button>
-            )
-          })}
-        </div>
-
-        <div className="mt-2.5 flex flex-wrap gap-2">
-          {SECONDARY.map((kind) => {
-            const meta = KIND_META[kind]
-            const Icon = meta.icon
-            return (
-              <button
-                key={kind}
-                type="button"
-                onClick={() => onQuick(kind)}
-                className="inline-flex h-11 items-center gap-2 rounded-full border border-line bg-surface pl-3 pr-4 text-sm font-medium text-ink transition-[background-color,transform] duration-150 ease-out-quart hover:bg-surface-2 active:scale-[0.97] active:bg-surface-2"
-              >
-                <Icon className={clsx('size-[18px]', meta.text)} aria-hidden />
-                {meta.label}
-              </button>
-            )
-          })}
-        </div>
-      </section>
+      <QuickLog
+        running={activeKinds}
+        feedHint={suggestedSide ? `Tocca al ${BREAST_SIDE_LABEL[suggestedSide].toLowerCase()}` : null}
+        hints={{
+          diaper: `${count('diaper')} oggi`,
+          bottle: lastBottle ? `ultimo ${formatNumber(lastBottle.details.amount, 1)} ${lastBottle.details.unit}` : 'nessuno',
+          pumping: `${count('pumping')} oggi`,
+        }}
+        onQuick={onQuick}
+      />
 
       <section className="mt-10">
         <div className="flex items-end justify-between gap-3">

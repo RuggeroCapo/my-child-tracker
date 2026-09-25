@@ -18,6 +18,8 @@ export const KIND_LABEL: Record<EventKind, string> = {
   medication: 'Medicina',
   vaccination: 'Vaccinazione',
   measurement: 'Misurazione',
+  bath: 'Bagnetto',
+  doctor_visit: 'Visita medica',
 }
 
 export const BREAST_SIDE_LABEL: Record<BreastSide, string> = { left: 'Sinistro', right: 'Destro' }

@@ -23,13 +23,13 @@ export function Segmented<T extends string>({
     <div
       role="radiogroup"
       aria-label={ariaLabel}
-      className={clsx('relative isolate flex gap-1 rounded-2xl bg-surface-2 p-1', className)}
+      className={clsx('frost relative isolate flex gap-1 rounded-2xl p-1', className)}
     >
       {/* Un solo indicatore che scivola sotto l'opzione scelta (opzioni di pari larghezza, gap-1 = 0.25rem). */}
       {index >= 0 && (
         <span
           aria-hidden
-          className="absolute inset-y-1 left-1 -z-10 rounded-xl bg-rose transition-transform duration-200 ease-out-expo"
+          className="absolute inset-y-1 left-1 -z-10 rounded-xl rose-lit transition-transform duration-200 ease-out-expo"
           style={{
             width: `calc((100% - 0.5rem - ${options.length - 1} * 0.25rem) / ${options.length})`,
             transform: `translateX(calc(${index} * (100% + 0.25rem)))`,

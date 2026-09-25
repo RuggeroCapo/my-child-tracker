@@ -12,32 +12,40 @@ const tabs = [
 export function AppLayout() {
   return (
     <div className="mx-auto min-h-dvh w-full max-w-lg">
-      <main className="vt-page px-4 pb-28">
+      <main className="vt-page px-4 pb-[calc(7rem+env(safe-area-inset-bottom))]">
         <Outlet />
       </main>
-      {/* Snapshot a parte: resta ferma tra le schede, scende/risale entrando in un dettaglio. */}
+      {/* Bottoni flottanti in vetro: la scheda attiva si allarga in una pillola con l'etichetta.
+          Ogni bottone ha il proprio nome di transizione: un nome sul contenitore farebbe da
+          "backdrop root" e il vetro non sfocherebbe più la pagina sotto. */}
       <nav
         aria-label="Navigazione principale"
-        className="vt-tab-bar fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/95 pb-safe backdrop-blur"
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-30 flex justify-center px-4 pb-[max(env(safe-area-inset-bottom),0.75rem)]"
       >
-        <div className="mx-auto flex max-w-lg">
-          {tabs.map(({ to, label, icon: Icon, end }) => (
+        <div className="flex items-center gap-2">
+          {tabs.map(({ to, label, icon: Icon, end }, i) => (
             <NavLink
               key={to}
               to={to}
               end={end}
+              aria-label={label}
+              style={{ viewTransitionName: `tab-${i}` }}
               className={({ isActive }) =>
                 clsx(
-                  'group flex h-16 flex-1 flex-col items-center justify-center gap-1 text-xs font-medium transition-colors duration-150',
-                  isActive ? 'font-semibold text-rose-ink' : 'text-ink-3 hover:text-ink-2',
+                  'vt-tab group pointer-events-auto flex h-14 items-center justify-center rounded-full transition-colors duration-150',
+                  isActive ? 'tab-active gap-2 pl-4 pr-5 font-semibold text-night' : 'glass w-14 text-ink-2 hover:text-ink',
                 )
               }
             >
-              <Icon
-                className="size-6 transition-transform duration-150 ease-out-quart group-active:scale-90"
-                aria-hidden
-              />
-              {label}
+              {({ isActive }) => (
+                <>
+                  <Icon
+                    className="size-6 shrink-0 transition-transform duration-150 ease-out-quart group-active:scale-90"
+                    aria-hidden
+                  />
+                  {isActive && <span className="text-[15px]">{label}</span>}
+                </>
+              )}
             </NavLink>
           ))}
         </div>

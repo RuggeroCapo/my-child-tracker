@@ -15,7 +15,7 @@ export function UpdatePrompt() {
 
   if (!needRefresh) return null
   return (
-    <div className="fixed inset-x-0 bottom-24 z-50 flex justify-center px-4">
+    <div className="fixed inset-x-0 bottom-[calc(6.5rem+env(safe-area-inset-bottom))] z-50 flex justify-center px-4">
       <div className="flex items-center gap-1 rounded-2xl bg-night py-1 pl-4 pr-1 text-sm text-night-ink shadow-[0_8px_24px_oklch(0.3_0.05_350/0.2)]" role="status">
         <span className="mr-2">Nuova versione disponibile</span>
         <button type="button" className="inline-flex h-11 items-center gap-1.5 rounded-xl px-3 font-semibold hover:bg-night-line/60" onClick={() => void updateServiceWorker(true)}>

@@ -33,8 +33,8 @@ colors:
   canvas: "oklch(0.974 0.012 45)"
   surface: "oklch(0.994 0.004 45)"
   ink: "oklch(0.25 0.04 350)"
-  ink-2: "oklch(0.45 0.035 350)"
-  ink-3: "oklch(0.53 0.03 350)"
+  ink-2: "oklch(0.4 0.04 350)"
+  ink-3: "oklch(0.46 0.035 350)"
   night: "oklch(0.27 0.055 350)"
   night-ink: "oklch(0.96 0.014 45)"
   dark-canvas: "oklch(0.17 0.022 345)"
@@ -102,7 +102,7 @@ spacing:
   container: "16px"
   section: "24px"
   card-gap: "16px"
-  tab-bar: "83px"
+  tab-bar: "80px"
 components:
   button-primary:
     backgroundColor: "{colors.primary}"
@@ -186,15 +186,16 @@ Bebè is the paper diary two parents keep on the changing table, rebuilt so it l
 
 The palette is soft and domestic: a warm cream page, neutrals tinted toward plum, one confident rose for the thing you do most (feeding, primary actions), and a set of pastel category tints that behave like colored tabs in a notebook, so a parent learns "blue is diapers" without reading. Type pairs Bricolage Grotesque (display: the baby's name, the status sentence, page and section titles, the timer) with Inter for everything you read or tap; hierarchy comes from weight and size, never from decoration. Density is low on Home (big targets, one question answered) and comfortable on Diario and Statistiche (a list of entries you scan by time).
 
-This system explicitly rejects the **SaaS dashboard** (KPI tiles, hero metrics, identical stat-card grids, gradients) and the **ad-heavy baby tracker** (banners, upsell badges, streaks, crowded home screens). It is built for a tired person in a dark room, so the dark theme is a first-class, night-safe surface, not an afterthought.
+This system explicitly rejects the **SaaS dashboard** (KPI tiles, hero metrics, identical stat-card grids, gradient accents on data) and the **ad-heavy baby tracker** (banners, upsell badges, streaks, crowded home screens). It is built for a tired person in a dark room, so the dark theme is a first-class, night-safe surface, not an afterthought.
 
 **Key Characteristics:**
-- Single mobile column, max 512px wide, 16px side gutter, bottom tab bar (Home · Diario · Statistiche · Altro).
+- Single mobile column, max 512px wide, 16px side gutter, floating glass tab buttons (Home · Diario · Statistiche · Altro).
+- The page is drenched in a fixed wash (peach → coral → rose → lilac) and every surface on it is frosted glass. The wash warms to rose while a session runs.
 - Answer-first home: a dark status panel phrased as a sentence, then primary logging keys, then today.
 - Category color = soft pastel tile + saturated icon + text label, always all three.
 - Rounded, soft geometry (12px elements, 16px cards, 24px feature panels, 28px sheets).
 - Bottom sheets for quick logging, undo toasts instead of confirmation dialogs.
-- Responsive motion: press feedback, sheet slide-up and slide-down (drag the grabber to dismiss), live-session pulse, toast in/out, the segmented control's sliding indicator, and screen transitions on navigation (shared-axis slide going deeper or back, fade-through between tabs, tab bar slides away on detail screens). Nothing else moves.
+- Responsive motion: press feedback, sheet slide-up and slide-down (drag the grabber to dismiss), live-session pulse, toast in/out, the segmented control's sliding indicator, and screen transitions on navigation (shared-axis slide going deeper or back, fade-through between tabs, tab bar slides away on detail screens, the active tab pops into a labeled rose pill, the ambient wash warms when a session starts). Nothing else moves.
 - Layout rhythm on a 4px base: 4 · 8 · 12 · 16 · 24 · 48. Container padding 16px, space between sections 24px (Home uses 36 to 40px between major blocks), space between cards 16px.
 
 ## 2. Colors
@@ -229,10 +230,10 @@ Each event kind has a saturated **ink** (icon, small marks, chart series) and a 
 ### Neutral
 All neutrals are OKLCH, tinted toward the brand's plum (hue ~350) so the page reads warm, never grey. Tokens live in `src/styles/index.css`.
 - **Cream Page** (`--bg`, oklch 0.974 0.012 45): app background in light mode.
-- **Paper** (`--surface`, oklch 0.994 0.004 45): cards, sheets, inputs, tab bar, toasts.
+- **Paper** (`--surface`, oklch 0.994 0.004 45): sheets, inputs, toasts, icon discs (page-level cards are Frost, see Elevation).
 - **Mist** (`--surface-2`): segmented track, pressed rows, secondary buttons.
 - **Hairline** (`--line`): borders, dividers, the filets between values.
-- **Ink** (`--ink`, oklch 0.25 0.04 350): primary text. **Ink 2** secondary text. **Ink 3** (oklch 0.53) captions and hints; tuned to stay at 4.5:1 on Cream Page, so it may carry small text.
+- **Ink** (`--ink`, oklch 0.25 0.04 350): primary text. **Ink 2** secondary text. **Ink 3** (oklch 0.46) captions and hints; tuned to stay at 4.5:1 on the darkest point of the wash (L 0.85), so it may carry small text.
 - **Rose Ink** (`--rose-ink`): rose for text and icons on light surfaces (links, active tab, "Suggerito"). Filled rose never carries rose text.
 
 ### Night panel
@@ -276,7 +277,14 @@ All neutrals are OKLCH, tinted toward the brand's plum (hue ~350) so the page re
 
 ## 4. Elevation
 
-Flat by default, with tonal layering doing most of the work: Paper cards sit on a Cream Page, and the Home status panel is a solid Night block. A single, very soft warm shadow separates cards from the page in light mode; in dark mode shadows are removed entirely and surfaces step up in lightness instead (Night Canvas → Night Surface → Night Raised).
+Three layers: a **drenched wash** fixed behind everything, **frosted surfaces** on top of it, and **lit rose** for the few things you press most. Light always comes from the top-left.
+
+- **Wash** (`.ambient`): `position: fixed`, full viewport, content scrolls over it. A 172° base gradient (peach oklch 0.95 → coral 0.9 → rose 0.875 → lilac 0.88) with four radial blooms. It never drops below L 0.85, which is why Ink 2 (0.40) and Ink 3 (0.46) hold 4.5:1 anywhere on it. While a feed or pump runs, a rose bloom fades in over 900ms. Dark mode keeps the same shapes at L 0.17 to 0.28: a wine-and-plum room, no glow.
+- **Frost** (`.frost`, `.frost-strong`): translucent Paper (56% / 68%), a 1px light edge, a top-left sheen and a rose-tinted drop shadow (none in dark). No backdrop-filter: over a smooth wash, blur is invisible and costs frames. Used by `Card`, the segmented track, chips, diary filters and the status panel.
+- **Glass** (`.glass`): translucent Paper at 72% with a 20px blur and 1.8 saturation, only where real content scrolls underneath: the tab buttons and sticky headers once scrolled (`.glass-header`, clear at rest, driven by a scroll timeline). The opacity alone keeps icons legible where blur is unavailable.
+- **Lit rose** (`.rose-lit`, `.feed-key`, `.tab-active`): a coral-to-rose gradient with a top highlight. Primary buttons, the selected segment and filter, the active tab and the feeding key. The feeding key and active tab add a rose drop shadow.
+- **Category tiles** (`.quick-tile`): Frost with a bloom of their own ink in the top-left corner (`color-mix(in oklab, ink 24%, transparent)`) and a shadow in their color; the icon sits on a raised Paper disc.
+- **Status panel** (`.night-panel`): in light mode it is Frost Strong with a rose and lilac inner glow, and remaps the night tokens inside itself (Night Ink → Ink, Feed Glow → Rose Ink), so the sentence reads dark on light. In dark mode it stays the lit Night block.
 
 ### Shadow Vocabulary
 - **Card rest** (`box-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 6px 20px rgb(15 23 42 / 0.05)`): cards and list groups on the Cream Page. Light mode only.
@@ -284,7 +292,11 @@ Flat by default, with tonal layering doing most of the work: Paper cards sit on 
 - **Toast** (`box-shadow: 0 8px 24px rgb(15 23 42 / 0.12)`): toasts only.
 
 ### Named Rules
-**The Paper-On-Table Rule.** If a shadow is noticeable at a glance, it is too strong. Elevation should read like a sheet of paper lying on a table, not a floating card.
+**The Paper-On-Table Rule.** Frost shadows are tinted rose and soft; only the signature surfaces (status panel, feeding key, active tab) may float visibly.
+
+**The Blur Budget Rule.** Surfaces are frosted by translucency; real backdrop blur only where content scrolls underneath (tab buttons, scrolled headers, the sheet scrim). Never blur a card.
+
+**The Oklab Mix Rule.** Tints mixed from a category ink use `color-mix(in oklab, …)`. Mixing in oklch drags the hue toward the near-neutral surface (blue turns pink).
 
 ## 5. Components
 
@@ -323,14 +335,17 @@ Soft, tactile and forgiving: every control is large enough to hit with a thumb w
 - Mist track with 4px inset, 12px radius; segments 40px tall. Selected segment fills Nursery Rose with Night text (semibold); others are Ink 2. Used for time ranges (Oggi / 7 giorni / 30 giorni) and binary choices (Seno sinistro / destro).
 
 ### Navigation
-- **Tab bar:** fixed bottom, Paper at 95% with a Hairline top border, 83px including the safe area. Four items (Home, Diario, Statistiche, Altro), 24px icon over a 12px caption. Active is Rose Ink, semibold; inactive is Ink 3.
+- **Tab bar:** four separate floating buttons, centered, 8px apart, 12px or the safe area from the bottom. Inactive tabs are 56px Glass circles with a 24px Ink 2 icon (the label lives in `aria-label`). The active tab expands into a 56px Lit Rose pill with icon + 15px semibold label in Night, popping in with a 260ms scale from 0.9. Each button carries its own view-transition name (class `tab`) so the glass keeps blurring the page. Screen content keeps `7rem + safe area` of bottom padding.
 - **Page header:** sticky, 44px back button left, title centered in Title style, optional single action right. No hamburger menus.
 
 ### Status Panel (signature)
-The Home answer. A Night block (28px radius, 24/20/20px padding) that states the last meal as a Display sentence, with the relative time in Feed Glow, followed by a detail line in Body Small ("Seno sinistro, 14 min · alle 10:15"). Below a Night Line divider, a two-column definition list: "Prossimo lato" and "Cambio". When a session is running, it is replaced by the **Active Session card**: the same Night block, a pulsing dot and "Allattamento in corso", the timer in Timer style (Feed Glow for feeds), "Avviato da…", then a Night-variant side switch and a primary "Termina".
+The Home answer. A luminous frosted panel by day, a lit Night block by night (`.night-panel`, 28px radius, 24/20/20px padding) that states the last meal as a Display sentence, with the relative time in Feed Glow, followed by a detail line in Body Small ("Seno sinistro, 14 min · alle 10:15"). Below a Night Line divider, a two-column definition list: "Prossimo lato" and "Cambio". When a session is running, it is replaced by the **Active Session card**: the same Night block, a pulsing dot and "Allattamento in corso", the timer in Timer style (Feed Glow for feeds), "Avviato da…", then a Night-variant side switch and a primary "Termina".
 
-### Quick-Log Keys (signature)
-The primary feeding key is a full-width, 84px, Nursery Rose bar with Night content: a 48px icon disc, the label in Bricolage 800, and a "+". While a feed runs, a small "in corso" line with a pulsing dot sits under the label and the "+" becomes an arrow. Below it, three equal 118px category tiles (Pannolino, Biberon, Tiralatte) in their pastel tints, icon top-left, label and a live hint ("3 oggi", "ultimo 90 ml") bottom-left. Secondary categories drop to chips. Frequency decides size: this is the only place tiles appear.
+### Baby Monogram
+`BabyAvatar`: the initial in Bricolage 800, Night ink, on a three-stop gradient built around one hue per baby (`--h`, picked from the baby id), so siblings stay distinguishable. Never tied to sex. 56px on Home beside the name (inside the name button), 44px in lists.
+
+### Quick-Log Console (signature)
+The "Aggiungi" section is one console (`.console`, 30px radius, 8px padding) that follows the Status Panel's rule: luminous Frost with peach and lilac blooms by day, the lit Night block by night (the `night-*` tokens remap inside it the same way). On top, the full-width 88px lit Nursery Rose feeding key (`.feed-key`, 22px radius) with Night content: a 48px translucent icon disc, the label in Bricolage 800, a "Tocca al destro/sinistro" line from the suggested side, and a "+". While a feed runs, the line becomes "in corso" with a pulsing dot and the "+" becomes an arrow. Below it, three round 64px keys (`.console-key`: Pannolino, Biberon, Tiralatte) filled with their category color, lit from the top with a same-hue halo and shadow by day, pulled toward plum with no shadow by night; the Night icon sits in the key, label and live hint ("3 oggi", "ultimo 90 ml") below. A running session puts a small dot, ringed in the console surface, on the key. Under a Night Line filet, the rare categories (Medicine, Crescita, Vaccini) are 48px text buttons with their ink icon. Frequency decides size: rose bar, then keys, then text.
 
 ### Value rows
 Summary numbers ("Sessioni · Totale · Media") are a `dl` of three columns split by Hairline filets, label above value, like the Home panel. Never tinted tiles.
@@ -348,7 +363,7 @@ Slides up in 220ms (ease-out-quart), 28px top radius, grab handle, title + close
 
 ### Do:
 - **Do** lead every screen with the answer: the Home status panel's Display sentence comes before any button.
-- **Do** keep frequent actions in the lower half of the screen and at least 44×44px; Home logging keys are 84px and 118px tall.
+- **Do** keep frequent actions in the lower half of the screen and at least 44×44px; Home logging keys are 88px tall (feeding) and 64px round keys.
 - **Do** show every category as tint + ink icon + text label, all three, every time.
 - **Do** use tabular figures for all times, durations, quantities and timers.
 - **Do** use undo toasts (Paper, 16px radius, Toast shadow) instead of confirmation dialogs for deletes and edits.
@@ -357,13 +372,13 @@ Slides up in 220ms (ease-out-quart), 28px top radius, grab handle, title + close
 - **Do** respect `prefers-reduced-motion`: the live pulse, sheet slide and screen transitions become instant.
 
 ### Don't:
-- **Don't** build a **SaaS dashboard**: no KPI tiles, no hero-metric blocks (big number, small label, trend arrow), no grids of identical stat cards, no gradients.
+- **Don't** build a **SaaS dashboard**: no KPI tiles, no hero-metric blocks (big number, small label, trend arrow), no grids of identical stat cards, no gradient accents on numbers or charts. Gradients are atmosphere and light, never data.
 - **Don't** make it an **ad-heavy baby tracker**: no banners, premium upsell badges, streaks, gamification, or engagement nags; no crowded home screen with every feature competing.
 - **Don't** use gender-coded pink-for-girls / blue-for-boys theming; the palette is the same for every baby.
 - **Don't** use Alert Red (#E5484D) for normal events; red means a data problem.
 - **Don't** fill whole screens or headers with a category tint (The Notebook Tab Rule).
 - **Don't** use `border-left` or `border-right` wider than 1px as a colored stripe on rows, cards or toasts.
-- **Don't** use gradient text, glassmorphism, or decorative blur (the sheet scrim is the only blur, at 2px).
+- **Don't** use gradient text. Don't put backdrop blur on cards; frost them with translucency (The Blur Budget Rule).
 - **Don't** add a third typeface, set labels or buttons in the display face, or use all-caps labels or letter-spaced eyebrows.
 - **Don't** open a modal dialog when a sheet, inline edit, or undo toast would do.
 - **Don't** animate anything that isn't feedback or a state change; no page-load choreography.

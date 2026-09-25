@@ -1,8 +1,10 @@
 import { Suspense, useEffect, type ReactNode } from 'react'
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router'
 import { Toaster } from '@/components/ui/Toaster'
+import { isActiveSession } from '@/domain/types'
 import { isSupabaseConfigured } from '@/lib/supabase'
-import { useBabies } from '@/stores/babies'
+import { useActiveBaby, useBabies } from '@/stores/babies'
+import { useEvents } from '@/stores/events'
 import { useSession } from '@/stores/session'
 import { AppLayout } from './AppLayout'
 import { lazyPage, preloadWhenIdle } from './navTransition'
@@ -81,11 +83,19 @@ function Page({ children }: { children: ReactNode }) {
   )
 }
 
+/** Velo di colore in cima a ogni schermata; si scalda mentre una sessione è in corso. */
+function Ambient() {
+  const babyId = useActiveBaby()?.id
+  const live = useEvents((s) => !!babyId && Object.values(s.byId).some((e) => e.baby_id === babyId && isActiveSession(e)))
+  return <div aria-hidden className="ambient" data-live={live || undefined} />
+}
+
 export function App() {
   useEffect(() => preloadWhenIdle(LAZY_PAGES), [])
   if (!isSupabaseConfigured) return <SetupMissing />
   return (
     <>
+      <Ambient />
       <Toaster />
       <UpdatePrompt />
       <Suspense fallback={<FullScreenLoader />}>

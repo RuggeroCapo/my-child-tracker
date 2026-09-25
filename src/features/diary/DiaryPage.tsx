@@ -20,6 +20,8 @@ const FILTERS: { id: string; label: string; kinds: EventKind[] | null }[] = [
   { id: 'med', label: 'Medicine', kinds: ['medication'] },
   { id: 'vax', label: 'Vaccinazioni', kinds: ['vaccination'] },
   { id: 'growth', label: 'Crescita', kinds: ['measurement'] },
+  { id: 'bath', label: 'Bagnetto', kinds: ['bath'] },
+  { id: 'visit', label: 'Visite mediche', kinds: ['doctor_visit'] },
 ]
 
 const ADDABLE: EventKind[] = ['breastfeeding', 'diaper', 'bottle', 'pumping', 'medication', 'vaccination', 'measurement']
@@ -34,7 +36,7 @@ export default function DiaryPage() {
 
   return (
     <div className="space-y-4">
-      <header className="sticky top-0 z-20 -mx-4 space-y-3 bg-bg/90 px-4 pb-3 pt-safe backdrop-blur">
+      <header className="sticky top-0 z-20 -mx-4 space-y-3 glass-header px-4 pb-3 pt-safe">
         <div className="flex items-center justify-between gap-2">
           <h1 className="font-display-tight text-[34px] font-extrabold leading-none">Diario</h1>
           <div className="flex items-center gap-1">
@@ -54,7 +56,7 @@ export default function DiaryPage() {
               onClick={() => setFilter(f.id)}
               className={clsx(
                 'h-11 shrink-0 rounded-full px-4 text-sm font-medium transition-colors duration-150',
-                filter === f.id ? 'bg-rose font-semibold text-night' : 'bg-surface text-ink-2 ring-1 ring-inset ring-line hover:text-ink',
+                filter === f.id ? 'rose-lit font-semibold text-night' : 'frost text-ink-2 hover:text-ink',
               )}
             >
               {f.label}
