@@ -1,18 +1,22 @@
 import clsx from 'clsx'
+import { ChevronRight, Maximize2 } from 'lucide-react'
+import { Link } from 'react-router'
 import { useMemo, useState, type ReactNode } from 'react'
 import { SyncBadge } from '@/app/SyncBadge'
 import { CategoryIcon } from '@/components/CategoryIcon'
+import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Segmented } from '@/components/ui/Segmented'
 import { Stat, StatGrid } from '@/components/ui/Stat'
 import { referenceCurves, WHO_MAX_MONTHS } from '@/domain/growth/percentile'
 import { computeStats, latestWithDelta, measurementSeries, rangeBounds, type DayBucket, type StatsRange } from '@/domain/stats'
-import type { EventKind } from '@/domain/types'
+import type { EventKind, MeasurementMetric } from '@/domain/types'
 import { ageInMonths, formatDuration, formatShortDate } from '@/lib/time'
 import { formatNumber, plural } from '@/lib/units'
 import { useActiveBaby } from '@/stores/babies'
-import { useBabyEvents } from '@/stores/selectors'
+import { useBabyEvents, useEventsOfKind } from '@/stores/selectors'
 import { GrowthChart } from '../growth/GrowthChart'
+import { GrowthExplorer } from '../growth/GrowthExplorer'
 
 export default function StatsPage() {
   const baby = useActiveBaby()!
@@ -24,6 +28,9 @@ export default function StatsPage() {
   }, [events, range])
   const weights = useMemo(() => measurementSeries(events, 'weight'), [events])
   const weight = latestWithDelta(weights)
+  const measurements = useEventsOfKind(baby.id, 'measurement')
+  const [explorerOpen, setExplorerOpen] = useState(false)
+  const [explorerMetric, setExplorerMetric] = useState<MeasurementMetric>('weight')
   const { feeding, diaper, bottle, pumping } = stats
   const sideTotal = feeding.leftSeconds + feeding.rightSeconds
   const leftPct = sideTotal ? Math.round((feeding.leftSeconds / sideTotal) * 100) : 0
@@ -114,16 +121,34 @@ export default function StatsPage() {
                 sub={weight.previous ? `dal ${formatShortDate(weight.previous.date)}` : undefined}
               />
             </StatGrid>
+            <div className="flex items-center justify-between gap-2">
+              <Link to="/growth" className="inline-flex h-11 items-center gap-1 text-sm font-semibold text-rose-ink underline-offset-2 hover:underline">
+                Tutte le misure <ChevronRight className="size-4" aria-hidden />
+              </Link>
+              <Button size="sm" variant="secondary" icon={<Maximize2 className="size-4" />} onClick={() => setExplorerOpen(true)}>
+                Schermo intero
+              </Button>
+            </div>
             <GrowthChart
               points={weights.map((p) => ({ x: ageInMonths(baby.birth_date, p.date), y: p.value })).filter((p) => p.x >= 0 && p.x <= xMax)}
               curves={curves}
               xMax={xMax}
               xLabel="Età (mesi)"
               unit="kg"
+              onExpand={() => setExplorerOpen(true)}
             />
           </>
         ) : null}
       </StatCard>
+
+      <GrowthExplorer
+        open={explorerOpen}
+        onClose={() => setExplorerOpen(false)}
+        baby={baby}
+        measurements={measurements}
+        metric={explorerMetric}
+        onMetricChange={setExplorerMetric}
+      />
     </div>
   )
 }
