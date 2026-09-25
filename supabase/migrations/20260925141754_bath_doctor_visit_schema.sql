@@ -1,42 +1,34 @@
--- Registrazione del bagnetto: event_json e write_event_details gestiscono
--- 'bath' (nessun dettaglio) e 'doctor_visit'.
+-- =============================================================================
+-- Segue 20260925141722: aggiunge tabella dettaglio e RLS per 'doctor_visit',
+-- e permette a 'bath' di avere started_at/ended_at come le sessioni con timer.
+-- =============================================================================
 
-create or replace function public.event_json(p_event_id uuid)
-returns jsonb
-language sql
-stable
-set search_path = ''
-as $$
-  select to_jsonb(e) || jsonb_build_object(
-    'details',
-    case e.kind
-      when 'breastfeeding' then
-        (select to_jsonb(d) - 'event_id' from public.feeding_sessions d where d.event_id = e.id)
-      when 'diaper' then
-        (select to_jsonb(d) - 'event_id' from public.diaper_events d where d.event_id = e.id)
-      when 'bottle' then
-        (select to_jsonb(d) - 'event_id' from public.bottle_events d where d.event_id = e.id)
-      when 'pumping' then
-        (select to_jsonb(d) - 'event_id' from public.pumping_sessions d where d.event_id = e.id)
-      when 'medication' then
-        (select to_jsonb(d) - 'event_id' from public.medication_events d where d.event_id = e.id)
-      when 'vaccination' then
-        (select to_jsonb(d) - 'event_id' from public.vaccinations d where d.event_id = e.id)
-      when 'measurement' then
-        jsonb_build_object('items', coalesce((
-          select jsonb_agg(to_jsonb(d) - 'event_id' order by d.metric)
-          from public.measurements d where d.event_id = e.id
-        ), '[]'::jsonb))
-      when 'bath' then
-        '{}'::jsonb
-      when 'doctor_visit' then
-        (select to_jsonb(d) - 'event_id' from public.doctor_visit_events d where d.event_id = e.id)
-    end
-  )
-  from public.events e
-  where e.id = p_event_id;
-$$;
+-- Il bagnetto è un evento con durata (come allattamento/tiralatte), ma senza
+-- sessione "attiva" concorrente: niente unique index dedicato.
+alter table public.events drop constraint events_only_sessions_end;
+alter table public.events add constraint events_only_sessions_end check (
+  ended_at is null or kind in ('breastfeeding', 'pumping', 'bath')
+);
 
+create table public.doctor_visit_events (
+  event_id uuid primary key references public.events (id) on delete cascade,
+  visit_type text not null check (char_length(trim(visit_type)) between 1 and 80)
+);
+
+alter table public.doctor_visit_events enable row level security;
+
+create policy doctor_visit_events_select on public.doctor_visit_events for select to authenticated
+  using (public.is_event_member(event_id));
+create policy doctor_visit_events_insert on public.doctor_visit_events for insert to authenticated
+  with check (public.is_event_member(event_id));
+create policy doctor_visit_events_update on public.doctor_visit_events for update to authenticated
+  using (public.is_event_member(event_id)) with check (public.is_event_member(event_id));
+
+alter publication supabase_realtime add table public.doctor_visit_events;
+
+-- -----------------------------------------------------------------------------
+-- write_event_details / event_json: aggiungono i due nuovi kind.
+-- -----------------------------------------------------------------------------
 create or replace function public.write_event_details(p_event_id uuid, p_kind public.event_kind, p_details jsonb)
 returns void
 language plpgsql
@@ -46,6 +38,11 @@ declare
   v_item jsonb;
   v_metrics public.measurement_metric[] := '{}';
 begin
+  -- Il bagnetto non ha dettagli propri.
+  if p_kind = 'bath' then
+    return;
+  end if;
+
   if p_details is null or jsonb_typeof(p_details) <> 'object' then
     raise exception 'details_required' using errcode = '22023';
   end if;
@@ -134,14 +131,49 @@ begin
       delete from public.measurements m
       where m.event_id = p_event_id and not (m.metric = any (v_metrics));
 
-    when 'bath' then
-      -- Il bagnetto non ha dettagli propri: orario e note stanno su events.
-      null;
-
     when 'doctor_visit' then
       insert into public.doctor_visit_events (event_id, visit_type)
       values (p_event_id, trim(p_details ->> 'visit_type'))
       on conflict (event_id) do update set visit_type = excluded.visit_type;
+
+    else
+      null; -- 'bath' già gestito sopra
   end case;
 end;
+$$;
+
+create or replace function public.event_json(p_event_id uuid)
+returns jsonb
+language sql
+stable
+set search_path = ''
+as $$
+  select to_jsonb(e) || jsonb_build_object(
+    'details',
+    case e.kind
+      when 'breastfeeding' then
+        (select to_jsonb(d) - 'event_id' from public.feeding_sessions d where d.event_id = e.id)
+      when 'diaper' then
+        (select to_jsonb(d) - 'event_id' from public.diaper_events d where d.event_id = e.id)
+      when 'bottle' then
+        (select to_jsonb(d) - 'event_id' from public.bottle_events d where d.event_id = e.id)
+      when 'pumping' then
+        (select to_jsonb(d) - 'event_id' from public.pumping_sessions d where d.event_id = e.id)
+      when 'medication' then
+        (select to_jsonb(d) - 'event_id' from public.medication_events d where d.event_id = e.id)
+      when 'vaccination' then
+        (select to_jsonb(d) - 'event_id' from public.vaccinations d where d.event_id = e.id)
+      when 'measurement' then
+        jsonb_build_object('items', coalesce((
+          select jsonb_agg(to_jsonb(d) - 'event_id' order by d.metric)
+          from public.measurements d where d.event_id = e.id
+        ), '[]'::jsonb))
+      when 'doctor_visit' then
+        (select to_jsonb(d) - 'event_id' from public.doctor_visit_events d where d.event_id = e.id)
+      when 'bath' then
+        '{}'::jsonb
+    end
+  )
+  from public.events e
+  where e.id = p_event_id;
 $$;
