@@ -19,9 +19,10 @@ Stack: React 19 · TypeScript · Vite · Tailwind CSS 4 · Zustand · Supabase (
 | Statistiche | Oggi / 7 / 30 giorni: sessioni, durate, lato S/D, pannolini, biberon, tiralatte, peso |
 | Condivisione | Link d'invito monouso (7 giorni); ruoli owner / member |
 
+
 ## Avvio in locale
 
-Requisiti: Node 20+, Docker (per Supabase locale).
+Requisiti: Node 20+, Docker (per Supabase locale)..
 
 ```bash
 npm install
