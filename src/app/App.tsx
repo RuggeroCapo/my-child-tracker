@@ -32,6 +32,7 @@ const MedicationsPage = lazyPage(() => import('@/features/medication/Medications
 const VaccinationsPage = lazyPage(() => import('@/features/vaccination/VaccinationsPage'))
 const GrowthPage = lazyPage(() => import('@/features/growth/GrowthPage'))
 const BathPage = lazyPage(() => import('@/features/bath/BathPage'))
+const DoctorVisitsPage = lazyPage(() => import('@/features/doctorVisit/DoctorVisitsPage'))
 
 const LAZY_PAGES = [
   WelcomePage,
@@ -50,6 +51,7 @@ const LAZY_PAGES = [
   VaccinationsPage,
   GrowthPage,
   BathPage,
+  DoctorVisitsPage,
 ]
 
 function RequireAuth() {
@@ -130,6 +132,7 @@ export function App() {
               <Route path="/vaccinations" element={<Page><VaccinationsPage /></Page>} />
               <Route path="/growth" element={<Page><GrowthPage /></Page>} />
               <Route path="/bath" element={<Page><BathPage /></Page>} />
+              <Route path="/doctor-visit" element={<Page><DoctorVisitsPage /></Page>} />
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
