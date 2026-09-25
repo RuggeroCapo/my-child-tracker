@@ -75,7 +75,7 @@ export function HomePage() {
         onPress={() => (babyCount > 1 ? setSwitcher(true) : navigate(`/babies/${baby.id}/edit`))}
       />
 
-      <div className="mt-6 space-y-3">
+      <div className="mt-6 space-y-3 short:mt-4">
         {active.map((e) => (
           <ActiveSessionCard key={e.id} event={e} />
         ))}

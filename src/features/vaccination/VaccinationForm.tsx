@@ -1,5 +1,6 @@
 import { useId, useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/Button'
+import { FormDock } from '@/components/ui/FormDock'
 import { Input, Select } from '@/components/ui/Field'
 import type { EventOf } from '@/domain/types'
 import { fromLocalInput, toDateInput, toLocalInput } from '@/lib/time'
@@ -65,9 +66,11 @@ export function VaccinationForm({ babyId, initial, onSaved }: { babyId: string; 
       <Input label="Data" type="date" required max={toDateInput(new Date())} value={date} onChange={(e) => setDate(e.target.value)} />
       <NotesInput value={draft.notes} onChange={draft.setNotes} />
       {draft.error && <p className="text-sm text-danger" role="alert">{draft.error}</p>}
-      <Button type="submit" block size="lg">
-        Salva
-      </Button>
+      <FormDock>
+        <Button type="submit" block size="lg">
+          Salva
+        </Button>
+      </FormDock>
     </form>
   )
 }

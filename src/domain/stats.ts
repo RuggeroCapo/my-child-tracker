@@ -133,6 +133,17 @@ export function measurementSeries(allEvents: BabyEvent[], metric: MeasurementMet
   return points.sort((a, b) => a.date.getTime() - b.date.getTime())
 }
 
+/** Ultimo valore registrato per ciascuna misura (in unità canoniche). */
+export function latestMeasurements(allEvents: BabyEvent[]): Record<MeasurementMetric, MeasurementPoint | null> {
+  const metrics: MeasurementMetric[] = ['weight', 'length', 'head']
+  return Object.fromEntries(
+    metrics.map((m) => {
+      const series = measurementSeries(allEvents, m)
+      return [m, series.length ? series[series.length - 1] : null]
+    }),
+  ) as Record<MeasurementMetric, MeasurementPoint | null>
+}
+
 export interface LatestWithDelta {
   latest: MeasurementPoint
   previous: MeasurementPoint | null

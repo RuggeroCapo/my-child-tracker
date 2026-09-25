@@ -27,9 +27,10 @@ export function QuickLog({ running, feedHint, hints, onQuick }: QuickLogProps) {
   const feedingRunning = running.has('breastfeeding')
 
   return (
-    <section className="mt-9">
-      <h2 className="font-display-tight text-2xl font-bold">Aggiungi</h2>
-      <div className="console mt-3 rounded-[30px] p-2 text-night-ink">
+    <section className="mt-9 short:mt-4">
+      {/* Su schermi bassi il titolo resta solo per i lettori di schermo: la console parla da sé. */}
+      <h2 className="font-display-tight text-2xl font-bold short:sr-only">Aggiungi</h2>
+      <div className="console mt-3 rounded-[30px] p-2 text-night-ink short:mt-0">
         <button
           type="button"
           onClick={() => onQuick('breastfeeding')}

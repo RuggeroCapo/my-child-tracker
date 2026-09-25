@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/Button'
+import { FormDock } from '@/components/ui/FormDock'
 import type { DiaperType, EventOf, StoolAmount, StoolColor } from '@/domain/types'
 import { DIAPER_LABEL } from '@/i18n/it'
 import { ChoiceGrid, DateTimeInput, NotesInput } from '../events/formParts'
@@ -36,9 +37,11 @@ export function DiaperForm({ babyId, initial, onSaved }: { babyId: string; initi
       <DateTimeInput label="Data e ora" value={draft.startedAt} onChange={draft.setStartedAt} />
       <NotesInput value={draft.notes} onChange={draft.setNotes} />
       {draft.error && <p className="text-sm text-danger" role="alert">{draft.error}</p>}
-      <Button type="submit" block size="lg">
-        Salva
-      </Button>
+      <FormDock>
+        <Button type="submit" block size="lg">
+          Salva
+        </Button>
+      </FormDock>
     </form>
   )
 }

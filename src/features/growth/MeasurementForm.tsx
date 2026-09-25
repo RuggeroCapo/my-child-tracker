@@ -1,12 +1,13 @@
 import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/Button'
+import { FormDock } from '@/components/ui/FormDock'
 import { Input } from '@/components/ui/Field'
 import type { EventOf, MeasurementItem, MeasurementMetric } from '@/domain/types'
 import { formatNumber, parseDecimal } from '@/lib/units'
 import { DateTimeInput, NotesInput } from '../events/formParts'
 import { useEventDraft } from '../events/useEventDraft'
 
-const LIMITS: Record<MeasurementMetric, [number, number]> = {
+export const MEASUREMENT_LIMITS: Record<MeasurementMetric, [number, number]> = {
   weight: [0.3, 40],
   length: [20, 130],
   head: [20, 60],
@@ -36,7 +37,7 @@ export function MeasurementForm({ babyId, initial, onSaved }: { babyId: string; 
     for (const [metric, raw, unit] of entries) {
       if (!raw.trim()) continue
       const v = parseDecimal(raw)
-      const [min, max] = LIMITS[metric]
+      const [min, max] = MEASUREMENT_LIMITS[metric]
       if (v === null || v < min || v > max) {
         draft.setError(`Valore non valido per ${metric === 'weight' ? 'il peso' : metric === 'length' ? "l'altezza" : 'la circonferenza'}.`)
         return
@@ -59,9 +60,11 @@ export function MeasurementForm({ babyId, initial, onSaved }: { babyId: string; 
       <DateTimeInput label="Data e ora" value={draft.startedAt} onChange={draft.setStartedAt} />
       <NotesInput value={draft.notes} onChange={draft.setNotes} />
       {draft.error && <p className="text-sm text-danger" role="alert">{draft.error}</p>}
-      <Button type="submit" block size="lg">
-        Salva
-      </Button>
+      <FormDock>
+        <Button type="submit" block size="lg">
+          Salva
+        </Button>
+      </FormDock>
     </form>
   )
 }

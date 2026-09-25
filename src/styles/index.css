@@ -3,6 +3,8 @@
 @import '@fontsource-variable/bricolage-grotesque';
 
 @custom-variant dark (&:where(.dark, .dark *));
+/* Schermi bassi (iPhone SE, Android compatti, Safari con le barre): stessa struttura, meno aria. */
+@custom-variant short (@media (max-height: 760px));
 
 /* -----------------------------------------------------------------------------
    Design token. I colori superficie/testo cambiano con il tema; i colori
@@ -318,6 +320,33 @@
     -webkit-backdrop-filter: blur(20px) saturate(1.6);
     backdrop-filter: blur(20px) saturate(1.6);
     box-shadow: 0 1px 0 var(--frost-edge);
+  }
+}
+
+/* Azione principale di un form, ancorata al fondo finché il form è visibile:
+   Salva resta sotto il pollice senza scorrere. Quando si stacca dal suo posto
+   galleggia come le schede, con un alone di carta che la separa dai campi. */
+.form-dock {
+  position: sticky;
+  bottom: max(env(safe-area-inset-bottom), 0.75rem);
+  z-index: 10;
+  container-type: scroll-state;
+}
+.form-dock > * {
+  transition: box-shadow 200ms var(--ease-out-quart);
+}
+@container scroll-state(stuck: bottom) {
+  .form-dock > * {
+    box-shadow:
+      inset 0 1px 0 oklch(0.97 0.015 25 / 0.45),
+      0 0 0 5px color-mix(in oklab, var(--surface) 72%, transparent),
+      0 16px 32px -12px oklch(0.45 0.08 356 / 0.55);
+  }
+  .dark .form-dock > * {
+    box-shadow:
+      inset 0 1px 0 oklch(0.97 0.015 25 / 0.3),
+      0 0 0 5px color-mix(in oklab, var(--bg) 80%, transparent),
+      0 12px 28px -14px oklch(0.05 0.02 345 / 0.8);
   }
 }
 

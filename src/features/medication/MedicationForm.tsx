@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/Button'
+import { FormDock } from '@/components/ui/FormDock'
 import { Input, Select } from '@/components/ui/Field'
 import type { EventOf, Medication } from '@/domain/types'
 import { formatNumber, parseDecimal } from '@/lib/units'
@@ -89,9 +90,11 @@ export function MedicationForm({ babyId, initial, onSaved }: { babyId: string; i
       <DateTimeInput label="Data e ora" value={draft.startedAt} onChange={draft.setStartedAt} />
       <NotesInput value={draft.notes} onChange={draft.setNotes} />
       {draft.error && <p className="text-sm text-danger" role="alert">{draft.error}</p>}
-      <Button type="submit" block size="lg">
-        Salva
-      </Button>
+      <FormDock>
+        <Button type="submit" block size="lg">
+          Salva
+        </Button>
+      </FormDock>
     </form>
   )
 }

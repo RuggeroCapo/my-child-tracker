@@ -1,6 +1,7 @@
 import { Pencil, Plus, Trash } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { Button, IconButton } from '@/components/ui/Button'
+import { FormDock } from '@/components/ui/FormDock'
 import { Card, SectionTitle } from '@/components/ui/Card'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Input, Select, Textarea } from '@/components/ui/Field'
@@ -142,9 +143,11 @@ function RegistryForm({ babyId, medication, onDone }: { babyId: string; medicati
         </Select>
       </div>
       <Textarea label="Note" optional maxLength={500} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Es. al mattino, prescritta dal pediatra" />
-      <Button type="submit" block size="lg" loading={saving} disabled={!name.trim()}>
-        Salva
-      </Button>
+      <FormDock>
+        <Button type="submit" block size="lg" loading={saving} disabled={!name.trim()}>
+          Salva
+        </Button>
+      </FormDock>
       {medication && (
         <Button variant="ghost" block icon={<Trash className="size-4" />} onClick={onRemove}>
           Rimuovi dal registro

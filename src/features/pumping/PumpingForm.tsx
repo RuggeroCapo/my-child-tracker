@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/Button'
+import { FormDock } from '@/components/ui/FormDock'
 import { Input } from '@/components/ui/Field'
 import type { EventOf, PumpSide } from '@/domain/types'
 import { PUMP_SIDE_LABEL } from '@/i18n/it'
@@ -45,9 +46,11 @@ export function PumpingForm({ babyId, initial, onSaved }: { babyId: string; init
       <Input label="Quantità estratta" optional inputMode="decimal" suffix="ml" value={amount} onChange={(e) => setAmount(e.target.value)} />
       <NotesInput value={draft.notes} onChange={draft.setNotes} />
       {draft.error && <p className="text-sm text-danger" role="alert">{draft.error}</p>}
-      <Button type="submit" block size="lg">
-        Salva
-      </Button>
+      <FormDock>
+        <Button type="submit" block size="lg">
+          Salva
+        </Button>
+      </FormDock>
     </form>
   )
 }

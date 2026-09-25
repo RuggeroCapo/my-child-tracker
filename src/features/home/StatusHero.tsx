@@ -32,10 +32,10 @@ export function StatusHero({
   now: number
 }) {
   return (
-    <section aria-label="Situazione" className="night-panel rounded-[28px] px-5 pb-5 pt-6 text-night-ink">
+    <section aria-label="Situazione" className="night-panel rounded-[28px] px-5 pb-5 pt-6 text-night-ink short:pb-4 short:pt-5">
       {lastMeal ? (
         <>
-          <p className="font-display-tight text-[40px] font-bold leading-[1.02]">
+          <p className="font-display-tight text-[40px] font-bold leading-[1.02] short:text-[34px]">
             Ha mangiato <span className="text-feed-glow">{ago(lastMeal.started_at, now)}</span>
           </p>
           <p className="mt-2 text-[15px] text-night-ink-2">
@@ -44,13 +44,13 @@ export function StatusHero({
         </>
       ) : (
         <>
-          <p className="font-display-tight text-[40px] font-bold leading-[1.02]">Nessun pasto, per ora.</p>
+          <p className="font-display-tight text-[40px] font-bold leading-[1.02] short:text-[34px]">Nessun pasto, per ora.</p>
           <p className="mt-2 text-[15px] text-night-ink-2">Il primo tocco qui sotto avvia il diario.</p>
         </>
       )}
 
       {(suggestedSide || lastDiaper) && (
-        <dl className="mt-6 grid grid-cols-2 border-t border-night-line pt-4 text-sm">
+        <dl className="mt-6 grid grid-cols-2 short:mt-4 border-t border-night-line pt-4 text-sm">
           {suggestedSide && (
             <div className="pr-3">
               <dt className="text-night-ink-2">Prossimo lato</dt>

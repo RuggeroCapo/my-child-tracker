@@ -45,7 +45,7 @@ export function ActiveSessionCard({
 
   return (
     <section
-      className="night-panel relative overflow-hidden rounded-[28px] p-5 text-night-ink"
+      className={clsx('night-panel relative overflow-hidden rounded-[28px] text-night-ink', compact ? 'p-4' : 'p-5 short:p-4')}
       aria-live="polite"
     >
       <div className="flex items-center gap-2.5">
@@ -67,7 +67,8 @@ export function ActiveSessionCard({
       <p
         className={clsx(
           'font-display-tight font-extrabold leading-[0.9] tabular',
-          compact ? 'mt-3 text-6xl' : 'mt-5 text-[88px]',
+          // Su schermi bassi il timer si stringe, così i tasti della home restano sopra le schede.
+          compact ? 'mt-3 text-6xl' : 'mt-5 text-[88px] short:mt-3 short:text-6xl',
           isFeeding ? 'text-feed-glow' : 'text-night-ink',
         )}
         role="timer"
@@ -76,7 +77,7 @@ export function ActiveSessionCard({
         {formatClock(elapsed)}
       </p>
       {startedBy && <p className="mt-2 text-xs text-night-ink-2">Avviato da {startedBy}</p>}
-      <div className="mt-5 grid grid-cols-[auto_1fr] gap-2">
+      <div className={clsx('grid grid-cols-[auto_1fr] gap-2', compact ? 'mt-4' : 'mt-5 short:mt-4')}>
         {isFeeding ? (
           <Button
             variant="night"

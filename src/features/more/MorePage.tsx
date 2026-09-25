@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router'
 import { signOut } from '@/app/auth'
 import { SyncBadge } from '@/app/SyncBadge'
 import { Button } from '@/components/ui/Button'
+import { FormDock } from '@/components/ui/FormDock'
 import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Field'
 import { Segmented } from '@/components/ui/Segmented'
@@ -130,9 +131,11 @@ function NameForm({ userId, initial, onDone }: { userId: string; initial: string
       }}
     >
       <Input label="Nome visibile agli altri genitori" required maxLength={60} value={name} onChange={(e) => setName(e.target.value)} />
-      <Button type="submit" block size="lg" loading={saving} disabled={!name.trim()}>
-        Salva
-      </Button>
+      <FormDock>
+        <Button type="submit" block size="lg" loading={saving} disabled={!name.trim()}>
+          Salva
+        </Button>
+      </FormDock>
     </form>
   )
 }

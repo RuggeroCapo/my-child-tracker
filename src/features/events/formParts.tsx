@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useId, type ReactNode } from 'react'
-import { Field, Input, Textarea } from '@/components/ui/Field'
+import { Input, Textarea } from '@/components/ui/Field'
 import { formatAgo, formatDayLabel, isSameDay, shiftLocalDay, toDateInput, toLocalInput, withLocalTime } from '@/lib/time'
 
 const QUICK_OFFSETS = [
@@ -31,7 +31,16 @@ export function DateTimeInput({
   const isToday = isSameDay(date, now)
 
   return (
-    <Field label={label} htmlFor={id} hint={formatAgo(date.toISOString(), now.getTime())}>
+    <div className="space-y-1.5">
+      {/* Il "quanto tempo fa" sta sulla riga dell'etichetta: una riga in meno per campo. */}
+      <div className="flex items-baseline justify-between gap-3 px-1">
+        <label htmlFor={id} className="text-sm font-medium text-ink-2">
+          {label}
+        </label>
+        <span id={`${id}-ago`} className="truncate text-xs text-ink-3 tabular">
+          {formatAgo(date.toISOString(), now.getTime())}
+        </span>
+      </div>
       <div className="flex gap-2">
         <div className="flex h-12 min-w-0 flex-1 items-center rounded-2xl border border-line bg-surface">
           <button
@@ -71,12 +80,13 @@ export function DateTimeInput({
           id={id}
           type="time"
           required
+          aria-describedby={`${id}-ago`}
           className="w-28 text-center tabular"
           value={value.slice(11, 16)}
           onChange={(e) => e.target.value && onChange(withLocalTime(value, e.target.value))}
         />
       </div>
-      <div className="flex gap-2 overflow-x-auto pt-1">
+      <div className="flex gap-2 overflow-x-auto">
         {QUICK_OFFSETS.map((o) => (
           <button
             key={o.minutes}
@@ -89,13 +99,23 @@ export function DateTimeInput({
           </button>
         ))}
       </div>
-    </Field>
+    </div>
   )
 }
 
 export function NotesInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   return (
-    <Textarea label="Note" optional maxLength={1000} placeholder="Aggiungi una nota…" value={value} onChange={(e) => onChange(e.target.value)} />
+    // Una riga che cresce col testo: la nota è rara, non deve spingere Salva fuori schermo.
+    <Textarea
+      label="Note"
+      optional
+      rows={1}
+      maxLength={1000}
+      placeholder="Aggiungi una nota…"
+      className="min-h-12 max-h-40 field-sizing-content"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
   )
 }
 
@@ -127,7 +147,7 @@ export function ChoiceGrid<T extends string>({
             aria-checked={value === o.value}
             onClick={() => onChange(o.value)}
             className={clsx(
-              'flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl border border-line bg-surface px-2 py-2 text-sm font-medium transition-colors duration-150',
+              'flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl short:min-h-12 border border-line bg-surface px-2 py-2 text-sm font-medium transition-colors duration-150',
               value === o.value ? activeClass : 'text-ink-2 hover:bg-surface-2',
             )}
           >

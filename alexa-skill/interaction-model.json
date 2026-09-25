@@ -1,0 +1,132 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "diario del bebè",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "AvviaAllattamentoIntent",
+          "slots": [
+            {
+              "name": "lato",
+              "type": "LATO_TYPE"
+            }
+          ],
+          "samples": [
+            "avvia allattamento",
+            "inizia allattamento",
+            "comincia allattamento",
+            "avvia poppata",
+            "inizia poppata",
+            "comincia poppata",
+            "inizia poppata a {lato}",
+            "avvia poppata a {lato}",
+            "avvia allattamento a {lato}",
+            "inizia allattamento a {lato}",
+            "allattamento a {lato}",
+            "poppata a {lato}",
+            "{lato}"
+          ]
+        },
+        {
+          "name": "TerminaAllattamentoIntent",
+          "slots": [],
+          "samples": [
+            "termina allattamento",
+            "finisci allattamento",
+            "ferma allattamento",
+            "stop allattamento",
+            "termina poppata",
+            "finisci poppata",
+            "fine allattamento",
+            "fine poppata",
+            "ho finito di allattare",
+            "ho finito la poppata"
+          ]
+        },
+        {
+          "name": "RegistraPannolinoIntent",
+          "slots": [
+            {
+              "name": "tipo",
+              "type": "TIPO_PANNOLINO_TYPE"
+            }
+          ],
+          "samples": [
+            "registra pannolino",
+            "registra un pannolino",
+            "cambia pannolino",
+            "registra pannolino {tipo}",
+            "cambia pannolino {tipo}",
+            "pannolino {tipo}",
+            "ho cambiato un pannolino {tipo}",
+            "ho fatto un pannolino {tipo}",
+            "{tipo}"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "name": "LATO_TYPE",
+          "values": [
+            {
+              "id": "left",
+              "name": {
+                "value": "sinistra",
+                "synonyms": ["a sinistra", "lato sinistro", "sinistro"]
+              }
+            },
+            {
+              "id": "right",
+              "name": {
+                "value": "destra",
+                "synonyms": ["a destra", "lato destro", "destro"]
+              }
+            }
+          ]
+        },
+        {
+          "name": "TIPO_PANNOLINO_TYPE",
+          "values": [
+            {
+              "id": "wet",
+              "name": {
+                "value": "bagnato",
+                "synonyms": ["solo pipì", "pipì"]
+              }
+            },
+            {
+              "id": "dirty",
+              "name": {
+                "value": "sporco",
+                "synonyms": ["solo cacca", "cacca"]
+              }
+            },
+            {
+              "id": "mixed",
+              "name": {
+                "value": "misto",
+                "synonyms": ["pipì e cacca", "entrambi"]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

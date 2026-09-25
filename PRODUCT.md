@@ -42,14 +42,16 @@ Success looks like:
 
 1. **Answer first, then ask.** Every screen leads with the thing the parent came to know (last feed, running timer, today's count) before offering actions. If an answer can be shown, don't make them tap for it.
 2. **Two taps, one thumb.** The frequent actions live in the lower, thumb-reachable half and finish in two taps. Rare actions (vaccines, measurements, settings) may take longer and sit further away. Effort follows frequency.
-3. **Trust is visible.** Sync state, who did what, and "already ended by…" conflicts are shown quietly but always. Undo instead of confirmation dialogs. The parent should never wonder whether something was saved.
-4. **Calm at 3am.** Designed for a dark room first: no bright flashes, no urgent reds for normal events, no motion that isn't feedback. The dark theme is a first-class surface, not an inversion.
-5. **Written like a person.** Status is phrased as sentences a partner would say, with relative times and plain words. Numbers support the sentence; they don't replace it.
+3. **Scroll to read more, never to act.** Scrolling is allowed: history, charts and long forms can run past the fold. What a screen is *for* cannot. The answer and the primary action (Salva, Termina, the Home logging keys) must be visible without scrolling on the smallest supported phone (375×667, iPhone SE) while holding the phone in one hand. When the content doesn't fit, the layout tightens first and the action docks to the bottom edge second; the parent never scrolls to find the button.
+4. **Trust is visible.** Sync state, who did what, and "already ended by…" conflicts are shown quietly but always. Undo instead of confirmation dialogs. The parent should never wonder whether something was saved.
+5. **Calm at 3am.** Designed for a dark room first: no bright flashes, no urgent reds for normal events, no motion that isn't feedback. The dark theme is a first-class surface, not an inversion.
+6. **Written like a person.** Status is phrased as sentences a partner would say, with relative times and plain words. Numbers support the sentence; they don't replace it.
 
 ## Accessibility & Inclusion
 
 - **WCAG 2.2 AA** as the floor: 4.5:1 for body text, 3:1 for large text and UI boundaries, visible focus on every interactive element, full keyboard and screen-reader support for sheets and forms (the Italian labels must make sense read aloud).
 - **One-handed use**: minimum 44×44px targets (primary logging targets are much larger), primary actions reachable by the thumb in the lower half of the screen, no gestures that need two hands, no precision taps near screen edges.
+- **Small and short screens**: the reference device is 375×667 (iPhone SE), with 360px-wide Android phones and Safari's collapsed toolbars in mind. On it, every screen's primary action is on screen at first paint, without scrolling, and there is no horizontal scroll.
 - **Night-safe dark mode**: dark theme tuned for a dark nursery. Low-luminance surfaces, no pure-white fills or large bright areas, accents dimmed enough not to flash. Theme follows the system by default and applies before first paint (no white flash on launch).
 - **Reduced motion** is respected everywhere; nothing depends on animation to be understood.
 - Event categories are never identified by color alone: each one always has an icon and a text label.

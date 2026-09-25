@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { latestMeasurements } from '@/domain/stats'
 import { isActiveSession, type BabyEvent, type EventKind, type EventOf, type TimedKind } from '@/domain/types'
 import { useActiveBaby, useBabies } from './babies'
 import { useEvents } from './events'
@@ -18,6 +19,12 @@ export function useBabyEvents(babyId: string | null | undefined): BabyEvent[] {
 export function useEventsOfKind<K extends EventKind>(babyId: string | null | undefined, kind: K): EventOf<K>[] {
   const all = useBabyEvents(babyId)
   return useMemo(() => all.filter((e) => e.kind === kind) as EventOf<K>[], [all, kind])
+}
+
+/** Ultimo peso / altezza / circonferenza cranica registrati. */
+export function useLatestMeasurements(babyId: string | null | undefined) {
+  const measurements = useEventsOfKind(babyId, 'measurement')
+  return useMemo(() => latestMeasurements(measurements), [measurements])
 }
 
 export function useActiveSession<K extends TimedKind>(babyId: string | null | undefined, kind: K): EventOf<K> | null {

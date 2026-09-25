@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/Button'
+import { FormDock } from '@/components/ui/FormDock'
 import type { BreastSide, EventOf } from '@/domain/types'
 import { BREAST_SIDE_LABEL } from '@/i18n/it'
 import { fromLocalInput, toLocalInput } from '@/lib/time'
@@ -37,9 +38,11 @@ export function FeedingForm({ babyId, initial, onSaved }: { babyId: string; init
       {!active && <DateTimeInput label="Fine" value={endedAt} onChange={setEndedAt} />}
       <NotesInput value={draft.notes} onChange={draft.setNotes} />
       {draft.error && <p className="text-sm text-danger" role="alert">{draft.error}</p>}
-      <Button type="submit" block size="lg">
-        Salva
-      </Button>
+      <FormDock>
+        <Button type="submit" block size="lg">
+          Salva
+        </Button>
+      </FormDock>
     </form>
   )
 }

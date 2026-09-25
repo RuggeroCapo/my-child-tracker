@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { PageHeader } from '@/components/ui/PageHeader'
-import { Stat, StatGrid } from '@/components/ui/Stat'
 import type { EventOf } from '@/domain/types'
 import { BREAST_SIDE_LABEL } from '@/i18n/it'
 import { formatDuration, formatShortDate, formatTime } from '@/lib/time'
@@ -37,21 +36,21 @@ export default function FeedingDetailPage() {
   const active = event.ended_at === null
 
   return (
-    <div className="space-y-5 pb-6">
+    <div className="space-y-5 pb-6 short:space-y-4">
       <PageHeader title={active ? 'Allattamento in corso' : 'Allattamento'} />
 
       {active ? (
-        <ActiveSessionCard event={event} detailLink={false} onSwitched={(next) => navigate(`/breastfeeding/${next.id}`, { replace: true })} />
+        <ActiveSessionCard event={event} compact detailLink={false} onSwitched={(next) => navigate(`/breastfeeding/${next.id}`, { replace: true })} />
       ) : (
-        <Card className="space-y-3 p-4">
-          <p className="text-sm text-ink-2">
+        // La risposta in una frase: i valori modificabili sono già nel form qui sotto.
+        <div className="px-1">
+          <p className="font-display-snug text-2xl font-bold">
+            {BREAST_SIDE_LABEL[event.details.side]}, {formatDuration(event.duration_seconds ?? 0)}
+          </p>
+          <p className="mt-0.5 text-sm text-ink-2 tabular">
             {formatShortDate(event.started_at)} · {formatTime(event.started_at)} → {formatTime(event.ended_at!)}
           </p>
-          <StatGrid>
-            <Stat label="Lato" value={BREAST_SIDE_LABEL[event.details.side]} />
-            <Stat label="Durata" value={formatDuration(event.duration_seconds ?? 0)} />
-          </StatGrid>
-        </Card>
+        </div>
       )}
 
       <Card className="p-4">

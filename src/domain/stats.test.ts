@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { computeStats, latestWithDelta, measurementSeries, rangeBounds } from './stats'
+import { computeStats, latestMeasurements, latestWithDelta, measurementSeries, rangeBounds } from './stats'
 import type { BabyEvent } from './types'
 
 const base = {
@@ -75,5 +75,12 @@ describe('crescita', () => {
     expect(series.map((p) => p.value)).toEqual([5.8, 6.2])
     const d = latestWithDelta(series)!
     expect(d.delta).toBeCloseTo(0.4, 6)
+  })
+
+  it('restituisce l\'ultimo valore per ciascuna misura', () => {
+    const latest = latestMeasurements(events)
+    expect(latest.weight?.value).toBe(6.2)
+    expect(latest.length?.eventId).toBe('m2')
+    expect(latest.head).toBeNull()
   })
 })

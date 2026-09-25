@@ -108,6 +108,16 @@ test('tutte le funzionalità MVP', async ({ page }) => {
   await expect(page.getByText(/\+800 g dalla precedente/)).toBeVisible()
   await shot(page, 'growth')
 
+  // Grafico a schermo intero: zoom, dettagli al tocco e schede per metrica
+  await page.getByRole('button', { name: 'Ingrandisci il grafico' }).click()
+  const growthDialog = page.getByRole('dialog', { name: 'Curve di crescita' })
+  await growthDialog.getByRole('button', { name: 'Ingrandisci', exact: true }).click()
+  await expect(growthDialog.getByRole('button', { name: 'Ripristina vista' })).toBeEnabled()
+  await growthDialog.getByRole('radio', { name: 'Altezza' }).click()
+  await expect(growthDialog.getByRole('button', { name: 'Ripristina vista' })).toBeDisabled()
+  await shot(page, 'growth-explorer')
+  await growthDialog.getByRole('button', { name: 'Chiudi' }).click()
+
   // Modifica ed eliminazione dal diario
   await page.goto('/diary')
   await page.getByRole('tab', { name: 'Alimentazione' }).click()
@@ -155,5 +165,13 @@ test('layout su schermi piccoli (360px)', async ({ browser }) => {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)
   expect(overflow).toBe(false)
   await page.screenshot({ path: 'test-results/screens/home-360.png' })
+
+  // Su uno schermo basso (iPhone SE) Salva resta raggiungibile senza scorrere.
+  await page.setViewportSize({ width: 375, height: 667 })
+  await page.goto('/breastfeeding')
+  await page.getByRole('button', { name: 'Seno sinistro' }).click()
+  await page.getByRole('link', { name: 'Dettagli allattamento' }).click()
+  await expect(page).toHaveURL(/\/breastfeeding\/[0-9a-f-]+$/)
+  await expect(page.getByRole('button', { name: 'Salva' })).toBeInViewport({ ratio: 1 })
   await context.close()
 })

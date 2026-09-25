@@ -103,6 +103,8 @@ spacing:
   section: "24px"
   card-gap: "16px"
   tab-bar: "80px"
+  short-viewport: "760px"
+  dock-offset: "max(safe-area-inset-bottom, 12px)"
 components:
   button-primary:
     backgroundColor: "{colors.primary}"
@@ -168,6 +170,12 @@ components:
     backgroundColor: "{colors.pump-soft}"
     textColor: "{colors.pump}"
     rounded: "{rounded.card}"
+  form-dock:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.night}"
+    rounded: "{rounded.card}"
+    height: "56px"
+    padding: "0 20px"
   tab-bar:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.grey-500}"
@@ -196,6 +204,7 @@ This system explicitly rejects the **SaaS dashboard** (KPI tiles, hero metrics, 
 - Rounded, soft geometry (12px elements, 16px cards, 24px feature panels, 28px sheets).
 - Bottom sheets for quick logging, undo toasts instead of confirmation dialogs.
 - Responsive motion: press feedback, sheet slide-up and slide-down (drag the grabber to dismiss), live-session pulse, toast in/out, the segmented control's sliding indicator, and screen transitions on navigation (shared-axis slide going deeper or back, fade-through between tabs, tab bar slides away on detail screens, the active tab pops into a labeled rose pill, the ambient wash warms when a session starts). Nothing else moves.
+- Scroll to read, never to act: on the reference phone (375×667) every screen's primary action is visible at first paint. Short screens (height ≤ 760px) tighten the same structure through the `short:` variant, and form Save buttons dock to the bottom edge while the form is on screen.
 - Layout rhythm on a 4px base: 4 · 8 · 12 · 16 · 24 · 48. Container padding 16px, space between sections 24px (Home uses 36 to 40px between major blocks), space between cards 16px.
 
 ## 2. Colors
@@ -266,7 +275,7 @@ All neutrals are OKLCH, tinted toward the brand's plum (hue ~350) so the page re
 - **Body** (400, 16px, 24px line): default text, inputs (16px minimum to avoid iOS zoom), buttons (at 600).
 - **Body Small** (400, 14px, 20px line): event subtitles, hints, summaries ("5 pasti · 7 cambi").
 - **Caption** (400, 12px, 16px line): tab labels, timestamps in dense lists, chart axes.
-- **Timer** (Bricolage 800, 88px on Home, 60px compact, tabular figures): running session timers only.
+- **Timer** (Bricolage 800, 88px on Home, 60px compact and on short screens, tabular figures): running session timers only.
 
 ### Named Rules
 **The Tabular Time Rule.** Every time, duration, quantity and timer uses tabular figures (`font-variant-numeric: tabular-nums`). Numbers that shift width while ticking are forbidden.
@@ -311,6 +320,7 @@ Soft, tactile and forgiving: every control is large enough to hit with a thumb w
 - There are no category-colored buttons. Every form's Save is the Primary button, whatever the category.
 - **States:** pressed scales to 0.98 and shifts to the pressed color (Pressed Rose for primary) within 150ms; disabled is Mist fill with grey-300 text; loading swaps the icon for a spinner and keeps the width; focus shows a 2px `--focus` indigo ring with 2px offset.
 - **Icon buttons:** 44px circle, grey-700 icon, Mist on press.
+- **Form dock** (`FormDock`, `.form-dock`): every form's Save sits in a dock that is `position: sticky` to the bottom edge, 12px (or the safe area) above it. While the form is on screen and its end is below the fold, Save floats under the thumb; at the end of the form it rests in its normal place. When stuck it gains a 5px Paper halo (Canvas in dark) and a soft rose drop shadow (a `scroll-state(stuck: bottom)` container query; without support it simply floats without the halo), so fields scroll cleanly under it. It works the same inside bottom sheets. The dock is for the one primary action only; Elimina and secondary links stay in the flow below.
 
 ### Chips
 - **Style:** pill (9999px), 44px tall, Paper fill with Hairline border, category ink icon at 18px + Ink label. Used for secondary quick actions (Medicine, Crescita, Vaccini) and diary filters.
@@ -330,6 +340,9 @@ Soft, tactile and forgiving: every control is large enough to hit with a thumb w
 - **Error:** border and helper text in Alert Red, message announced with `role="alert"`.
 - **Disabled:** 60% opacity, no border change.
 - **Big numeric input** (bottle ml, weight): 64px tall, 32px semibold tabular figures, unit as a suffix.
+- **Date and time** (`DateTimeInput`): label left and the relative time ("19 min fa") right on the same line, then the day stepper + native time input (48px), then the quick offsets (Adesso, −5′, −15′, −30′, −1h, 40px chips). No hint line underneath: the relative time is the hint.
+- **Notes**: one line (48px) that grows with its text up to 160px (`field-sizing: content`). A note is rare; it never gets to push Save off screen.
+- **Choice grid** (side, diaper type, milk): 56px options, 48px on short screens.
 
 ### Segmented Control
 - Mist track with 4px inset, 12px radius; segments 40px tall. Selected segment fills Nursery Rose with Night text (semibold); others are Ink 2. Used for time ranges (Oggi / 7 giorni / 30 giorni) and binary choices (Seno sinistro / destro).
@@ -337,6 +350,12 @@ Soft, tactile and forgiving: every control is large enough to hit with a thumb w
 ### Navigation
 - **Tab bar:** four separate floating buttons, centered, 8px apart, 12px or the safe area from the bottom. Inactive tabs are 56px Glass circles with a 24px Ink 2 icon (the label lives in `aria-label`). The active tab expands into a 56px Lit Rose pill with icon + 15px semibold label in Night, popping in with a 260ms scale from 0.9. Each button carries its own view-transition name (class `tab`) so the glass keeps blurring the page. Screen content keeps `7rem + safe area` of bottom padding.
 - **Page header:** sticky, 44px back button left, title centered in Title style, optional single action right. No hamburger menus.
+- **Detail pages** lead with the answer as a sentence, not a card that repeats the form: "Sinistro, 15 min" in Title-scale Bricolage with the date and times below in Body Small. A running session uses the compact Active Session card (60px timer). The editable form follows, with its docked Save.
+
+### Short screens
+The `short:` variant (`@media (max-height: 760px)`) tightens Home and forms without changing their structure: the baby header drops to 64px, the Active Session timer to 60px, the status sentence to 34px, the "Aggiungi" heading becomes screen-reader only, and the 24 to 40px gaps between blocks shrink to 16px. The goal is concrete: on 375×667, with a feed running, the feeding key and the three round keys sit above the floating tab bar.
+
+**The Thumb Floor Rule.** On the reference phone (375×667), the primary action of every screen is fully visible at first paint, without scrolling. Tighten spacing first, then dock the action; never hide the action behind a scroll or a "more" toggle. Content that exists to be read (history, charts, long lists) may scroll freely.
 
 ### Status Panel (signature)
 The Home answer. A luminous frosted panel by day, a lit Night block by night (`.night-panel`, 28px radius, 24/20/20px padding) that states the last meal as a Display sentence, with the relative time in Feed Glow, followed by a detail line in Body Small ("Seno sinistro, 14 min · alle 10:15"). Below a Night Line divider, a two-column definition list: "Prossimo lato" and "Cambio". When a session is running, it is replaced by the **Active Session card**: the same Night block, a pulsing dot and "Allattamento in corso", the timer in Timer style (Feed Glow for feeds), "Avviato da…", then a Night-variant side switch and a primary "Termina".
@@ -364,6 +383,7 @@ Slides up in 220ms (ease-out-quart), 28px top radius, grab handle, title + close
 ### Do:
 - **Do** lead every screen with the answer: the Home status panel's Display sentence comes before any button.
 - **Do** keep frequent actions in the lower half of the screen and at least 44×44px; Home logging keys are 88px tall (feeding) and 64px round keys.
+- **Do** check every new screen at 375×667: the primary action must be visible without scrolling. Wrap a form's Save in `FormDock`; use the `short:` variant to tighten spacing before shrinking targets.
 - **Do** show every category as tint + ink icon + text label, all three, every time.
 - **Do** use tabular figures for all times, durations, quantities and timers.
 - **Do** use undo toasts (Paper, 16px radius, Toast shadow) instead of confirmation dialogs for deletes and edits.
@@ -381,5 +401,6 @@ Slides up in 220ms (ease-out-quart), 28px top radius, grab handle, title + close
 - **Don't** use gradient text. Don't put backdrop blur on cards; frost them with translucency (The Blur Budget Rule).
 - **Don't** add a third typeface, set labels or buttons in the display face, or use all-caps labels or letter-spaced eyebrows.
 - **Don't** open a modal dialog when a sheet, inline edit, or undo toast would do.
+- **Don't** make the parent scroll to reach Salva, Termina or a logging key; and don't restate a form's values in a summary card above it (answer in one sentence instead).
 - **Don't** animate anything that isn't feedback or a state change; no page-load choreography.
 - **Don't** use pure black (#000) or pure white (#FFF) anywhere, including white text on rose; use Ink, Night and Paper.

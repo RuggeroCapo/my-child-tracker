@@ -1,0 +1,10 @@
+{
+  "name": "diario-bebe-alexa-skill",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Backend Lambda (CommonJS) per la skill Alexa 'Diario del bebè'. Nessuna dipendenza a runtime.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node smoke-test.js"
+  }
+}
