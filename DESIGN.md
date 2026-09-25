@@ -203,7 +203,8 @@ This system explicitly rejects the **SaaS dashboard** (KPI tiles, hero metrics, 
 - Category color = soft pastel tile + saturated icon + text label, always all three.
 - Rounded, soft geometry (12px elements, 16px cards, 24px feature panels, 28px sheets).
 - Bottom sheets for quick logging, undo toasts instead of confirmation dialogs.
-- Responsive motion: press feedback, sheet slide-up and slide-down (drag the grabber to dismiss), live-session pulse, toast in/out, the segmented control's sliding indicator, and screen transitions on navigation (shared-axis slide going deeper or back, fade-through between tabs, tab bar slides away on detail screens, the active tab pops into a labeled rose pill, the ambient wash warms when a session starts). Nothing else moves.
+- Responsive motion: press feedback (sink fast, spring back), sheet slide-up and slide-down (drag the grabber to dismiss), edge-swipe back on detail screens, live-session pulse, toast in/out (swipe up to dismiss), the segmented control's sliding indicator, and screen transitions on navigation (shared-axis slide going deeper or back, fade-through between tabs, tab bar slides away on detail screens, the active tab pops into a labeled rose pill, the ambient wash warms when a session starts). Nothing else moves.
+- Touch first, with quiet haptics: short, soft vibrations confirm what a tired parent may not be looking at (an event saved, a session started or ended, a gesture past its threshold, a choice snapping into place). Never to ask for attention, never for the other parent's changes.
 - Scroll to read, never to act: on the reference phone (375×667) every screen's primary action is visible at first paint. Short screens (height ≤ 760px) tighten the same structure through the `short:` variant, and form Save buttons dock to the bottom edge while the form is on screen.
 - Layout rhythm on a 4px base: 4 · 8 · 12 · 16 · 24 · 48. Container padding 16px, space between sections 24px (Home uses 36 to 40px between major blocks), space between cards 16px.
 
@@ -318,7 +319,7 @@ Soft, tactile and forgiving: every control is large enough to hit with a thumb w
 - **Night:** outline button for use on the Night panel only.
 - **Destructive:** a ghost button in Ink 2. Deliberately not red: delete is a calm choice, and every event delete offers undo.
 - There are no category-colored buttons. Every form's Save is the Primary button, whatever the category.
-- **States:** pressed scales to 0.98 and shifts to the pressed color (Pressed Rose for primary) within 150ms; disabled is Mist fill with grey-300 text; loading swaps the icon for a spinner and keeps the width; focus shows a 2px `--focus` indigo ring with 2px offset.
+- **States:** pressed (`.press`) sinks to 0.97 in 90ms (ease-out-quart) and shifts to the pressed color, then springs back on release (`--ease-spring`, 420ms, about 2% overshoot), so even a very quick tap is visible; small targets sink deeper through `--press` (0.9 for icon buttons). `:active` drives it, so every control shows its pressed state on touch as well as on hover devices; disabled is Mist fill with grey-300 text; loading swaps the icon for a spinner and keeps the width; focus shows a 2px `--focus` indigo ring with 2px offset.
 - **Icon buttons:** 44px circle, grey-700 icon, Mist on press.
 - **Form dock** (`FormDock`, `.form-dock`): every form's Save sits in a dock that is `position: sticky` to the bottom edge, 12px (or the safe area) above it. While the form is on screen and its end is below the fold, Save floats under the thumb; at the end of the form it rests in its normal place. When stuck it gains a 5px Paper halo (Canvas in dark) and a soft rose drop shadow (a `scroll-state(stuck: bottom)` container query; without support it simply floats without the halo), so fields scroll cleanly under it. It works the same inside bottom sheets. The dock is for the one primary action only; Elimina and secondary links stay in the flow below.
 
@@ -348,8 +349,9 @@ Soft, tactile and forgiving: every control is large enough to hit with a thumb w
 - Mist track with 4px inset, 12px radius; segments 40px tall. Selected segment fills Nursery Rose with Night text (semibold); others are Ink 2. Used for time ranges (Oggi / 7 giorni / 30 giorni) and binary choices (Seno sinistro / destro).
 
 ### Navigation
-- **Tab bar:** four separate floating buttons, centered, 8px apart, 12px or the safe area from the bottom. Inactive tabs are 56px Glass circles with a 24px Ink 2 icon (the label lives in `aria-label`). The active tab expands into a 56px Lit Rose pill with icon + 15px semibold label in Night, popping in with a 260ms scale from 0.9. Each button carries its own view-transition name (class `tab`) so the glass keeps blurring the page. Screen content keeps `7rem + safe area` of bottom padding.
-- **Page header:** sticky, 44px back button left, title centered in Title style, optional single action right. No hamburger menus.
+- **Tab bar:** four separate floating buttons, centered, 8px apart, 12px or the safe area from the bottom. Inactive tabs are 56px Glass circles with a 24px Ink 2 icon (the label lives in `aria-label`). The active tab expands into a 56px Lit Rose pill with icon + 15px semibold label in Night, popping in with a spring from 0.9; tabs sink under the thumb like buttons. Each button carries its own view-transition name (class `tab`) so the glass keeps blurring the page. Screen content keeps `7rem + safe area` of bottom padding.
+- **Page header:** sticky, 44px back button left (carries `data-swipe-back`), title centered in Title style, optional single action right. No hamburger menus.
+- **Swipe back** (`SwipeBack`): on any screen with a Page header back button, dragging from the left 28px of the edge moves the screen with the thumb (with a soft left shadow); past 35% of the width, or with a quick flick, it slides out and the previous screen enters from the left, otherwise it springs back. It presses the header's back button, so it goes exactly where that button goes. Off on iOS Safari in the browser (the system gesture already exists there), on in the installed app. Charts and other `touch-none` surfaces keep their own drag.
 - **Detail pages** lead with the answer as a sentence, not a card that repeats the form: "Sinistro, 15 min" in Title-scale Bricolage with the date and times below in Body Small. A running session uses the compact Active Session card (60px timer). The editable form follows, with its docked Save.
 
 ### Short screens
@@ -370,13 +372,13 @@ The "Aggiungi" section is one console (`.console`, 30px radius, 8px padding) tha
 Summary numbers ("Sessioni · Totale · Media") are a `dl` of three columns split by Hairline filets, label above value, like the Home panel. Never tinted tiles.
 
 ### Toasts
-Paper (Raised in dark), 16px radius, Hairline ring, Toast shadow in light mode only. The tone lives in the icon alone (success green, warning amber, error red, info Ink 2). Action and close are 44px targets; the action is Rose Ink.
+Paper (Raised in dark), 16px radius, Hairline ring, Toast shadow in light mode only. The tone lives in the icon alone (success green, warning amber, error red, info Ink 2). Action and close are 44px targets; the action is Rose Ink. A flick or drag upward dismisses it; downward it resists.
 
 ### Event Row
 Time in tabular Body Small at a fixed 48px column, a 40px category icon chip (tint fill, ink icon), title in 15px medium and subtitle in Body Small Slate, optional chevron. Rows are grouped in one card per day with Hairline dividers; unsynced rows show a small cloud-off icon.
 
 ### Bottom Sheet
-Slides up in 220ms (ease-out-quart), 28px top radius, grab handle, title + close button, max 92% of the viewport. Used for quick logging only; everything else is a page.
+Slides up in 280ms (ease-out-expo), 28px top radius, grab handle, title + close button, max 92% of the viewport. Dragging the handle down follows the thumb; a haptic tick marks the point where letting go would close it, short of that it springs back. Used for quick logging only; everything else is a page.
 
 ## 6. Do's and Don'ts
 
@@ -387,9 +389,10 @@ Slides up in 220ms (ease-out-quart), 28px top radius, grab handle, title + close
 - **Do** show every category as tint + ink icon + text label, all three, every time.
 - **Do** use tabular figures for all times, durations, quantities and timers.
 - **Do** use undo toasts (Paper, 16px radius, Toast shadow) instead of confirmation dialogs for deletes and edits.
-- **Do** keep transitions between 150 and 250ms with exponential ease-out; press feedback is `scale(0.98)`.
+- **Do** keep transitions between 150 and 250ms with exponential ease-out; what the finger lets go of (press release, sheet and swipe-back snap-back, the segmented indicator, the active tab) uses the soft spring.
+- **Do** use haptics (`haptic()` in `lib/haptics.ts`) sparingly: `tick` for selections, wheel detents and gesture thresholds, `tap` for light actions (switch side, undo, change baby), `success` for a record saved, started or ended, `warning` for a delete, `error` for rejected input. They can be turned off in Altro; Android uses `navigator.vibrate`, iOS the `<input switch>` tick.
 - **Do** design the dark theme on its own: plum Night Canvas base, no Paper or Snow fills larger than a button, at most one filled Nursery Rose element per screen.
-- **Do** respect `prefers-reduced-motion`: the live pulse, sheet slide and screen transitions become instant.
+- **Do** respect `prefers-reduced-motion`: the live pulse, sheet slide, springs and screen transitions become instant (the swipe-back still follows the finger, but lands without animating).
 
 ### Don't:
 - **Don't** build a **SaaS dashboard**: no KPI tiles, no hero-metric blocks (big number, small label, trend arrow), no grids of identical stat cards, no gradient accents on numbers or charts. Gradients are atmosphere and light, never data.

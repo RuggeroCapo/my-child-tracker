@@ -74,6 +74,19 @@
   --color-night-line: var(--night-line);
 }
 
+/* Molla morbida (smorzamento 0.77, ~2% di rimbalzo, 420ms): per ciò che il dito
+   lascia andare. Senza linear() ripiega sull'ease-out esponenziale. */
+:root {
+  --ease-spring: var(--ease-out-expo);
+  --spring-ms: 280ms;
+}
+@supports (transition-timing-function: linear(0, 1)) {
+  :root {
+    --ease-spring: linear(0, 0.037, 0.126, 0.243, 0.369, 0.492, 0.606, 0.705, 0.789, 0.856, 0.909, 0.949, 0.978, 0.998, 1.011, 1.018, 1.022, 1.023, 1.022, 1.019, 1.017, 1.014, 1.011, 1.009, 1.006, 1.004, 1.003, 1.002, 1);
+    --spring-ms: 420ms;
+  }
+}
+
 @theme {
   /* Rosa della marca = allattamento. Sul rosa pieno il testo è sempre text-night. */
   --color-rose: #ee7f95;
@@ -289,7 +302,7 @@
   box-shadow:
     inset 0 1px 0 oklch(0.97 0.015 25 / 0.45),
     0 12px 24px -12px oklch(0.62 0.06 356 / 0.5);
-  animation: tab-pop 260ms var(--ease-out-expo);
+  animation: tab-pop var(--spring-ms) var(--ease-spring);
 }
 .dark .tab-active {
   box-shadow:
@@ -480,6 +493,31 @@
 }
 
 /* -----------------------------------------------------------------------------
+   Pressione. Il dito affonda subito (90ms) e al rilascio il controllo torna su
+   con la molla, così anche un tocco rapidissimo si vede. Usa la proprietà
+   `scale`, indipendente da `transform`: si somma alle animazioni già presenti.
+   .press sul controllo; .press-group + .press-target quando affonda solo una
+   parte (il tasto rotondo dentro la sua cella). --press regola la profondità.
+   -------------------------------------------------------------------------- */
+.press,
+.press-target {
+  transition:
+    scale var(--spring-ms) var(--ease-spring),
+    color 150ms var(--ease-out-quart),
+    background-color 150ms var(--ease-out-quart),
+    border-color 150ms var(--ease-out-quart),
+    box-shadow 200ms var(--ease-out-quart),
+    filter 150ms var(--ease-out-quart),
+    opacity 150ms var(--ease-out-quart);
+}
+.press:active:not(:disabled, [aria-disabled='true']),
+.press-group:active:not(:disabled) .press-target {
+  scale: var(--press, 0.97);
+  transition-duration: 90ms, 150ms, 150ms, 150ms, 200ms, 150ms, 150ms;
+  transition-timing-function: var(--ease-out-quart);
+}
+
+/* -----------------------------------------------------------------------------
    Movimento. Solo feedback e cambi di stato, 150–250ms, ease-out esponenziale.
    -------------------------------------------------------------------------- */
 @keyframes sheet-up {
@@ -580,6 +618,16 @@
 }
 .animate-toast-out {
   animation: toast-out 160ms var(--ease-out-quart) forwards;
+}
+/* Un pannello che si apre in linea (rotelle dell'ora): scende appena dal suo controllo. */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+.animate-reveal {
+  animation: reveal 220ms var(--ease-out-expo);
 }
 .animate-pulse-dot {
   animation: pulse-dot 1.6s ease-in-out infinite;
@@ -712,6 +760,24 @@
 }
 ::view-transition-new(*.tab):only-child {
   animation: 240ms var(--ease-out-expo) both vt-bar-up;
+}
+
+/* Indietro con il gesto (SwipeBack): la schermata è già uscita sotto il dito,
+   quella di prima rientra da sinistra senza una seconda uscita. */
+:root[data-nav='swipe'] .vt-page {
+  animation:
+    160ms var(--ease-out-quart) both vt-fade-in,
+    260ms var(--ease-out-expo) both vt-from-left;
+}
+:root[data-nav='swipe'] .vt-tab {
+  animation: 240ms var(--ease-out-expo) both vt-bar-up;
+}
+/* Ombra sul bordo sinistro della schermata mentre la si trascina via. */
+.swipe-back-edge {
+  box-shadow: -16px 0 32px -18px oklch(0.35 0.08 350 / 0.45);
+}
+.dark .swipe-back-edge {
+  box-shadow: -16px 0 32px -16px oklch(0.05 0.02 345 / 0.9);
 }
 
 /* Iniziale fantasma dietro il nome in home: stesso gradiente del monogramma, molto attenuato. */

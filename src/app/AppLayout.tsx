@@ -32,17 +32,14 @@ export function AppLayout() {
               style={{ viewTransitionName: `tab-${i}` }}
               className={({ isActive }) =>
                 clsx(
-                  'vt-tab group pointer-events-auto flex h-14 items-center justify-center rounded-full transition-colors duration-150',
+                  'vt-tab press pointer-events-auto flex h-14 items-center justify-center rounded-full [--press:0.92]',
                   isActive ? 'tab-active gap-2 pl-4 pr-5 font-semibold text-night' : 'glass w-14 text-ink-2 hover:text-ink',
                 )
               }
             >
               {({ isActive }) => (
                 <>
-                  <Icon
-                    className="size-6 shrink-0 transition-transform duration-150 ease-out-quart group-active:scale-90"
-                    aria-hidden
-                  />
+                  <Icon className="size-6 shrink-0" aria-hidden />
                   {isActive && <span className="text-[15px]">{label}</span>}
                 </>
               )}

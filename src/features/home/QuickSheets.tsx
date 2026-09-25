@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button'
 import { Sheet } from '@/components/ui/Sheet'
 import type { BreastSide, DiaperType, EventOf, MilkType, PumpSide, StoolAmount, StoolColor } from '@/domain/types'
 import { DIAPER_LABEL, MILK_LABEL, PUMP_SIDE_LABEL } from '@/i18n/it'
+import { haptic } from '@/lib/haptics'
 import { parseDecimal } from '@/lib/units'
 import { toast } from '@/stores/ui'
 import { deleteEvent, quickAdd, saveEvent, startSession } from '@/sync/actions'
@@ -14,7 +15,7 @@ import { DiaperTypeIcon, StoolPicker } from '../diaper/DiaperDetails'
 import { NotesInput } from '../events/formParts'
 
 const bigChoice =
-  'flex h-24 flex-col items-center justify-center gap-1 rounded-3xl border text-base font-semibold transition-transform active:scale-[0.97]'
+  'press flex h-24 flex-col items-center justify-center gap-1 rounded-3xl border text-base font-semibold [--press:0.96]'
 
 /** Allattamento: un tap sul lato e il timer parte. */
 export function FeedingQuickSheet({
@@ -94,7 +95,7 @@ export function DiaperQuickSheet({ open, onClose, babyId }: { open: boolean; onC
         ended_at: null,
         notes: notes.trim() || null,
         details: { type: saved.details.type, stool_amount: amount, stool_color: color },
-      })
+      }, { silent: true })
     }
     toast({ tone: 'success', title: 'Pannolino registrato', description: saved ? DIAPER_LABEL[saved.details.type] : undefined })
     close()
@@ -191,8 +192,11 @@ export function BottleQuickSheet({
             <button
               key={p}
               type="button"
-              onClick={() => setAmount(String(p))}
-              className={clsx('h-11 rounded-full border border-line px-4 text-sm font-medium tabular transition-colors', value === p ? 'bg-bottle/15 text-ink ring-2 ring-bottle' : 'text-ink-2 hover:bg-surface-2')}
+              onClick={() => {
+                haptic('tick')
+                setAmount(String(p))
+              }}
+              className={clsx('press h-11 rounded-full border border-line px-4 text-sm font-medium tabular [--press:0.95]', value === p ? 'bg-bottle/15 text-ink ring-2 ring-bottle' : 'text-ink-2 hover:bg-surface-2 active:bg-surface-2')}
             >
               {p} ml
             </button>
@@ -203,8 +207,11 @@ export function BottleQuickSheet({
             <button
               key={m}
               type="button"
-              onClick={() => setMilk(m)}
-              className={clsx('h-12 rounded-2xl border border-line text-sm font-medium transition-colors', milk === m ? 'bg-bottle/15 text-ink ring-2 ring-bottle' : 'text-ink-2 hover:bg-surface-2')}
+              onClick={() => {
+                if (milk !== m) haptic('tick')
+                setMilk(m)
+              }}
+              className={clsx('press h-12 rounded-2xl border border-line text-sm font-medium [--press:0.96]', milk === m ? 'bg-bottle/15 text-ink ring-2 ring-bottle' : 'text-ink-2 hover:bg-surface-2 active:bg-surface-2')}
             >
               {MILK_LABEL[m]}
             </button>

@@ -17,7 +17,7 @@ export type NavDirection = 'forward' | 'back' | 'tab' | 'none'
 export const TAB_PATHS = ['/', '/diary', '/stats', '/more']
 
 /** Profondità di una schermata: le schede stanno a 0, i dettagli scendono con il percorso. */
-function depth(pathname: string) {
+export function depth(pathname: string) {
   if (TAB_PATHS.includes(pathname)) return 0
   return pathname.split('/').filter(Boolean).length
 }
@@ -47,6 +47,30 @@ function browserAnimated() {
   return e instanceof PopStateEvent && e.hasUAVisualTransition === true
 }
 
+/**
+ * "Indietro" già animato dal dito (SwipeBack): la schermata vecchia è fuori
+ * dallo schermo, niente foto né uscita; entra solo quella di prima.
+ */
+let pendingSwipe: { at: number; reset: () => void } | null = null
+
+export function swipeBack(go: () => void, reset: () => void) {
+  const swipe = { at: performance.now(), reset }
+  pendingSwipe = swipe
+  go()
+  // Nessuna navigazione arrivata: la schermata non può restare fuori dallo schermo.
+  setTimeout(() => {
+    if (pendingSwipe !== swipe) return
+    pendingSwipe = null
+    reset()
+  }, 1000)
+}
+
+function takeSwipe() {
+  const s = pendingSwipe
+  pendingSwipe = null
+  return s && performance.now() - s.at < 1000 ? s : null
+}
+
 /** Posizione di scroll per voce di cronologia: il ripristino lo facciamo noi, dopo il cambio di DOM. */
 const scrollByKey = new Map<string, number>()
 
@@ -70,14 +94,28 @@ export function TransitionRouter({ children }: { children: ReactNode }) {
       // Schermata nuova dall'alto; tornando indietro, dov'eravamo.
       const scrollTo = dir === 'none' ? null : action === 'POP' ? (scrollByKey.get(location.key) ?? 0) : 0
       const next = { action, location, scrollTo }
+      const root = document.documentElement
+
+      const swipe = takeSwipe()
+      if (swipe) {
+        flushSync(() => setState(next))
+        swipe.reset()
+        if (canAnimate()) {
+          root.dataset.nav = 'swipe'
+          setTimeout(() => {
+            if (current === location) delete root.dataset.nav
+          }, 300)
+        }
+        return
+      }
 
       if (dir === 'none' || !canAnimate() || browserAnimated()) {
         startTransition(() => setState(next))
         return
       }
-      document.documentElement.dataset.nav = dir
+      root.dataset.nav = dir
       const done = () => {
-        if (current === location) delete document.documentElement.dataset.nav
+        if (current === location) delete root.dataset.nav
       }
       // Il callback gira dopo la foto della schermata vecchia: il DOM nuovo va scritto subito.
       document.startViewTransition(() => flushSync(() => setState(next))).finished.then(done, done)

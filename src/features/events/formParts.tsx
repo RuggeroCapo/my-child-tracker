@@ -3,6 +3,7 @@ import { CalendarDays } from 'lucide-react'
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { Textarea } from '@/components/ui/Field'
 import { WheelTimePicker } from '@/components/ui/WheelPicker'
+import { haptic } from '@/lib/haptics'
 import { formatAgo, formatDayLabel, toDateInput, withLocalTime } from '@/lib/time'
 
 const pad = (n: number) => String(n).padStart(2, '0')
@@ -68,7 +69,7 @@ export function DateTimeInput({
           aria-describedby={`${id}-ago`}
           onClick={() => setWheelOpen((o) => !o)}
           className={clsx(
-            'flex h-14 min-w-0 flex-1 items-center justify-center rounded-2xl border bg-surface text-2xl font-semibold text-ink tabular transition-colors',
+            'press flex h-14 min-w-0 flex-1 items-center justify-center rounded-2xl border bg-surface text-2xl font-semibold text-ink tabular [--press:0.98]',
             wheelOpen ? 'border-rose ring-3 ring-rose/20' : 'border-line',
           )}
         >
@@ -91,7 +92,7 @@ export function DateTimeInput({
         </div>
       </div>
       {wheelOpen && (
-        <div id={`${id}-wheel`} role="dialog" aria-label="Seleziona l'ora" className="pt-1">
+        <div id={`${id}-wheel`} role="dialog" aria-label="Seleziona l'ora" className="animate-reveal pt-1">
           <WheelTimePicker hour={hour} minute={minute} onChange={(h, m) => onChange(withLocalTime(value, `${pad(h)}:${pad(m)}`))} />
         </div>
       )}
@@ -141,10 +142,13 @@ export function ChoiceGrid<T extends string>({
             type="button"
             role="radio"
             aria-checked={value === o.value}
-            onClick={() => onChange(o.value)}
+            onClick={() => {
+              if (value !== o.value) haptic('tick')
+              onChange(o.value)
+            }}
             className={clsx(
-              'flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl short:min-h-12 border border-line bg-surface px-2 py-2 text-sm font-medium transition-colors duration-150',
-              value === o.value ? activeClass : 'text-ink-2 hover:bg-surface-2',
+              'press flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl short:min-h-12 border border-line bg-surface px-2 py-2 text-sm font-medium',
+              value === o.value ? activeClass : 'text-ink-2 hover:bg-surface-2 active:bg-surface-2',
             )}
           >
             {o.icon}

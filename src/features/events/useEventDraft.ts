@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { BabyEvent, EventInput } from '@/domain/types'
+import { haptic } from '@/lib/haptics'
 import { newId } from '@/lib/id'
 import { FUTURE_TOLERANCE_MS, fromLocalInput, toLocalInput } from '@/lib/time'
 import { toast } from '@/stores/ui'
@@ -22,10 +23,12 @@ export function useEventDraft(initial?: BabyEvent | null, minutesAgo = 0) {
     const limit = Date.now() + FUTURE_TOLERANCE_MS
     if (Date.parse(started) > limit || (input.ended_at && Date.parse(input.ended_at) > limit)) {
       setError("L'orario non può essere nel futuro.")
+      haptic('error')
       return false
     }
     if (input.ended_at && Date.parse(input.ended_at) < Date.parse(started)) {
       setError("La fine deve essere successiva all'inizio.")
+      haptic('error')
       return false
     }
     setError(null)

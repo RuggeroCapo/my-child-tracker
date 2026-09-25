@@ -55,7 +55,7 @@ export function ActiveSessionCard({
           <Link
             to={`/breastfeeding/${event.id}`}
             aria-label="Dettagli allattamento"
-            className="-mr-2 -mt-2 ml-auto flex size-11 items-center justify-center rounded-xl text-night-ink-2 transition-colors hover:bg-night-line hover:text-night-ink"
+            className="press -mr-2 -mt-2 ml-auto flex size-11 items-center justify-center rounded-xl text-night-ink-2 [--press:0.9] hover:bg-night-line hover:text-night-ink active:bg-night-line"
           >
             <Maximize2 className="size-5" />
           </Link>

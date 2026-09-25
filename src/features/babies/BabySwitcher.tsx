@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { Check, Plus } from 'lucide-react'
 import { useNavigate } from 'react-router'
 import { Sheet } from '@/components/ui/Sheet'
+import { haptic } from '@/lib/haptics'
 import { formatAge } from '@/lib/time'
 import { useBabies } from '@/stores/babies'
 import { BabyAvatar } from './BabyAvatar'
@@ -17,12 +18,13 @@ export function BabySwitcher({ open, onClose }: { open: boolean; onClose: () => 
             <button
               type="button"
               onClick={() => {
+                if (b.id !== activeBabyId) haptic('tap')
                 setActive(b.id)
                 onClose()
               }}
               className={clsx(
-                'flex w-full items-center gap-3 rounded-2xl p-3 text-left transition-colors',
-                b.id === activeBabyId ? 'bg-rose/10' : 'hover:bg-surface-2',
+                'press flex w-full items-center gap-3 rounded-2xl p-3 text-left [--press:0.98]',
+                b.id === activeBabyId ? 'bg-rose/10' : 'hover:bg-surface-2 active:bg-surface-2',
               )}
             >
               <BabyAvatar baby={b} />
@@ -41,7 +43,7 @@ export function BabySwitcher({ open, onClose }: { open: boolean; onClose: () => 
           onClose()
           navigate('/babies/new')
         }}
-        className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-line text-sm font-medium text-ink-2 hover:bg-surface-2"
+        className="press mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-line text-sm font-medium text-ink-2 [--press:0.98] hover:bg-surface-2 active:bg-surface-2"
       >
         <Plus className="size-4" /> Aggiungi bambino
       </button>

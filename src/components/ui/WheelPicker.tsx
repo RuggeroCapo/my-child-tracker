@@ -1,5 +1,6 @@
 import clsx from 'clsx'
-import { useLayoutEffect, useRef } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
+import { haptic } from '@/lib/haptics'
 
 const ITEM_H = 40
 const PAD_ROWS = 2
@@ -22,11 +23,21 @@ function WheelColumn({
 }) {
   const ref = useRef<HTMLDivElement>(null)
   const settleTimer = useRef<number>(undefined)
+  // La riga sotto la lente mentre la rotella gira: si evidenzia (e fa tic) a ogni scatto,
+  // prima che lo scroll si fermi e il valore venga confermato.
+  const [live, setLive] = useState(value)
+  const liveRef = useRef(value)
+  const [prevValue, setPrevValue] = useState(value)
+  if (value !== prevValue) {
+    setPrevValue(value)
+    setLive(value)
+  }
 
   // Il valore può cambiare da fuori (cambio giorno, passaggio a ieri...): riallinea lo scroll.
   useLayoutEffect(() => {
     const el = ref.current
     const target = value * ITEM_H
+    liveRef.current = value
     if (el && Math.abs(el.scrollTop - target) > 1) el.scrollTop = target
   }, [value])
 
@@ -39,6 +50,12 @@ function WheelColumn({
     window.clearTimeout(settleTimer.current)
     const el = ref.current
     if (!el) return
+    const idx = Math.max(0, Math.min(count - 1, Math.round(el.scrollTop / ITEM_H)))
+    if (idx !== liveRef.current) {
+      liveRef.current = idx
+      setLive(idx)
+      haptic('tick')
+    }
     settleTimer.current = window.setTimeout(() => settle(el), 90)
   }
 
@@ -71,12 +88,14 @@ function WheelColumn({
           role="option"
           aria-selected={n === value}
           onClick={() => {
+            liveRef.current = n
             ref.current!.scrollTop = n * ITEM_H
+            if (n !== value) haptic('tick')
             onChange(n)
           }}
           className={clsx(
-            'flex h-10 snap-center items-center justify-center text-xl tabular transition-colors duration-150',
-            n === value ? 'font-semibold text-ink' : 'text-ink-3',
+            'flex h-10 snap-center items-center justify-center text-xl tabular transition-[color,scale] duration-150',
+            n === live ? 'scale-110 font-semibold text-ink' : 'text-ink-3',
           )}
         >
           {String(n).padStart(2, '0')}
