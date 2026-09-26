@@ -12,6 +12,7 @@ import { toast } from '@/stores/ui'
 import { deleteEvent, quickAdd, saveEvent, startSession } from '@/sync/actions'
 import { BOTTLE_PRESETS } from '../bottle/BottleForm'
 import { DiaperTypeIcon, StoolPicker } from '../diaper/DiaperDetails'
+import { primeLockScreenAudio } from '../breastfeeding/lockScreen'
 import { NotesInput } from '../events/formParts'
 
 const bigChoice =
@@ -30,6 +31,7 @@ export function FeedingQuickSheet({
   suggested: BreastSide | null
 }) {
   function start(side: BreastSide) {
+    primeLockScreenAudio()
     startSession(babyId, 'breastfeeding', { side })
     onClose()
   }

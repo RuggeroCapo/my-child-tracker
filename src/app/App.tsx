@@ -16,6 +16,7 @@ import { SignupPage } from '@/features/auth/SignupPage'
 import { ForgotPasswordPage } from '@/features/auth/ForgotPasswordPage'
 import { ResetPasswordPage } from '@/features/auth/ResetPasswordPage'
 import { HomePage } from '@/features/home/HomePage'
+import { useFeedingLockScreen } from '@/features/breastfeeding/lockScreen'
 
 const WelcomePage = lazyPage(() => import('@/features/babies/WelcomePage'))
 const BabyFormPage = lazyPage(() => import('@/features/babies/BabyFormPage'))
@@ -95,12 +96,19 @@ function Ambient() {
   return <div aria-hidden className="ambient" data-live={live || undefined} />
 }
 
+/** Allattamento in corso sulla schermata di blocco, ovunque ci si trovi nell'app. */
+function FeedingLockScreen() {
+  useFeedingLockScreen()
+  return null
+}
+
 export function App() {
   useEffect(() => preloadWhenIdle(LAZY_PAGES), [])
   if (!isSupabaseConfigured) return <SetupMissing />
   return (
     <>
       <Ambient />
+      <FeedingLockScreen />
       <Toaster />
       <UpdatePrompt />
       <SwipeBack />

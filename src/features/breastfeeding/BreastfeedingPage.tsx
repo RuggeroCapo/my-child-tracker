@@ -18,6 +18,7 @@ import { FeedingIcon } from '@/components/icons'
 import { EventList } from '../events/EventList'
 import { ActiveSessionCard } from '../home/ActiveSessionCard'
 import { FeedingForm } from './FeedingForm'
+import { primeLockScreenAudio } from './lockScreen'
 
 export default function BreastfeedingPage() {
   const baby = useActiveBaby()!
@@ -56,7 +57,10 @@ export default function BreastfeedingPage() {
             <button
               key={side}
               type="button"
-              onClick={() => startSession(baby.id, 'breastfeeding', { side })}
+              onClick={() => {
+                primeLockScreenAudio()
+                startSession(baby.id, 'breastfeeding', { side })
+              }}
               className={clsx(
                 'flex h-36 flex-col items-center justify-center gap-2 rounded-3xl border-2 font-semibold transition-transform duration-150 ease-out-quart active:scale-[0.97]',
                 suggested === side ? 'border-feed bg-feed/12 text-ink' : 'frost border-transparent text-ink-2',
