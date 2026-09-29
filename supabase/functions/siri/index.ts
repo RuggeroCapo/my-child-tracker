@@ -1,15 +1,20 @@
 // Endpoint per i Comandi Rapidi di iOS (Siri): avvia/termina l'allattamento e
 // registra un pannolino. Uso personale: scrive sempre sullo stesso bambino.
 //
-// Autenticazione: header `Authorization: Bearer <SIRI_TOKEN>` (token segreto
-// lungo, revocabile cambiando il secret). La service_role key resta sul server.
+// Autenticazione (token lunghi e casuali, revocabili cambiando il secret; la
+// service_role key resta sul server):
+//  - Siri/Comandi Rapidi: header `Authorization: Bearer <SIRI_TOKEN>`
+//  - Alexa (Virtual Smart Home, che apre solo URL): `?token=<ALEXA_TOKEN>`.
+//    Il token finisce in URL e log, per questo è separato da SIRI_TOKEN.
 //
-// Secret richiesti (`supabase secrets set`): SIRI_TOKEN, BABY_ID.
-// SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY sono già iniettati da Supabase.
+// Secret (`supabase secrets set`): BABY_ID e almeno uno tra SIRI_TOKEN e
+// ALEXA_TOKEN. SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY sono già iniettati.
 //
-//   POST /siri?action=start&side=left|right
-//   POST /siri?action=stop
-//   POST /siri?action=diaper&type=wet|dirty|mixed
+//   /siri?action=start&side=left|right
+//   /siri?action=stop
+//   /siri?action=diaper&type=wet|dirty|mixed
+//
+// Accetta POST (header Bearer) o GET/POST (token in query).
 //
 // Risponde sempre con JSON { ok, message }: `message` è pensato per essere
 // letto da Siri con l'azione "Pronuncia testo".
@@ -17,6 +22,7 @@
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 const SIRI_TOKEN = Deno.env.get('SIRI_TOKEN')
+const ALEXA_TOKEN = Deno.env.get('ALEXA_TOKEN')
 const BABY_ID = Deno.env.get('BABY_ID')
 
 const SIDES: Record<string, 'left' | 'right'> = {
@@ -115,15 +121,21 @@ async function diaper(type: string | null) {
 }
 
 Deno.serve(async (req) => {
-  if (!SIRI_TOKEN || !BABY_ID) return reply(500, false, 'Configurazione mancante sul server.')
-  if (req.method !== 'POST') return reply(405, false, 'Metodo non consentito.')
-
-  const auth = req.headers.get('Authorization') ?? ''
-  if (!auth.startsWith('Bearer ') || !safeEqual(auth.slice(7), SIRI_TOKEN)) {
-    return reply(401, false, 'Non autorizzato.')
+  if (!BABY_ID || (!SIRI_TOKEN && !ALEXA_TOKEN)) {
+    return reply(500, false, 'Configurazione mancante sul server.')
+  }
+  if (req.method !== 'GET' && req.method !== 'POST') {
+    return reply(405, false, 'Metodo non consentito.')
   }
 
   const params = new URL(req.url).searchParams
+  const bearer = (req.headers.get('Authorization') ?? '').replace(/^Bearer /, '')
+  const queryToken = params.get('token') ?? ''
+  const authorized =
+    (req.method === 'POST' && !!SIRI_TOKEN && safeEqual(bearer, SIRI_TOKEN)) ||
+    (!!ALEXA_TOKEN && safeEqual(queryToken, ALEXA_TOKEN))
+  if (!authorized) return reply(401, false, 'Non autorizzato.')
+
   try {
     switch (params.get('action')) {
       case 'start':

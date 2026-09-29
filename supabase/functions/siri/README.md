@@ -7,13 +7,14 @@ voce con Siri, tramite l'app Comandi di iOS.
 
 ```bash
 # token lungo casuale, es.: openssl rand -hex 32
-npx supabase secrets set SIRI_TOKEN=<token> BABY_ID=<uuid da tabella babies>
+npx supabase secrets set SIRI_TOKEN=<token> ALEXA_TOKEN=<altro token> BABY_ID=<uuid da tabella babies>
 npx supabase functions deploy siri --no-verify-jwt
 ```
 
 URL: `https://<ref>.supabase.co/functions/v1/siri`
 
-Per revocare l'accesso basta cambiare `SIRI_TOKEN`.
+Per revocare l'accesso basta cambiare il secret. `ALEXA_TOKEN` è separato da
+`SIRI_TOKEN` perché viaggia nell'URL (e quindi nei log): imposta solo quelli che usi.
 
 ## 2. Comandi Rapidi
 
@@ -42,3 +43,18 @@ Prova rapida da terminale:
 curl -X POST -H "Authorization: Bearer <token>" \
   "https://<ref>.supabase.co/functions/v1/siri?action=stop"
 ```
+
+## Alexa (Virtual Smart Home)
+
+Le skill di [Virtual Smart Home](https://www.virtualsmarthome.xyz/) aprono un
+URL quando un dispositivo virtuale o una routine viene attivata. Usa la
+variante con token in query (GET):
+
+```
+https://<ref>.supabase.co/functions/v1/siri?action=start&side=left&token=<ALEXA_TOKEN>
+```
+
+Un URL (e quindi un interruttore/routine) per azione: `start&side=left`,
+`start&side=right`, `stop`, `diaper&type=wet|dirty|mixed`. Poi, ad esempio,
+"Alexa, accendi allattamento sinistra". Non ho verificato come la skill
+gestisca il testo della risposta: l'azione viene comunque registrata.
