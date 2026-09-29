@@ -1,6 +1,6 @@
 import { Maximize2, Plus } from 'lucide-react'
 import { useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { Button } from '@/components/ui/Button'
 import { Card, SectionTitle } from '@/components/ui/Card'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -21,6 +21,7 @@ import { METRIC_COLOR, METRIC_TABS, useGrowthData } from './growthData'
 import { MeasurementForm } from './MeasurementForm'
 
 export default function GrowthPage() {
+  const navigate = useNavigate()
   const baby = useActiveBaby()!
   const measurements = useEventsOfKind(baby.id, 'measurement')
   const [metric, setMetric] = useState<MeasurementMetric>('weight')
@@ -122,7 +123,7 @@ export default function GrowthPage() {
       />
 
       <Sheet open={open} onClose={() => setOpen(false)} title="Nuova misurazione">
-        <MeasurementForm babyId={baby.id} onSaved={() => setOpen(false)} />
+        <MeasurementForm babyId={baby.id} onSaved={() => navigate(-1)} />
       </Sheet>
     </div>
   )

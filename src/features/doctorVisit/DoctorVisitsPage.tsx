@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
@@ -11,6 +12,7 @@ import { EventList } from '../events/EventList'
 import { DoctorVisitForm } from './DoctorVisitForm'
 
 export default function DoctorVisitsPage() {
+  const navigate = useNavigate()
   const baby = useActiveBaby()!
   const visits = useEventsOfKind(baby.id, 'doctor_visit')
   const [open, setOpen] = useState(false)
@@ -30,7 +32,7 @@ export default function DoctorVisitsPage() {
         )}
       </section>
       <Sheet open={open} onClose={() => setOpen(false)} title="Visita medica">
-        <DoctorVisitForm babyId={baby.id} onSaved={() => setOpen(false)} />
+        <DoctorVisitForm babyId={baby.id} onSaved={() => navigate(-1)} />
       </Sheet>
     </div>
   )

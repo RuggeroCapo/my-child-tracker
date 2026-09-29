@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router'
 import { Plus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { IconButton } from '@/components/ui/Button'
@@ -18,6 +19,7 @@ import { DiaperTypeIcon } from './DiaperDetails'
 import { DiaperForm } from './DiaperForm'
 
 export default function DiaperPage() {
+  const navigate = useNavigate()
   const baby = useActiveBaby()!
   const diapers = useEventsOfKind(baby.id, 'diaper')
   const [form, setForm] = useState(false)
@@ -76,7 +78,7 @@ export default function DiaperPage() {
       </section>
 
       <Sheet open={form} onClose={() => setForm(false)} title="Pannolino">
-        <DiaperForm babyId={baby.id} onSaved={() => setForm(false)} />
+        <DiaperForm babyId={baby.id} onSaved={() => navigate(-1)} />
       </Sheet>
     </div>
   )

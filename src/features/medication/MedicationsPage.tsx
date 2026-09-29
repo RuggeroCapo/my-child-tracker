@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router'
 import { Pencil, Plus, Trash } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { Button, IconButton } from '@/components/ui/Button'
@@ -20,6 +21,7 @@ import { DOSE_UNITS, MedicationForm } from './MedicationForm'
 const EMPTY: Medication[] = []
 
 export default function MedicationsPage() {
+  const navigate = useNavigate()
   const baby = useActiveBaby()!
   const history = useEventsOfKind(baby.id, 'medication')
   const registry = useBabies((s) => s.medications[baby.id] ?? EMPTY)
@@ -80,7 +82,7 @@ export default function MedicationsPage() {
       </section>
 
       <Sheet open={logOpen} onClose={() => setLogOpen(false)} title="Somministrazione">
-        <MedicationForm babyId={baby.id} onSaved={() => setLogOpen(false)} />
+        <MedicationForm babyId={baby.id} onSaved={() => navigate(-1)} />
       </Sheet>
       <Sheet open={editing !== null} onClose={() => setEditing(null)} title={editing === 'new' ? 'Nuova medicina' : 'Modifica medicina'}>
         {editing !== null && (

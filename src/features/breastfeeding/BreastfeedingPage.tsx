@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { Plus } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 import { IconButton } from '@/components/ui/Button'
 import { Card, SectionTitle } from '@/components/ui/Card'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -21,6 +21,7 @@ import { FeedingForm } from './FeedingForm'
 import { primeLockScreenAudio } from './lockScreen'
 
 export default function BreastfeedingPage() {
+  const navigate = useNavigate()
   const baby = useActiveBaby()!
   const feeds = useEventsOfKind(baby.id, 'breastfeeding')
   const active = useActiveSession(baby.id, 'breastfeeding')
@@ -93,7 +94,7 @@ export default function BreastfeedingPage() {
       </section>
 
       <Sheet open={manual} onClose={closeManual} title="Allattamento passato">
-        <FeedingForm babyId={baby.id} onSaved={closeManual} />
+        <FeedingForm babyId={baby.id} onSaved={() => navigate(-1)} />
       </Sheet>
     </div>
   )
