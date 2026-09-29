@@ -55,7 +55,7 @@ export default function FeedingDetailPage() {
 
       <Card className="p-4">
         {/* Rimonta quando la sessione termina, così il form mostra anche l'orario di fine. */}
-        <FeedingForm key={`${event.id}-${active}`} babyId={event.baby_id} initial={event} />
+        <FeedingForm key={`${event.id}-${active}`} babyId={event.baby_id} initial={event} onSaved={() => navigate(-1)} />
       </Card>
 
       {(createdBy || (endedBy && event.ended_by !== event.created_by)) && (
