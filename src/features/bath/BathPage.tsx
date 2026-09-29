@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router'
 import { Bath, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { IconButton } from '@/components/ui/Button'
@@ -13,6 +14,7 @@ import { EventList } from '../events/EventList'
 import { BathForm } from './BathForm'
 
 export default function BathPage() {
+  const navigate = useNavigate()
   const baby = useActiveBaby()!
   const baths = useEventsOfKind(baby.id, 'bath')
   const [form, setForm] = useState(false)
@@ -52,7 +54,7 @@ export default function BathPage() {
       </section>
 
       <Sheet open={form} onClose={() => setForm(false)} title="Bagnetto">
-        <BathForm babyId={baby.id} onSaved={() => setForm(false)} />
+        <BathForm babyId={baby.id} onSaved={() => navigate(-1)} />
       </Sheet>
     </div>
   )

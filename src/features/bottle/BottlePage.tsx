@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router'
 import { useMemo } from 'react'
 import { Card, SectionTitle } from '@/components/ui/Card'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -14,6 +15,7 @@ import { EventList } from '../events/EventList'
 import { BottleForm } from './BottleForm'
 
 export default function BottlePage() {
+  const navigate = useNavigate()
   const baby = useActiveBaby()!
   const bottles = useEventsOfKind(baby.id, 'bottle')
   const now = useNow()
@@ -39,7 +41,7 @@ export default function BottlePage() {
         </StatGrid>
       </Card>
       <Card className="p-4">
-        <BottleForm key={bottles.length} babyId={baby.id} lastMilkType={last?.details.milk_type} lastAmount={last?.details.amount} />
+        <BottleForm key={bottles.length} babyId={baby.id} lastMilkType={last?.details.milk_type} lastAmount={last?.details.amount} onSaved={() => navigate(-1)} />
       </Card>
       <section className="space-y-3">
         <SectionTitle>Storico</SectionTitle>

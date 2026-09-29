@@ -1,6 +1,6 @@
 import { Plus } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 import { Button, IconButton } from '@/components/ui/Button'
 import { Card, SectionTitle } from '@/components/ui/Card'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -21,6 +21,7 @@ import { ActiveSessionCard } from '../home/ActiveSessionCard'
 import { PumpingForm } from './PumpingForm'
 
 export default function PumpingPage() {
+  const navigate = useNavigate()
   const baby = useActiveBaby()!
   const sessions = useEventsOfKind(baby.id, 'pumping')
   const active = useActiveSession(baby.id, 'pumping')
@@ -92,7 +93,7 @@ export default function PumpingPage() {
       </section>
 
       <Sheet open={manual} onClose={closeManual} title="Sessione tiralatte">
-        <PumpingForm babyId={baby.id} onSaved={closeManual} />
+        <PumpingForm babyId={baby.id} onSaved={() => navigate(-1)} />
       </Sheet>
     </div>
   )
